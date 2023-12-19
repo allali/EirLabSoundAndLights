@@ -31,14 +31,16 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from os import path
+import sys
 from platform import system
 from typing import List
 
 from pylibftdi import Device, Driver, LibraryMissingError
 
 from dmx.drivers import DMXDriver
-import socketio
-import eventlet
+currentDir = path.dirname(path.abspath(__file__))
+sys.path.append(currentDir)
+import tkinter_utils as tkutils
 
 DRIVER_PATH = path.abspath(path.dirname(__file__))
 
@@ -106,7 +108,7 @@ elif system() == "Windows":
         _WIN32.CloseHandle(timer_handle)
 
 
-class SIMULATOR(DMXDriver):
+class TkinterDisplayer(Device, DMXDriver):
     """A DMX driver design for the University of York Serial-to-DMX usb adapter based on the FT232R."""
 
     _BITS_8 = 8
@@ -115,70 +117,37 @@ class SIMULATOR(DMXDriver):
     _BREAK_OFF = 0
     _BREAK_ON = 1
 
-    _client = None
-
     def __init__(self, device_index=0):
         """Initialise the driver."""
-        print("[*] Initialising DMX Simulator")
+        self._opened = True
+        self.tkDisplayer = tkutils.TkinterDisplayer()
 
-        self._opened = False
 
     def write(self, data: List[int]):
         """Write 512 bytes or less of DMX data."""
-        try:
-            byte_data = bytes(data)
-        except TypeError:
-            byte_data = self.encoder.encode(data)
-
-        wait_ms(10)
-        wait_us(8)
-        # Frame body
-        # Device.write(self, b"\x00" + byte_data)
-        self._client.emit('light_frame', byte_data)
-        wait_ms(15)
+        self.tkDisplayer.set_light_colors(data)
+        self.tkDisplayer.update()
+        wait_ms(30)
 
     def _set_break_on(self):
-        pass
+        self.ftdi_fn.ftdi_set_line_property2(TkinterDisplayer._BITS_8, TkinterDisplayer._STOP_BITS_2,
+                                             TkinterDisplayer._PARITY_NONE, TkinterDisplayer._BREAK_ON)
 
     def _set_break_off(self):
-        pass
+        self.ftdi_fn.ftdi_set_line_property2(TkinterDisplayer._BITS_8, TkinterDisplayer._STOP_BITS_2,
+                                             TkinterDisplayer._PARITY_NONE, TkinterDisplayer._BREAK_OFF)
 
     @staticmethod
     def get_driver_name() -> str:
         """Get driver name."""
-        return "SIMULATOR"
-
+        return "TkinterDisplayer"
+    
     def close(self):
         """Close the driver."""
         self._opened = False
-
-    def open(self):
-        """Open the driver."""
-        self._client = socketio.Client()
-        print("[*] SocketIO Client Started")
-
-        @self._client.event
-        def connect():
-            print("[*] SocketIO Client Connected")
-            self._opened = True
-
-        @self._client.event
-        def disconnect():
-            print("[*] SocketIO Client Disconnected")
-            self._opened = False
-
-        @self._client.event
-        def message(data):
-            print("[*] SocketIO Client Message: " + data)
-
-        self._client.connect('http://localhost:5000', wait_timeout=10)
-
-    @property
-    def closed(self):
-        """Check if the driver is closed."""
-        return not self._opened
+        self.tkDisplayer.close()
 
 
-DRIVER_CLASS = SIMULATOR
+DRIVER_CLASS = TkinterDisplayer
 
 __ALL__ = ["DRIVER_CLASS"]
