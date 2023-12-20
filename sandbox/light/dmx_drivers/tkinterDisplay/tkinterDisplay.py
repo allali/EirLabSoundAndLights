@@ -127,15 +127,16 @@ class TkinterDisplayer(Device, DMXDriver):
         """Write 512 bytes or less of DMX data."""
         self.tkDisplayer.set_light_colors(data)
         self.tkDisplayer.update()
+        if (self.tkDisplayer.exitProgram):
+            exit(130)
         #wait_ms(30)
 
     def _set_break_on(self):
-        self.ftdi_fn.ftdi_set_line_property2(TkinterDisplayer._BITS_8, TkinterDisplayer._STOP_BITS_2,
-                                             TkinterDisplayer._PARITY_NONE, TkinterDisplayer._BREAK_ON)
+        pass
+        
 
     def _set_break_off(self):
-        self.ftdi_fn.ftdi_set_line_property2(TkinterDisplayer._BITS_8, TkinterDisplayer._STOP_BITS_2,
-                                             TkinterDisplayer._PARITY_NONE, TkinterDisplayer._BREAK_OFF)
+        pass
 
     @staticmethod
     def get_driver_name() -> str:

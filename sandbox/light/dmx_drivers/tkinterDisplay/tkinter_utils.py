@@ -12,19 +12,27 @@ except:
 import tkinter as tk
 
 
+bgColor = "#555555"
 
 class TkinterDisplayer:
 
     def __init__(self, windowSize = [727, 425]):
+        """
+        Initialize and launch the displayer
+        """
         self.nbLights = 54
+        self.exitProgram = False
         self.window = tk.Tk()
-        self.window.protocol("WM_DELETE_WINDOW", self.destroyDisplayer)
+        self.window.protocol("WM_DELETE_WINDOW", self.destroy_displayer)
+        self.window.bind('<Escape>', self.destroy_displayer)
+        self.window.bind('<Control-C>', self.destroy_displayer) 
+        self.window.bind('<Control-c>', self.destroy_displayer) 
         self.windowClosed = False
-        self.window.title("DMX Displayer")
+        self.window.title("DMX Lights Displayer")
         self.window.geometry(f"{windowSize[0]}x{windowSize[1]}")
-        self.window.configure(bg="#555555")
-        self.canvas = tk.Canvas(self.window, width=windowSize[0], height=windowSize[1])
-        self.canvas.pack()
+        self.window.configure(bg=bgColor)
+        self.canvas = tk.Canvas(self.window, width=windowSize[0], height=windowSize[1], bg=bgColor,highlightthickness=0)
+        self.canvas.place(relx=0.5, rely=0.5, anchor="center")
         self.lights = [[0,0,0,0] for i in range(self.nbLights)]
         self.lightsPositions = [[50 + 70 * (i//cf.number_of_columns), 70 * (i%cf.number_of_columns)] for i in range(self.nbLights)] 
         self.rectangles = [
@@ -42,6 +50,9 @@ class TkinterDisplayer:
         
 
     def set_light_colors(self, colorList):
+        """
+        Update the instance with the new color datas received
+        """
         if (not(self.windowClosed)):
             for i in range(self.nbLights):
                 lightPos = self.lightIdToPos[self.nbLights-i-1]
@@ -51,22 +62,31 @@ class TkinterDisplayer:
                 self.lights[lightPos][3] = colorList[i*4+3]
 
     def draw_lights(self):
+        """
+        Changes the color of the light representations
+        """
         for i in range(self.nbLights):
             color = self.rgbw_to_rgb(self.lights[i])
             rct = self.rectangles[i]
             self.canvas.itemconfig(rct, fill=color)
     
     def draw_light_ids(self):
+        """
+        Display the lights ids below their rectangular representations
+        """
         ypad = 46
         for i in range(self.nbLights):
             xpad = (18 if (self.nbLights-i-1 > 9) else 22)
             x= self.lightsPositions[i][0] + xpad
             y= self.lightsPositions[i][1] + ypad
-            label = tk.Label(self.window, text=str(self.nbLights-i-1))
+            label = tk.Label(self.canvas, text=str(self.nbLights-i-1), bg=bgColor, foreground="#FFFFFF")
             label.place(x=x, y=y, anchor="nw")
 
     
     def update(self):
+        """
+        Update the display
+        """
         if (not(self.windowClosed)):
             self.draw_lights()
             self.window.update()
@@ -96,23 +116,19 @@ class TkinterDisplayer:
         
     
     def close(self):
+        """
+        Close the displayer. This function is called by the upper functions.
+        """
         if not(self.windowClosed):
-            self.destroyDisplayer()
+            self.destroy_displayer()
 
-    def destroyDisplayer(self):
+    def destroy_displayer(self, event=None):
+        """
+        Close the displayer. This function will be called when closing manually the display.
+        The window can be closed using ESC or CTRL^C. Using CTRL^C will also stop main process.
+        """
         self.window.destroy()
         self.windowClosed = True
-
-        
-                
-if __name__ == "__main__": 
-    a = TkinterDisplayer()
-    import random as rd
-
-    for i in range(10000):
-        a.set_light_colors([[rd.randint(0, 255),rd.randint(0, 255),rd.randint(0, 255),rd.randint(0, 255)] for i in range(54)])
-        a.update()
-        a.window.update()
-        
-
-
+        if (event is not None and event.keycode == 54): # ctrl^C should notify the main thread to stop the process
+            self.exitProgram = True
+            
