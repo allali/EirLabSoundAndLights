@@ -18,6 +18,8 @@ except ImportError:
 import sys
 import threading
 
+SOUND_AMP = 3
+
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('filename', help='audio file to be played back')
 parser.add_argument(
@@ -69,7 +71,7 @@ def process(frames):
     if data is None:
         stop_callback()  # Playback is finished
     for channel, port in zip(data.T, client.outports):
-        port.get_array()[:] = channel
+        port.get_array()[:] = channel * SOUND_AMP
 
 
 try:
@@ -86,6 +88,7 @@ try:
 #    client.activate()
 
     with sf.SoundFile(args.filename) as f:
+        NCHANNELS = f.channels
         for ch in range(f.channels):
             client.outports.register(f'out_{ch + 1}')
         block_generator = f.blocks(blocksize=blocksize, dtype='float32',
@@ -99,11 +102,12 @@ try:
                 target_ports = client.get_ports(
                     is_physical=True, is_input=True, is_audio=True)
                 print(target_ports)
+                NPORTS=len(target_ports)
 #                if len(client.outports) == 1 and len(target_ports) > 1:
                     # Connect mono file to stereo output
                     #for i in range(20):
-                for i in range(10):
-                    client.outports[i].connect(target_ports[i])
+                for i in range(NCHANNELS):
+                    client.outports[i].connect(target_ports[i%NPORTS])
 #                    client.outports[0].connect(target_ports[1])
 #                else:
 #                    for source, target in zip(client.outports, target_ports):
