@@ -53,11 +53,11 @@ class DataFile:
                 self.lightData[i-shift, :, :3] = 255
                 self.lightData[i-shift, :, 3] = 200
                 self.switchType[i-shift] = 1
+                self.lightData[i-shift+1, :, :] = self.lightData[i-shift, :, :]
 
             elif len(row) == 7:
                 if (int(row[0]) == lastTime):
                     shift+=1
-                    print(i)
                 elif (int(row[0]) < lastTime):
                     raise Exception(f"Time indices in csv file must crescent. Error at line {i+2} in csv file")
                 self.timeData[i-shift] = int(row[0])
@@ -67,6 +67,7 @@ class DataFile:
                 self.check_light_values(row[2:6])
                 for lightId in lightIds:
                     self.lightData[i-shift, lightId, :] = np.array(list(map(int, row[2:6])))
+                self.lightData[i-shift+1, :, :] = self.lightData[i-shift, :, :]
             
             else:
                 raise Exception(f"Unknown structure at line {i+2} in csv file {fileName}")
@@ -91,7 +92,7 @@ def read_file(fileName : str):
                 result.append(row)
     return result
 
-class Chronometre:
+class Chronometer:
     def __init__(self):
         self.temps_debut = None
 
@@ -116,7 +117,7 @@ class DataReader:
 
     def __init__(self, dataFile : DataFile, interface : dmx.DMXInterface):
         self.dataFile = dataFile
-        self.chrono = Chronometre()
+        self.chrono = Chronometer()
         self.interface = interface
         self.universe = dmx.DMXUniverse()
         self.dataLine = 0
