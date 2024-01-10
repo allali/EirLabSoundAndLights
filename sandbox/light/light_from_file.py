@@ -35,7 +35,8 @@ class DataFile:
 
     def __init__(self, fileName : str, nbLights : int):
         rowData = read_file(fileName)
-        self.dataSize = len(rowData)
+        timeStamps = [row[0] for row in rowData if row[0].isdigit()]
+        self.dataSize = len(set(timeStamps)) + rowData.count(["default"]) +1
         self.nbLights = nbLights
         self.lightData = np.zeros((self.dataSize, nbLights, 4), dtype = np.uint8) 
         self.timeData = np.zeros((self.dataSize), dtype = np.uint32)
@@ -45,7 +46,7 @@ class DataFile:
         self.timeData[:] = 0
         self.switchType[:] = 1
 
-        lastTime = 0
+        lastTime = -1
         shift = 0
         for i, row in enumerate(rowData):
             if len(row) == 1 and row[0] == "default":
@@ -87,8 +88,8 @@ def read_file(fileName : str):
         rd = csv.reader(csvFile, delimiter=",", quotechar="|")
         for i, row in enumerate(rd):
             if i == 0:
-                print("file desscription :", "".join(row))
-            else:
+                print("file description :", "".join(row))
+            elif row != []:
                 result.append(row)
     return result
 
