@@ -25,8 +25,8 @@ WHITE_STOP_ID = 11
 
 ARGS_NUMBER = 12
 
-def transcript_line(line:List[str], lineNumber:int, timeStep:int):
-    check_data(line, lineNumber)
+def transcript_line(line:List[str], timeStep:int):
+    check_data(line)
 
     timeStamps = get_time_stamps(line, timeStep)
     ids = get_light_ids(line)
@@ -72,32 +72,32 @@ def get_stop_rgbw(line:List[str]):
     return list(map(int, line[RED_STOP_ID:WHITE_STOP_ID+1]))
 
 
-def check_data(line:List[str], lineNumber:int):
+def check_data(line:List[str]):
 
     # Check for number of arguments in list
     if (len(line) != ARGS_NUMBER):
-        raise Exception(f"Error at line {lineNumber} in csv file.\nWrong number of statements for a slot_transition")
+        raise Exception("Wrong number of statements for a slot_transition")
 
     # Check time stamps (arg 1 et 2)
     if (not(line[START_TIME_STAMP_ID].isdigit()) or not(line[STOP_TIME_STAMP_ID].isdigit())):
-        raise Exception(f"Error at line {lineNumber} in csv file.\nTime stamps must be positive integers")
+        raise Exception("Time stamps must be positive integers")
     elif(int(line[START_TIME_STAMP_ID]) > int(line[STOP_TIME_STAMP_ID])):
-        raise Exception(f"Error at line {lineNumber} in csv file.\nStart time stamp is greater than end time stamp")
+        raise Exception("Start time stamp is greater than end time stamp")
     
     # Check light ids
     for partedId in line[LIGHT_IDS_ID].split(";"):
         if ":" in partedId:
             ids = partedId.split(":")
             if (len(ids) != 2 or not(ids[0].isdigit()) or not(ids[1].isdigit()) or int(ids[0] > ids[1])):
-                raise Exception(f"Error at line {lineNumber} in csv file.\nLight id(s) are incorrect")
+                raise Exception("Light id(s) are incorrect")
         else:
             if (not(partedId.isdigit())):
-                raise Exception(f"Error at line {lineNumber} in csv file.\nLight id(s) are incorrect")
+                raise Exception("Light id(s) are incorrect")
     
     # Check color values
     for color in line[RED_START_ID:WHITE_STOP_ID+1]:
         if (not(color.isdigit()) or int(color) > 255):
-            raise Exception(f"Error at line {lineNumber} in csv file.\nLight color is incorrect")
+            raise Exception("Light color is incorrect")
     for color in line[RED_STOP_ID:WHITE_STOP_ID+1]:
         if (not(color.isdigit()) or int(color) > 255):
-            raise Exception(f"Error at line {lineNumber} in csv file.\nLight color is incorrect")
+            raise Exception("Light color is incorrect")

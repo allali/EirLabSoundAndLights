@@ -21,6 +21,8 @@ class FileTranscripter:
     fileName:str = ""
     nbLights:int = 0
     timeStep:int = 0
+    lineTraducter:List[int] = []
+
 
     def __init__(self, fileName:str, nbLights:int, timeStep:int = 35):
         self.check_init_values(nbLights, timeStep)
@@ -33,7 +35,10 @@ class FileTranscripter:
         transcriptedData = []
         for lineNumber,line in enumerate(fileRawData):
             lineIdentifier = self.get_line_identifier(line, lineNumber)
-            transcriptedData.extend(DATA_FILES_READERS[lineIdentifier].transcript_line(line, lineNumber, self.timeStep))
+            try:
+                transcriptedData.extend(DATA_FILES_READERS[lineIdentifier].transcript_line(line, self.timeStep))
+            except Exception as err:
+                raise Exception(f"\nError at line {self.lineTraducter[lineNumber]} in csv file\n" + str(err))
         transcriptedData.sort()
  
         a=TranscriptionSolver(transcriptedData, self.nbLights, self.timeStep)
@@ -62,8 +67,9 @@ class FileTranscripter:
                     continue
                 elif (row[0].isdigit()): # correct data line
                     data.append(row)
+                    self.lineTraducter.append(i+1)
                 else: # incorrect data line
-                    raise Exception(f"Error in {self.fileName} at line {i+1} : incorrect line structure")
+                    raise Exception(f"Error in {self.fileName} at line {self.lineTraducter[i]} : incorrect line structure")
         return data
 
     def get_line_identifier(self, line : List, lineNumber : int):
@@ -73,9 +79,9 @@ class FileTranscripter:
             if (0 <= lineIdentifierInt and lineIdentifierInt < len(DATA_FILES_READERS)):
                 return list(DATA_FILES_READERS.keys())[lineIdentifierInt]
             else:
-                raise Exception(f"FileTranscripter : Error at line {lineNumber}\nLine first argument is incorrect. Should be between 0 and {len(DATA_FILES_READERS)-1}.\nGiven value : {lineIdentifierInt}")
+                raise Exception(f"FileTranscripter : Error at line {self.lineTraducter[i]}\nLine first argument is incorrect. Should be between 0 and {len(DATA_FILES_READERS)-1}.\nGiven value : {lineIdentifierInt}")
         else:
-            raise Exception(f"FileTranscripter : Error at line {lineNumber}\nLine first argument is incorrect. It should be an integer.")
+            raise Exception(f"FileTranscripter : Error at line {self.lineTraducter[i]}\nLine first argument is incorrect. It should be an integer.")
     
     
 ##################################################################################################################################
@@ -238,5 +244,7 @@ class LightLauncher:
 
 
 ft = FileTranscripter("desc2.csv", 54)
-st = LightLauncher(a.get_data(), dmx.DMXInterface("TkinterDisplayer"))
+lightData = ft.get_data()
+del ft
+st = LightLauncher(lightData, dmx.DMXInterface("TkinterDisplayer"))
 st.start()
