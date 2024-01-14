@@ -129,15 +129,17 @@ class TranscriptionSolver:
         
     def solveUnfilledTimeStamps(self, lightId:int):
         # Ensure that for each time stamp, every light has a color set up. If not, copy past the value of the previous time stamp
+        lightStartInSet = self.cellPos[lightId] + self.add
+        lightStopInSet = self.cellPos[lightId+1] + self.add if lightId != self.nbLights-1 else len(self.dataSet)
+        lightTimeStamps = [arr[1] for arr in self.dataSet[lightStartInSet: lightStopInSet]]
         for timeStampId, timeStamp in enumerate(self.timeStamps):
-            lightStartInSet = self.cellPos[lightId] + self.add
-            lightStopInSet = self.cellPos[lightId+1] + self.add if lightId != self.nbLights-1 else len(self.dataSet)
-            if not(timeStamp in [arr[1] for arr in self.dataSet[lightStartInSet: lightStopInSet]]):
-                previousLineInSet = [arr[1] for arr in self.dataSet[lightStartInSet: lightStopInSet]].index(self.timeStamps[timeStampId-1])
-                r,g,b,w = self.dataSet[lightStartInSet+previousLineInSet][2:6]
+            if (timeStampId == len(lightTimeStamps) or timeStamp != lightTimeStamps[timeStampId]):
+                r,g,b,w = self.dataSet[lightStartInSet+timeStampId-1][2:6]
                 toInsertInSet = [lightId, timeStamp, r, g, b, w]
-                self.dataSet.insert(lightStartInSet+previousLineInSet+1, toInsertInSet)
+                self.dataSet.insert(lightStartInSet+timeStampId, toInsertInSet)
+                lightTimeStamps.insert(timeStampId, timeStamp)
                 self.add += 1
+                lightStopInSet += 1
     
     def get_data_set(self):
         return self.dataSet
@@ -148,8 +150,6 @@ class TranscriptionSolver:
 # Classe contenant le tableau ordonné représentant les trames à envoyer.
 class LightDataContainer:
     nbLights:int = 0
-    timeStep:int = 0
-    totalDuration:int = 0
     defaultColor:List[int] = [255, 255, 255, 200]
     dataSize = 0
 
@@ -162,12 +162,20 @@ class LightDataContainer:
 
         tmpTimeStamps = list(set([arr[1] for arr in dataSet]))
         tmpTimeStamps.sort()
-        self.timeStamps = np.array(tmpTimeStamps)
+        tmpTimeStamps.append(tmpTimeStamps[-1]+ 1000)
+        self.timeStamps = np.array(tmpTimeStamps, dtype=np.uint32)
         self.lightColors = np.zeros((len(self.timeStamps), self.nbLights, 4), dtype=np.uint8)
         self.dataSize = len(self.timeStamps)
         for lightId in range(self.nbLights):
-            for timeStampId in range(len(self.timeStamps)):
-                self.lightColors[timeStampId, lightId, :] = dataSet[lightId*len(self.timeStamps) + timeStampId][2:]
+            for timeStampId in range(len(self.timeStamps)-1):
+                self.lightColors[timeStampId, lightId, :] = dataSet[lightId*(len(self.timeStamps)-1) + timeStampId][2:]
+        self.lightColors[-1, :, :] = self.defaultColor
+        import sys
+
+   
+ 
+        
+
     
 
 
