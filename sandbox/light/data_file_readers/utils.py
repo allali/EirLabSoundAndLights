@@ -16,8 +16,16 @@ def check_light_ids(field:str):
                 raise Exception("Light id(s) are incorrect")
             
 def check_light_color_values(field:str):
-    if (not(field.isdigit()) or int(field) > 255):
-        raise Exception("Light color is incorrect")
+    rgbw = field.split(";")
+    if (len(rgbw) != 4):
+        raise Exception("Light color is incomplete. Should be |r;g;b;w|")
+    for i, color in enumerate(rgbw):
+        if (not(color.isdigit() or int(color) > 255)):
+            raise Exception(f"Light color {['red', 'green', 'blue', 'white'][i]} is incorrect")
+        
+
+def get_light_color_values(field:str):
+    return [int(color) for color in field.split(';')]
     
 
 def get_light_ids(field:str):

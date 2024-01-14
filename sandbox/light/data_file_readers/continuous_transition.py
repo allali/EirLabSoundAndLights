@@ -5,29 +5,17 @@ from data_file_readers import utils
 # 1 : startTimeStamp
 # 2 : endTimeStamp
 # 3 : lightsId(s)
-# 4 : Red at start
-# 5 : Green at start
-# 6 : Blue at start
-# 7 : White at start
-# 8 : Red at end
-# 9 : Green at end
-# 10 : Blue at end
-# 11 : White at end
+# 4 : Color at start of transition
+# 5 : Color at end of transition
 
 LINE_IDENTIFIER_ID = 0
 START_TIME_STAMP_ID = 1
 STOP_TIME_STAMP_ID = 2
 LIGHT_IDS_ID = 3
-RED_START_ID = 4
-GREEN_START_ID = 5
-BLUE_START_ID = 6
-WHITE_START_ID = 7
-RED_STOP_ID = 8
-GREEN_STOP_ID = 9
-BLUE_STOP_ID = 10
-WHITE_STOP_ID = 11
+COLOR_START_ID = 4
+COLOR_STOP_ID = 5
 
-ARGS_NUMBER = 12
+ARGS_NUMBER = 6
 
 def transcript_line(line:List[str], timeStep:int):
     check_data(line)
@@ -47,19 +35,13 @@ def transcript_line(line:List[str], timeStep:int):
 
 
 def get_rgbw_list(line:List[str], timeStamps:List[int]):
-    sr, sg, sb, sw = get_start_rgbw(line)
-    er, eg, eb, ew = get_stop_rgbw(line)
+    sr, sg, sb, sw = utils.get_light_color_values(line[COLOR_START_ID])
+    er, eg, eb, ew = utils.get_light_color_values(line[COLOR_STOP_ID])
     return [[int(er+((sr-er)*(i/len(timeStamps)))),
              int(eg+((sg-eg)*(i/len(timeStamps)))),
              int(eb+((sb-eb)*(i/len(timeStamps)))),
              int(ew+((sw-ew)*(i/len(timeStamps))))] 
              for i in range(len(timeStamps)-1, -1, -1)]
-
-def get_start_rgbw(line:List[str]):
-    return list(map(int, line[RED_START_ID:WHITE_START_ID+1]))
-
-def get_stop_rgbw(line:List[str]):
-    return list(map(int, line[RED_STOP_ID:WHITE_STOP_ID+1]))
 
 
 def check_data(line:List[str]):
@@ -78,7 +60,5 @@ def check_data(line:List[str]):
     utils.check_light_ids(line[LIGHT_IDS_ID])
     
     # Check color values
-    for color in line[RED_START_ID:WHITE_STOP_ID+1]:
-        utils.check_light_color_values(color)
-    for color in line[RED_STOP_ID:WHITE_STOP_ID+1]:
-        utils.check_light_color_values(color)
+    utils.check_light_color_values(line[COLOR_START_ID])
+    utils.check_light_color_values(line[COLOR_STOP_ID])
