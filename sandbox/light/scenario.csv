@@ -1,0 +1,68 @@
+# Vous pouvez commenter en commençant la ligne par un #
+#Vous pouvez laisser des lignes vides
+# Le premier nombre de chaque ligne désigne ce à quoi correspond la ligne (un genre de type)
+# le nombre d'arguments qui suit dépend du type
+# Pour l'instant il y a 2 types :
+# Type 0 : Changement instantané de lumière
+# Avec pour argument : Type, Temps (ms), les ids des lights, r, g, b, w
+#
+# Type 1 : Changement de couleur pas instantané
+# Avec pour argument : Type, Temps de départ(ms), Temps de fin (ms), ids des lights, r,g,b,w de départ, r,g,b,w de fin
+#
+# Pour les ids des lights, vous pouvez donner une plage avec 5:10 (de 5 à 10 inclus)
+# Ou alors donner des numéros séparés : 5;1;10;3
+# Ou mélanger un peut tout : 3:10;15;20:30
+
+# Tout est implémenté dans light_from_file_v2.py
+# Les types (0 ou 1) sont implémentés dans le dossier 'data_file_readers
+
+
+
+### TEST 1 - utilise un peu de tout ###
+
+0,0,0:53,0,0,0,255
+0,100,0:5;48:53,0,0,0,255
+0,200,0:5;48:53,0,0,0,0
+0,300,0:5;48:53,0,0,255,0
+0,400,0:5;48:53,0,0,0,0
+0,500,0:5;48:53,0,255,0,0
+0,600,0:5;48:53,0,0,0,0
+0,700,0:5;48:53,255,0,0,0
+0,800,0:5;48:53,180,110,10,50
+0,900,0:5;48:53,50,190,90,100
+0,1000,0:5;48:53,80,110,220,180
+
+1,50,1450,13:16;18:35;37:40,0,0,0,255,0,0,0,0
+1,1500,9000,13:16;18:35;37:40,0,0,0,0,10,10,230,219
+1,9035,11000,13:16;18:35;37:40,255,0,0,100,100,200,20,220
+1,50,11000,6:11;42:47,0,210,190,0,255,255,255,255
+1,50,7000,36;41;12;17,10,15,140,255,220,170,10,100
+
+2,7050,11000,36;41;12;17
+
+0,5000,0:5;48:53,0,0,0,0
+0,5100,0:5;48:53,255,255,255,255
+0,5200,0:5;48:53,0,0,0,0
+0,5300,0:5;48:53,255,255,255,255
+0,5400,0:5;48:53,0,0,0,0
+0,5500,0:5;48:53,255,255,255,255
+0,5600,0:5;48:53,0,0,0,0
+0,5700,0:5;48:53,255,255,255,255
+0,5800,0:5;48:53,0,0,0,0
+0,5900,0:5;48:53,255,255,255,255
+0,6000,0:5;48:53,0,0,0,0
+0,6100,0:5;48:53,255,255,255,255
+
+2,11050,23000,0:53
+
+
+### TEST 2 - démonstration longue - cas le plus long à calculer ###
+
+# 0,0,1:53,255,255,255,200
+# 1,0,360000,0,10,15,140,255,50,210,200,100
+
+
+### TEST 3 - rainbow ! ###
+
+# 0,0,0:53,0,0,0,255
+# 2,50,15000,0:53

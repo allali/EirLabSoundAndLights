@@ -1,14 +1,18 @@
 from typing import List
-import numpy as np
+from data_file_readers import utils
 
 # 0 : LineIdentifier
 # 1 : startTimeStamp
 # 2 : endTimeStamp
 # 3 : lightsId(s)
-# 4 : Red
-# 5 : Green
-# 6 : Blue
-# 7 : White
+# 4 : Red at start
+# 5 : Green at start
+# 6 : Blue at start
+# 7 : White at start
+# 8 : Red at end
+# 9 : Green at end
+# 10 : Blue at end
+# 11 : White at end
 
 LINE_IDENTIFIER_ID = 0
 START_TIME_STAMP_ID = 1
@@ -28,8 +32,8 @@ ARGS_NUMBER = 12
 def transcript_line(line:List[str], timeStep:int):
     check_data(line)
 
-    timeStamps = get_time_stamps(line, timeStep)
-    ids = get_light_ids(line)
+    timeStamps = utils.get_start_to_stop_time_stamps(line[START_TIME_STAMP_ID], line[STOP_TIME_STAMP_ID], timeStep)
+    ids = utils.get_light_ids(line[LIGHT_IDS_ID])
     rgbwList = get_rgbw_list(line, timeStamps)
 
 
@@ -41,20 +45,6 @@ def transcript_line(line:List[str], timeStep:int):
              rgbwList[i//len(ids)][3] 
              ] for i,id in enumerate(list(ids)*len(timeStamps))]
 
-
-def get_time_stamps(line:List[str], timeStep:int):
-    return list( np.arange( int(line[START_TIME_STAMP_ID]), int(line[STOP_TIME_STAMP_ID]), timeStep ) )
-
-def get_light_ids(line:List[str]):
-    ids = set()
-    for partedId in line[LIGHT_IDS_ID].split(";"):
-        if ":" in partedId:
-            startId, endId = list(map(int, partedId.split(":")))
-            for id in range(startId, endId+1):
-                ids.add(id)
-        else:
-            ids.add(int(partedId))
-    return ids
 
 def get_rgbw_list(line:List[str], timeStamps:List[int]):
     sr, sg, sb, sw = get_start_rgbw(line)
@@ -79,25 +69,16 @@ def check_data(line:List[str]):
         raise Exception("Wrong number of statements for a slot_transition")
 
     # Check time stamps (arg 1 et 2)
-    if (not(line[START_TIME_STAMP_ID].isdigit()) or not(line[STOP_TIME_STAMP_ID].isdigit())):
-        raise Exception("Time stamps must be positive integers")
-    elif(int(line[START_TIME_STAMP_ID]) > int(line[STOP_TIME_STAMP_ID])):
+    utils.check_time_stamps(line[START_TIME_STAMP_ID])
+    utils.check_time_stamps(line[STOP_TIME_STAMP_ID])
+    if(int(line[START_TIME_STAMP_ID]) > int(line[STOP_TIME_STAMP_ID])):
         raise Exception("Start time stamp is greater than end time stamp")
     
     # Check light ids
-    for partedId in line[LIGHT_IDS_ID].split(";"):
-        if ":" in partedId:
-            ids = partedId.split(":")
-            if (len(ids) != 2 or not(ids[0].isdigit()) or not(ids[1].isdigit()) or int(ids[0] > ids[1])):
-                raise Exception("Light id(s) are incorrect")
-        else:
-            if (not(partedId.isdigit())):
-                raise Exception("Light id(s) are incorrect")
+    utils.check_light_ids(line[LIGHT_IDS_ID])
     
     # Check color values
     for color in line[RED_START_ID:WHITE_STOP_ID+1]:
-        if (not(color.isdigit()) or int(color) > 255):
-            raise Exception("Light color is incorrect")
+        utils.check_light_color_values(color)
     for color in line[RED_STOP_ID:WHITE_STOP_ID+1]:
-        if (not(color.isdigit()) or int(color) > 255):
-            raise Exception("Light color is incorrect")
+        utils.check_light_color_values(color)

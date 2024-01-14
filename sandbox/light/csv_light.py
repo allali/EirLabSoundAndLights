@@ -5,15 +5,16 @@ import time
 import dmx
 from data_file_readers import slot_transition
 from data_file_readers import continuous_transition
+from data_file_readers import rainbow
 
 # Dictionnaire contenant les modules pouvant décrupter les lignes dans le csv (un module par type - type 0 ou 1 pour l'instant)
 DATA_FILES_READERS = {
     "slot_transition" : slot_transition,
-    "continuous_transition" : continuous_transition
+    "continuous_transition" : continuous_transition,
+    "rainbow" : rainbow
 }
 
 
-    
 
 
 # Traduit un fichier csv en un tableau ordonné compréhensible par la classe LightLauncher
@@ -41,10 +42,11 @@ class FileTranscripter:
                 raise Exception(f"\nError at line {self.lineTraducter[lineNumber]} in csv file\n" + str(err))
         transcriptedData.sort()
  
-        a=TranscriptionSolver(transcriptedData, self.nbLights, self.timeStep)
-        a.solve()
+        transcriptionSolver = TranscriptionSolver(transcriptedData, self.nbLights, self.timeStep)
+        transcriptionSolver.solve()
+      
 
-        self.data = LightDataContainer(54, a.get_data_set())    
+        self.data = LightDataContainer(54, transcriptionSolver.get_data_set())    
 
     def get_data(self):
         return self.data
@@ -113,6 +115,8 @@ class TranscriptionSolver:
                 self.cellPos[self.dataSet[i+1][0]] = i+1
                 if (self.dataSet[i+1][1] != 0):
                     raise Exception(f"No value written at time stamp 0 for light {self.dataSet[i+1][0]}")
+        self.dataSet[-1][1] -= self.dataSet[-1][1]%self.timeStep
+        self.timeStamps.add(self.dataSet[-1][1])
         
         if (self.dataSet[0][0] == 0 and self.dataSet[0][1] == 0):
             self.cellPos[0] = 0
@@ -124,8 +128,7 @@ class TranscriptionSolver:
         self.timeStamps.sort()
         for lightId in range(self.nbLights):
             self.solveUnfilledTimeStamps(lightId)
-        
-        
+          
         
     def solveUnfilledTimeStamps(self, lightId:int):
         # Ensure that for each time stamp, every light has a color set up. If not, copy past the value of the previous time stamp
@@ -152,10 +155,7 @@ class LightDataContainer:
     nbLights:int = 0
     defaultColor:List[int] = [255, 255, 255, 200]
     dataSize = 0
-
     timeStamps:int = 0
-
-
 
     def __init__(self, nbLights:int, dataSet):
         self.nbLights = nbLights
@@ -170,14 +170,6 @@ class LightDataContainer:
             for timeStampId in range(len(self.timeStamps)-1):
                 self.lightColors[timeStampId, lightId, :] = dataSet[lightId*(len(self.timeStamps)-1) + timeStampId][2:]
         self.lightColors[-1, :, :] = self.defaultColor
-        import sys
-
-   
- 
-        
-
-    
-
 
 
 ##################################################################################################################################
@@ -251,8 +243,9 @@ class LightLauncher:
         
 
 
-ft = FileTranscripter("desc2.csv", 54)
-lightData = ft.get_data()
-del ft
-st = LightLauncher(lightData, dmx.DMXInterface("TkinterDisplayer"))
-st.start()
+if __name__ == "__main__":
+    fileTranscripter = FileTranscripter("scenario.csv", 54)
+    lightData = fileTranscripter.get_data()
+    del fileTranscripter
+    launcher = LightLauncher(lightData, dmx.DMXInterface("TkinterDisplayer"))
+    launcher.start()
