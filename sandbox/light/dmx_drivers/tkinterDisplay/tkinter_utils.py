@@ -1,6 +1,7 @@
 import os
 import sys
 import bindings
+import time
 
 try:
     currentDir = os.path.dirname(os.path.abspath(__file__))
@@ -17,7 +18,9 @@ bgColor = "#555555"
 
 class TkinterDisplayer:
 
-    def __init__(self, windowSize = [727, 425]):
+    startTime = 0
+
+    def __init__(self, windowSize = [727, 455]):
         """
         Initialize and launch the displayer
         """
@@ -36,7 +39,7 @@ class TkinterDisplayer:
         self.canvas = tk.Canvas(self.window, width=windowSize[0], height=windowSize[1], bg=bgColor,highlightthickness=0)
         self.canvas.place(relx=0.5, rely=0.5, anchor="center")
         self.lights = [[0,0,0,0] for i in range(self.nbLights)]
-        self.lightsPositions = [[50 + 70 * (i//cf.number_of_columns), 70 * (i%cf.number_of_columns)] for i in range(self.nbLights)] 
+        self.lightsPositions = [[50 + 70 * (i//cf.number_of_columns), 70 * (i%cf.number_of_columns) + 20] for i in range(self.nbLights)] 
         self.rectangles = [
             self.canvas.create_rectangle(
                 self.lightsPositions[i][0] + 10, 
@@ -49,6 +52,8 @@ class TkinterDisplayer:
                 ]
         self.lightIdToPos = [cf.light_map.index(i) for i in range(54)]
         self.draw_light_ids()
+        self.timeLabel = tk.Label(self.canvas, text="Time : 0 ms", bg=bgColor, foreground="#FFFFFF")
+        self.timeLabel.place(x=0, y=0, anchor="nw")
         
 
     def set_light_colors(self, colorList):
@@ -83,6 +88,12 @@ class TkinterDisplayer:
             y= self.lightsPositions[i][1] + ypad
             label = tk.Label(self.canvas, text=str(self.nbLights-i-1), bg=bgColor, foreground="#FFFFFF")
             label.place(x=x, y=y, anchor="nw")
+    
+    def draw_timer(self):
+        if (self.startTime != 0):
+            t = str(round((time.time() - self.startTime) * 1000))
+            timeText = "Time : " + (t[:len(t)-3] + " " + t[len(t)-3:] if len(t) > 3 else t) + " ms"
+            self.timeLabel.config(text=timeText)
 
     
     def update(self):
@@ -91,7 +102,10 @@ class TkinterDisplayer:
         """
         if (not(self.windowClosed)):
             self.draw_lights()
+            self.draw_timer()
             self.window.update()
+        if (self.startTime == 0):
+            self.startTime = time.time()
 
 
         
