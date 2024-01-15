@@ -14,6 +14,12 @@ LIGHT_IDS_ID = 3
 
 ARGS_NUMBER = 4
 
+colorStep = 3 # color difference between 2 lights
+timeDivision = 1000 # sampling granularity
+redSinTable = [int(255*sin(pi * 2 * (i/1000))**2) for i in range(timeDivision)]
+blueSinTable = [int(255*sin(pi * 2 * (i/1000) + 0.66*pi)**2) for i in range(timeDivision)]
+greenSinTable = [int(255*sin(pi * 2 * (i/1000) + 1.32*pi)**2) for i in range(timeDivision)]
+
 
 def transcript_line(line:List[str], timeStep:int):
     check_data(line)
@@ -34,16 +40,13 @@ def transcript_line(line:List[str], timeStep:int):
 
 
 def get_rgbw_list(timeStamps:List[int], timeStep:int, lightId:int):
-    return [rainbow(timeStamp/timeStep + 3*lightId) for timeStamp in timeStamps]
+    return [rainbow(timeStamp//timeStep + colorStep*lightId) for timeStamp in timeStamps]
     
 
-
-
 def rainbow(i:int):
-    t:float = pi * 2 * (i/1000)
-    r:int = int( 255 * sin(t)**2 )
-    g:int = int( 255 * sin(t + 0.33 * 2 * pi)**2 )
-    b:int = int( 255 * sin(t + 0.66 * 2 * pi)**2 )
+    r:int = redSinTable[i%timeDivision]
+    g:int = blueSinTable[i%timeDivision]
+    b:int = greenSinTable[i%timeDivision]
     w:int = 0
     return [r, g, b, w]
 

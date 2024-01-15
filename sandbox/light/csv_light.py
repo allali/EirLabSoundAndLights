@@ -3,9 +3,7 @@ import csv
 import numpy as np
 import time
 import dmx
-from data_file_readers import slot_transition
-from data_file_readers import continuous_transition
-from data_file_readers import rainbow
+from data_file_readers import slot_transition, continuous_transition, rainbow
 
 # Dictionnaire contenant les modules pouvant décrupter les lignes dans le csv (un module par type - type 0 ou 1 pour l'instant)
 DATA_FILES_READERS = {
@@ -19,19 +17,18 @@ DATA_FILES_READERS = {
 
 # Traduit un fichier csv en un tableau ordonné compréhensible par la classe LightLauncher
 class FileTranscripter:
-    fileName:str = ""
-    nbLights:int = 0
-    timeStep:int = 0
-    lineTraducter:List[int] = []
 
 
     def __init__(self, fileName:str, nbLights:int, timeStep:int = 35):
+        t0 = time.time()
         self.check_init_values(nbLights, timeStep)
         self.fileName = fileName
         self.nbLights = nbLights
         self.timeStep = timeStep
+        self.lineTraducter:List[int] = []
         
         fileRawData:List[List[str]] = self.get_list_from_file()
+        t1 = time.time()
 
         transcriptedData = []
         for lineNumber,line in enumerate(fileRawData):
@@ -40,13 +37,32 @@ class FileTranscripter:
                 transcriptedData.extend(DATA_FILES_READERS[lineIdentifier].transcript_line(line, self.timeStep))
             except Exception as err:
                 raise Exception(f"\nError at line {self.lineTraducter[lineNumber]} in csv file\n" + str(err))
+        t2 = time.time()
         transcriptedData.sort()
+        t3 = time.time()
  
         transcriptionSolver = TranscriptionSolver(transcriptedData, self.nbLights, self.timeStep)
+        t4 = time.time()
         transcriptionSolver.solve()
+        t5 = time.time()
       
 
-        self.data = LightDataContainer(54, transcriptionSolver.get_data_set())    
+        self.data = LightDataContainer(54, transcriptionSolver.get_data_set())   
+
+        t6 = time.time() 
+
+        tmp1 = str(round(t1 - t0,3))
+        tmp2 = str(round(t2 - t1,3))
+        tmp3 = str(round(t3 - t2,3))
+        tmp4 = str(round(t4 - t3,3))
+        tmp5 = str(round(t5 - t4,3))
+        tmp6 = str(round(t6 - t5,3))
+        print("\ncsv to 1st raw list : " + tmp1 + " s")
+        print("transcript raw lines in raw trams : " + tmp2 + " s")
+        print("sort raw trams : " + tmp3 + " s")
+        print("Create transcription solver : " + tmp4 + " s")
+        print("solving : " + tmp5 + " s")
+        print("Creating LightDataContainer : " + tmp6 + " s\n")
 
     def get_data(self):
         return self.data
@@ -92,30 +108,27 @@ class FileTranscripter:
 # Ajuste (modifie) les temps fournit dans le fichier csv de manière à pouvoir envoyer des trames à des fréquences régulières, sans aller trop vite
 class TranscriptionSolver:
 
-    dataSet = []
-    nbLights = 0
-    timeStep = 0
-    add = 0
-
     def __init__(self, dataSet, nbLights, timeStep):
-        self.dataSet = dataSet # dataSet is sorted
+        self.dataSet:List[List[int]] = dataSet # dataSet is sorted
         self.nbLights = nbLights
         self.timeStep = timeStep
         self.timeStamps = set()
         self.cellPos = [-1] * nbLights
+        self.add = 0
     
     def solve(self):
         # Normalize all the time stamps by putting at least timeStep time between them (due to DMX max frequency)
+        t0 = time.time()
         for i in range(len(self.dataSet)-1):
             if (self.dataSet[i+1][1] - self.dataSet[i][1] < self.timeStep and self.dataSet[i][0] == self.dataSet[i+1][0]):
-                raise Exception(f"WARNING : time stamps too closed for light {self.dataSet[i][0]} with time stamp {self.dataSet[i][1]} and {self.dataSet[i+1][1]}")
-            self.dataSet[i][1] -= self.dataSet[i][1]%self.timeStep
-            self.timeStamps.add(self.dataSet[i][1])
-            if (self.dataSet[i][0] != self.dataSet[i+1][0]):
-                self.cellPos[self.dataSet[i+1][0]] = i+1
+                raise Exception(f"WARNING : time stamps too close for light {self.dataSet[i][0]} with time stamp {self.dataSet[i][1]} and {self.dataSet[i+1][1]}")
+            self.dataSet[i][1] -= self.dataSet[i][1] % self.timeStep # Tweaking time stamps
+            self.timeStamps.add(self.dataSet[i][1]) # Adding timeStamp in timeStamp list if it is not already in it
+            if (self.dataSet[i][0] != self.dataSet[i+1][0]): # If the next line in tab isn't the same light
+                self.cellPos[self.dataSet[i+1][0]] = i+1 #register the beginning of light i+1 data in tab
                 if (self.dataSet[i+1][1] != 0):
                     raise Exception(f"No value written at time stamp 0 for light {self.dataSet[i+1][0]}")
-        self.dataSet[-1][1] -= self.dataSet[-1][1]%self.timeStep
+        self.dataSet[-1][1] -= self.dataSet[-1][1] % self.timeStep # Tweaking time stamp - border condition
         self.timeStamps.add(self.dataSet[-1][1])
         
         if (self.dataSet[0][0] == 0 and self.dataSet[0][1] == 0):
@@ -126,12 +139,17 @@ class TranscriptionSolver:
         
         self.timeStamps = list(self.timeStamps)
         self.timeStamps.sort()
-        for lightId in range(self.nbLights):
-            self.solveUnfilledTimeStamps(lightId)
+        t1 = time.time()
+        for lightId in range(self.nbLights): 
+            self.solve_unfilled_time_stamps(lightId) # some time stamps are missing for some lights
+        self.dataSet.sort()
+        t2 = time.time()
+        print("Normalizing timeStamps : " + str(round(t1-t0,3)) + " s")
+        print("Filling unwritten time stamps : " + str(round(t2-t1,3)) + " s")
           
         
-    def solveUnfilledTimeStamps(self, lightId:int):
-        # Ensure that for each time stamp, every light has a color set up. If not, copy past the value of the previous time stamp
+    def solve_unfilled_time_stamps(self, lightId:int):
+        # Ensure that for each time stamp, every light has a color set up. If not, copy paste the value of the previous time stamp
         lightStartInSet = self.cellPos[lightId] + self.add
         lightStopInSet = self.cellPos[lightId+1] + self.add if lightId != self.nbLights-1 else len(self.dataSet)
         lightTimeStamps = [arr[1] for arr in self.dataSet[lightStartInSet: lightStopInSet]]
@@ -152,24 +170,18 @@ class TranscriptionSolver:
 
 # Classe contenant le tableau ordonné représentant les trames à envoyer.
 class LightDataContainer:
-    nbLights:int = 0
     defaultColor:List[int] = [255, 255, 255, 200]
-    dataSize = 0
-    timeStamps:int = 0
 
     def __init__(self, nbLights:int, dataSet):
         self.nbLights = nbLights
 
         tmpTimeStamps = list(set([arr[1] for arr in dataSet]))
         tmpTimeStamps.sort()
-        tmpTimeStamps.append(tmpTimeStamps[-1]+ 1000)
         self.timeStamps = np.array(tmpTimeStamps, dtype=np.uint32)
         self.lightColors = np.zeros((len(self.timeStamps), self.nbLights, 4), dtype=np.uint8)
         self.dataSize = len(self.timeStamps)
-        for lightId in range(self.nbLights):
-            for timeStampId in range(len(self.timeStamps)-1):
-                self.lightColors[timeStampId, lightId, :] = dataSet[lightId*(len(self.timeStamps)-1) + timeStampId][2:]
-        self.lightColors[-1, :, :] = self.defaultColor
+        self.lightColors = np.array(np.reshape(dataSet, (len(self.timeStamps), self.nbLights, 6), order='F')[:,:,2:], dtype=np.uint8)
+        
 
 
 ##################################################################################################################################
@@ -235,17 +247,39 @@ class LightLauncher:
         
         self.interface.set_frame(self.universe.serialise())
         self.interface.send_update()
+
+    def reset_lights(self):
+        for l in self.lights.values():
+            r,g,b,w = self.dataFile.defaultColor
+            l["light"].set_colour(dmx.Color(r,g,b,w))
+        self.interface.set_frame(self.universe.serialise())
+        self.interface.send_update()
+
     
     def loop(self):
         while (self.dataLine < self.dataFile.dataSize):
             self.read()
+        self.reset_lights()
         self.chrono.stop()
         
 
 
 if __name__ == "__main__":
+    t0 = time.time()
     fileTranscripter = FileTranscripter("scenario.csv", 54)
+    t1 = time.time()
     lightData = fileTranscripter.get_data()
     del fileTranscripter
+    t2 = time.time()
     launcher = LightLauncher(lightData, dmx.DMXInterface("TkinterDisplayer"))
+    t3 = time.time()
+    tmp1 = str(round(t1 - t0,3))
+    tmp2 = str(round(t2 - t1,3))
+    tmp3 = str(round(t3 - t2,3))
+    tmp4 = str(round(t3 - t0,3))
+    
+    print("FileTranscripter : " + tmp1 + " s")
+    print("del : " + tmp2 + " s")
+    print("LightLauncher : " + tmp3 + " s")
+    print("\nTotal : " + tmp4 + " s")
     launcher.start()
