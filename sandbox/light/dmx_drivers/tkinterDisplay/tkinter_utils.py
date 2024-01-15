@@ -1,5 +1,6 @@
 import os
 import sys
+import bindings
 import time
 
 try:
@@ -29,7 +30,8 @@ class TkinterDisplayer:
         self.window.protocol("WM_DELETE_WINDOW", self.destroy_displayer)
         self.window.bind('<Escape>', self.destroy_displayer)
         self.window.bind('<Control-C>', self.destroy_displayer) 
-        self.window.bind('<Control-c>', self.destroy_displayer) 
+        self.window.bind('<Control-c>', self.destroy_displayer)
+        self.extern_bindings()
         self.windowClosed = False
         self.window.title("DMX Lights Displayer")
         self.window.geometry(f"{windowSize[0]}x{windowSize[1]}")
@@ -146,3 +148,9 @@ class TkinterDisplayer:
         if (event is not None and event.keycode == 54): # ctrl^C should notify the main thread to stop the process
             self.exitProgram = True
             
+
+    def extern_bindings(self):
+        self.window.bind('<z>', lambda event: bindings.move('z'))
+        self.window.bind('<q>', lambda event: bindings.move('q'))
+        self.window.bind('<s>', lambda event: bindings.move('s'))
+        self.window.bind('<d>', lambda event: bindings.move('d'))
