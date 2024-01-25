@@ -1,4 +1,4 @@
-import module
+import LightController
 from typing import List
 import dmx
 import time
@@ -38,7 +38,7 @@ universe = dmx.DMXUniverse()
 interface = dmx.DMXInterface("TkinterDisplayer")
 nbLights:int = 54
 timeStep:int = 30
-fileName = "file.yaml"
+fileName = "'sandbox/light/yamls/test.yaml'"
 
 
 times:List[int] = [0]*nbLights
@@ -46,21 +46,21 @@ lights = [dmx.DMXLight4Slot(address=dmx.light.light_map[i]) for i in range()]
 for light in lights:
     universe.add_light(light)
 
-thrd = module.threadQueue(nbLights)
+thrd = LightController()
 thrd.set_file(fileName)
 chrono = Chronometer()
 chrono.start()
 
-while(thrd.isActive()):
+while(thrd.is_active()):
     currentTime = chrono.get_time()
     for lightId in range(nbLights):
         times[lightId] = times[lightId] + currentTime
-        currentBlock = thrd.getBlock(lightId)
+        currentBlock = thrd.get_block(lightId)
 
         if currentBlock['dt'] >= times[lightId]:
             times[lightId] %= timeStep
-            thrd.removeBlock(lightId)
-            currentBlock = thrd.getBlock(lightId)
+            thrd.remove_block(lightId)
+            currentBlock = thrd.get_block(lightId)
 
         if currentBlock['Tr'] == 0:
             r,g,b,w = get_transition_0(currentBlock)
