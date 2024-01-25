@@ -1,116 +1,5 @@
 - id: 7
   times:
-    - dt: 1700
-      red: 255
-      green: 255
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 1
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 2
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 3
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 4
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-- id: 8
-  times:
-    - dt: 1600
-      red: 255
-      green: 255
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-- id: 9
-  times:
-    - dt: 1500
-      red: 255
-      green: 255
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-- id: 10
-  times:
     - dt: 1400
       red: 255
       green: 255
@@ -146,23 +35,7 @@
       white: 200
       Tr: 0
 
-- id: 13
-  times:
-    - dt: 0
-      red: 255
-      green: 255
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-- id: 16
+- id: 8
   times:
     - dt: 1300
       red: 255
@@ -199,30 +72,7 @@
       white: 200
       Tr: 0
 
-- id: 19
-  times:
-    - dt: 0
-      red: 255
-      green: 255
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-- id: 22
+- id: 9
   times:
     - dt: 1200
       red: 255
@@ -259,37 +109,7 @@
       white: 200
       Tr: 0
 
-- id: 25
-  times:
-    - dt: 0
-      red: 255
-      green: 255
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-- id: 28
+- id: 10
   times:
     - dt: 1100
       red: 255
@@ -326,15 +146,8 @@
       white: 200
       Tr: 0
 
-- id: 31
+- id: 13
   times:
-    - dt: 0
-      red: 255
-      green: 255
-      blue: 255
-      white: 200
-      Tr: 0
-
     - dt: 100
       red: 0
       green: 0
@@ -342,28 +155,7 @@
       white: 200
       Tr: 0
 
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-- id: 34
+- id: 16
   times:
     - dt: 1000
       red: 255
@@ -400,15 +192,8 @@
       white: 200
       Tr: 0
 
-- id: 37
+- id: 19
   times:
-    - dt: 400
-      red: 255
-      green: 255
-      blue: 255
-      white: 200
-      Tr: 0
-
     - dt: 100
       red: 0
       green: 0
@@ -423,21 +208,7 @@
       white: 200
       Tr: 0
 
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - dt: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-- id: 40
+- id: 22
   times:
     - dt: 900
       red: 255
@@ -474,9 +245,32 @@
       white: 200
       Tr: 0
 
-- id: 43
+- id: 25
   times:
-    - dt: 500
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+- id: 28
+  times:
+    - dt: 800
       red: 255
       green: 255
       blue: 255
@@ -511,15 +305,8 @@
       white: 200
       Tr: 0
 
-- id: 44
+- id: 31
   times:
-    - dt: 600
-      red: 255
-      green: 255
-      blue: 255
-      white: 200
-      Tr: 0
-
     - dt: 100
       red: 0
       green: 0
@@ -548,7 +335,7 @@
       white: 200
       Tr: 0
 
-- id: 45
+- id: 34
   times:
     - dt: 700
       red: 255
@@ -585,9 +372,9 @@
       white: 200
       Tr: 0
 
-- id: 46
+- id: 37
   times:
-    - dt: 800
+    - dt: 100
       red: 255
       green: 255
       blue: 255
@@ -621,25 +408,188 @@
       blue: 255
       white: 200
       Tr: 0
-- id: 53
-  times:
-  - dt: 40
-    red: 200
-    green: 200
-    blue: 200
-    white: 200
-    Tr: 0
 
-  - dt: 2000
-    red: 50
-    green: 200
-    blue: 10
-    white: 0
-    Tr: 1
-  
-  - dt: 40
-    red: 200
-    green: 0
-    blue: 0
-    white: 200
-    Tr: 0
+- id: 40
+  times:
+    - dt: 600
+      red: 255
+      green: 255
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+- id: 43
+  times:
+    - dt: 200
+      red: 255
+      green: 255
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+- id: 44
+  times:
+    - dt: 300
+      red: 255
+      green: 255
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+- id: 45
+  times:
+    - dt: 400
+      red: 255
+      green: 255
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+- id: 46
+  times:
+    - dt: 500
+      red: 255
+      green: 255
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
+
+    - dt: 100
+      red: 0
+      green: 0
+      blue: 255
+      white: 200
+      Tr: 0
