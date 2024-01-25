@@ -8,28 +8,28 @@
       Tr: 0
 
     - dt: 100
-      red: 0
+      red: 1
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
     - dt: 100
-      red: 0
+      red: 2
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
     - dt: 100
-      red: 0
+      red: 3
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
     - dt: 100
-      red: 0
+      red: 4
       green: 0
       blue: 255
       white: 200
@@ -593,3 +593,25 @@
       blue: 255
       white: 200
       Tr: 0
+- id: 53
+  times:
+  - dt: 40
+    red: 200
+    green: 200
+    blue: 200
+    white: 200
+    Tr: 0
+
+  - dt: 2000
+    red: 50
+    green: 200
+    blue: 10
+    white: 0
+    Tr: 1
+  
+  - dt: 40
+    red: 200
+    green: 0
+    blue: 0
+    white: 200
+    Tr: 0
