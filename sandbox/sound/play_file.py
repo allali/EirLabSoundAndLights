@@ -18,7 +18,6 @@ except ImportError:
 import sys
 import threading
 
-SOUND_AMP = 3
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('filename', help='audio file to be played back')
@@ -71,7 +70,7 @@ def process(frames):
     if data is None:
         stop_callback()  # Playback is finished
     for channel, port in zip(data.T, client.outports):
-        port.get_array()[:] = channel * SOUND_AMP
+        port.get_array()[:] = channel
 
 
 try:
