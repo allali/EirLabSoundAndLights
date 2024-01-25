@@ -148,6 +148,13 @@
 
 - id: 13
   times:
+    - dt: 0
+      red: 255
+      green: 255
+      blue: 255
+      white: 200
+      Tr: 0
+
     - dt: 100
       red: 0
       green: 0
@@ -194,6 +201,13 @@
 
 - id: 19
   times:
+    - dt: 0
+      red: 255
+      green: 255
+      blue: 255
+      white: 200
+      Tr: 0
+
     - dt: 100
       red: 0
       green: 0
@@ -247,6 +261,13 @@
 
 - id: 25
   times:
+    - dt: 0
+      red: 255
+      green: 255
+      blue: 255
+      white: 200
+      Tr: 0
+
     - dt: 100
       red: 0
       green: 0
@@ -307,6 +328,13 @@
 
 - id: 31
   times:
+    - dt: 0
+      red: 255
+      green: 255
+      blue: 255
+      white: 200
+      Tr: 0
+
     - dt: 100
       red: 0
       green: 0
