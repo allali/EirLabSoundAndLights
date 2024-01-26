@@ -26,7 +26,7 @@ class YamlReader:
 
         for item in data:
             for tram in item["times"]:
-                player.add(item["id"], tram["dt"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], 0)
+                player.add(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], 0)
         self.file_name = file_name
 
 #############################################################
@@ -59,7 +59,7 @@ class Player:
         self.num_lights = nbLights
         self.isRunning = False
         self.thread_queues = [Queue(maxsize=0) for _ in range(nbLights)]
-        self.lastBlock = [{'dt': 0, 'red': 0, 'green': 0, 'blue': 0, 'white': 0, 'Tr': 0}] * nbLights
+        self.lastBlock = [{'time': 0, 'red': 0, 'green': 0, 'blue': 0, 'white': 0, 'Tr': 0}] * nbLights
         self.mainThread = threading.Thread(target=self._worker, args=[interfaceName])
         self.timer = Timer()
         self.universe = dmx.DMXUniverse()
@@ -71,7 +71,7 @@ class Player:
 
         
     def add(self, lightId, time, rgbw, tr, offset):
-        self.thread_queues[lightId].put({"dt":time + offset, "id": lightId, "red":rgbw[0], "green":rgbw[1], "blue":rgbw[2], "white":rgbw[3], "Tr":tr})
+        self.thread_queues[lightId].put({"time":time + offset, "id": lightId, "red":rgbw[0], "green":rgbw[1], "blue":rgbw[2], "white":rgbw[3], "Tr":tr})
 
 
     def start(self):
@@ -80,7 +80,7 @@ class Player:
 
     
     def _get_transition_1_rgbw(self, startBlock, endBlock, time):
-        ratio = (time - startBlock['dt']) / (endBlock["dt"] - startBlock['dt'])
+        ratio = (time - startBlock['time']) / (endBlock["time"] - startBlock['time'])
         ratio = 1 if ratio > 1 else ratio
         r:int = int(startBlock['red'] + (endBlock['red'] - startBlock['red']) * ratio)
         g:int = int(startBlock['green'] + (endBlock['green'] - startBlock['green']) * ratio)
@@ -92,7 +92,7 @@ class Player:
         currentBlock = self.get_block(lightId)
         nextBlock = self.get_next_block(lightId)
         
-        if ((currentBlock['dt'] <= currentTime and nextBlock['Tr'] in [1,-1] ) or (nextBlock['dt'] <= currentTime and nextBlock['Tr'] == 0)):
+        if ((currentBlock['time'] <= currentTime and nextBlock['Tr'] in [1,-1] ) or (nextBlock['time'] <= currentTime and nextBlock['Tr'] == 0)):
             self.lastBlock[lightId] = currentBlock
             self.remove_block(lightId)
             return self.get_block(lightId)
@@ -134,7 +134,7 @@ class Player:
             if (self.thread_queues[light_id].qsize() > 0):     
                 return self.thread_queues[light_id].queue[0]
             else:
-                return {'dt': self.timer.get_time(), 'red': 0, 'green': 0, 'blue': 0, 'white': 0, 'Tr': -1}
+                return {'time': self.timer.get_time(), 'red': 0, 'green': 0, 'blue': 0, 'white': 0, 'Tr': -1}
         else:
             raise Exception(f"Wrong light id in get_block. Given id : {light_id}")
 
@@ -143,7 +143,7 @@ class Player:
             if (self.thread_queues[light_id].qsize() > 1): 
                 return self.thread_queues[light_id].queue[1]
             else:
-                return {'dt': self.timer.get_time(), 'red': 255, 'green': 255, 'blue': 255, 'white': 200, 'Tr': -1}
+                return {'time': self.timer.get_time(), 'red': 255, 'green': 255, 'blue': 255, 'white': 200, 'Tr': -1}
         else:
             raise Exception(f"Wrong light id in get_block. Given id : {light_id}")
 

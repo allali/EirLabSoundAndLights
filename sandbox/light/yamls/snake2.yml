@@ -1,41 +1,41 @@
 - id: 7
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 1400
+    - time: 1400
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1500
+    - time: 1500
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1600
+    - time: 1600
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1700
+    - time: 1700
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 1850
+    - time: 1850
       red: 0
       green: 0
       blue: 0
@@ -44,42 +44,42 @@
 
 - id: 8
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 1300
+    - time: 1300
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1400
+    - time: 1400
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1500
+    - time: 1500
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1600
+    - time: 1600
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 1700
+    - time: 1700
       red: 0
       green: 0
       blue: 0
@@ -88,42 +88,42 @@
 
 - id: 9
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 1200
+    - time: 1200
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1300
+    - time: 1300
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1400
+    - time: 1400
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1500
+    - time: 1500
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 1600
+    - time: 1600
       red: 0
       green: 0
       blue: 0
@@ -132,42 +132,42 @@
 
 - id: 10
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 1100
+    - time: 1100
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1200
+    - time: 1200
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1300
+    - time: 1300
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1400
+    - time: 1400
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 1500
+    - time: 1500
       red: 0
       green: 0
       blue: 0
@@ -176,14 +176,14 @@
 
 - id: 13
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 100
+    - time: 100
       red: 0
       green: 0
       blue: 0
@@ -192,42 +192,42 @@
 
 - id: 16
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 1100
+    - time: 1100
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1200
+    - time: 1200
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1300
+    - time: 1300
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1400
+    - time: 1400
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 1500
+    - time: 1500
       red: 0
       green: 0
       blue: 0
@@ -236,21 +236,21 @@
 
 - id: 19
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 100
+    - time: 100
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 200
+    - time: 200
       red: 0
       green: 0
       blue: 0
@@ -259,42 +259,42 @@
 
 - id: 22
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 900
+    - time: 900
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1000
+    - time: 1000
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1100
+    - time: 1100
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1200
+    - time: 1200
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 1300
+    - time: 1300
       red: 0
       green: 0
       blue: 0
@@ -303,28 +303,28 @@
 
 - id: 25
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 100
+    - time: 100
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 200
+    - time: 200
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 300
+    - time: 300
       red: 0
       green: 0
       blue: 0
@@ -333,42 +333,42 @@
 
 - id: 28
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 800
+    - time: 800
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 900
+    - time: 900
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1000
+    - time: 1000
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1100
+    - time: 1100
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 1200
+    - time: 1200
       red: 0
       green: 0
       blue: 0
@@ -377,35 +377,35 @@
 
 - id: 31
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 100
+    - time: 100
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 200
+    - time: 200
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 300
+    - time: 300
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 400
+    - time: 400
       red: 0
       green: 0
       blue: 0
@@ -414,42 +414,42 @@
 
 - id: 34
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 700
+    - time: 700
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 800
+    - time: 800
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 900
+    - time: 900
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 1000
+    - time: 1000
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 1100
+    - time: 1100
       red: 0
       green: 0
       blue: 0
@@ -458,42 +458,42 @@
 
 - id: 37
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 100
+    - time: 100
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 200
+    - time: 200
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 300
+    - time: 300
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 400
+    - time: 400
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 500
+    - time: 500
       red: 0
       green: 0
       blue: 0
@@ -502,42 +502,42 @@
 
 - id: 40
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 600
+    - time: 600
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 700
+    - time: 700
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 800
+    - time: 800
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 900
+    - time: 900
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 1000
+    - time: 1000
       red: 0
       green: 0
       blue: 0
@@ -546,42 +546,42 @@
 
 - id: 43
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 200
+    - time: 200
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 300
+    - time: 300
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 400
+    - time: 400
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 500
+    - time: 500
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 600
+    - time: 600
       red: 0
       green: 0
       blue: 0
@@ -590,42 +590,42 @@
 
 - id: 44
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 300
+    - time: 300
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 400
+    - time: 400
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 500
+    - time: 500
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 600
+    - time: 600
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 700
+    - time: 700
       red: 0
       green: 0
       blue: 0
@@ -634,42 +634,42 @@
 
 - id: 45
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 400
+    - time: 400
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 500
+    - time: 500
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 600
+    - time: 600
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 700
+    - time: 700
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 800
+    - time: 800
       red: 0
       green: 0
       blue: 0
@@ -678,42 +678,42 @@
 
 - id: 46
   times:
-    - dt: 0
+    - time: 0
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-    - dt: 500
+    - time: 500
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 600
+    - time: 600
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 700
+    - time: 700
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
 
-    - dt: 800
+    - time: 800
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - dt: 900
+    - time: 900
       red: 0
       green: 0
       blue: 0
@@ -723,21 +723,21 @@
 - id: 53
   times:
 
-    - dt: 0
+    - time: 0
       red: 255
       green: 0
       blue: 0
       white: 200
       Tr: 0
 
-    - dt: 2000
+    - time: 2000
       red: 0
       green: 50
       blue: 255
       white: 0
       Tr: 1
     
-    - dt: 3000
+    - time: 3000
       red: 255
       green: 0
       blue : 0
