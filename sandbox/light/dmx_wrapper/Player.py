@@ -26,7 +26,7 @@ class YamlReader:
 
         for item in data:
             for tram in item["times"]:
-                player.add(item["id"], tram["dt"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"])
+                player.add(item["id"], tram["dt"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], 0)
         self.file_name = file_name
 
 #############################################################
@@ -70,8 +70,8 @@ class Player:
         
 
         
-    def add(self, lightId, time, rgbw, tr):
-        self.thread_queues[lightId].put({"dt":time, "id": lightId, "red":rgbw[0], "green":rgbw[1], "blue":rgbw[2], "white":rgbw[3], "Tr":tr})
+    def add(self, lightId, time, rgbw, tr, offset):
+        self.thread_queues[lightId].put({"dt":time + offset, "id": lightId, "red":rgbw[0], "green":rgbw[1], "blue":rgbw[2], "white":rgbw[3], "Tr":tr})
 
 
     def start(self):
