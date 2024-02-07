@@ -18,7 +18,7 @@ class YamlReader:
         except (yaml.YAMLError, FileNotFoundError) as e:
             raise ValueError(f"Error reading YAML file: {e}")
             
-    def set_file(self, file_name, player):
+    def play_file(self, file_name, player, offset = 0):
         data = self._read_yaml(file_name)
 
         if not isinstance(data, list):
@@ -26,7 +26,7 @@ class YamlReader:
 
         for item in data:
             for tram in item["times"]:
-                player.add(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], 0)
+                player.add(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], offset)
         self.file_name = file_name
 
 #############################################################
@@ -157,6 +157,7 @@ class Player:
         for lightId in range(self.num_lights):
             if self.thread_queues[lightId].qsize() != 0:
                 return True
+            #print(self.thread_queues[lightId].qsize())
             
         return False
 
@@ -171,7 +172,7 @@ if __name__ == "__main__":
     interfaceName = "TkinterDisplayer"
     player = Player(54, interfaceName)
     yr = YamlReader()
-    yr.set_file(r"../yamls/snake2.yml", player)
+    yr.play_file(r"../yamls/snake2.yml", player, 2000)
     player.start()
     while (player.is_running()):
         time.sleep(1)
