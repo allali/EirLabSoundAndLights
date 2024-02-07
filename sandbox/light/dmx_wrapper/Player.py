@@ -124,7 +124,7 @@ class Player:
 
             interface.set_frame(self.universe.serialise())
             interface.send_update()
-            currentTime = self.timer.get_time()
+            currentTime = self.timer.get_time() / 3
 
         interface.close()
 
@@ -169,10 +169,13 @@ class Player:
 
 if __name__ == "__main__":
     nbLights = 54
-    interfaceName = "TkinterDisplayer"
+    interfaceName = "FT232R"
     player = Player(54, interfaceName)
     yr = YamlReader()
-    yr.play_file(r"../yamls/snake2.yml", player, 2000)
+    yr.play_file(r"../yamls/snake2.yml", player, 200)
+    yr.play_file(r"../yamls/snake2.yml", player, 1200)
+    yr.play_file(r"../yamls/snake2.yml", player, 3200)
+    yr.play_file(r"../yamls/snake2.yml", player, 4200)
     player.start()
     while (player.is_running()):
         time.sleep(1)
