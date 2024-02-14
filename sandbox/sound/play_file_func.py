@@ -50,7 +50,7 @@ class AudioPlayer:
         self.bufferSize = bufferSize
         self.manual = False
         self.fileName = None
-        self.q = queue.Queue(maxsize=bufferSize)
+        self.q = queue.Queue(maxsize=self.bufferSize)
         self.event = threading.Event()
         self.mainThread = None
         self.isRunning = False
@@ -74,7 +74,7 @@ class AudioPlayer:
     def load_file(self, fileName):
         self.mainThread = threading.Thread(target=self._play, args=[fileName])
         
-    def play(self):
+    def start(self):
         self.mainThread.start()
             
     def _play(self, fileName):
@@ -87,7 +87,7 @@ class AudioPlayer:
                     self.client.outports.register(f'out_{ch + 1}')
                 block_generator = f.blocks(blocksize=self.blocksize, dtype='float32',
                                         always_2d=True, fill_value=0)
-                for _, data in zip(range(self.buffersize), block_generator):
+                for _, data in zip(range(self.bufferSize), block_generator):
                     self.q.put_nowait(data)  # Pre-fill queue
         #        with client:
                 self.client.activate()
@@ -107,21 +107,26 @@ class AudioPlayer:
         #                    for source, target in zip(client.outports, target_ports):
         #                        source.connect(target)
                     timeout = self.blocksize * self.bufferSize / self.samplerate
+                    print("Start Sound !")
                     for data in block_generator:
                         self.q.put(data, timeout=timeout)
                     self.q.put(None, timeout=timeout)  # Signal end of file
                     self.event.wait()  # Wait until playback is finished
+            print("Sound finished !")
             self.isRunning = False
         except KeyboardInterrupt:
             self.isRunning = False
+            print("error1")
             exit('\nInterrupted by user')
         except (queue.Full):
+            print("error2")
             self.isRunning = False
             # A timeout occured, i.e. there was an error in the callback
             exit(1)
         except Exception as e:
+            print(type(e).__name__ + ': ' + str(e))
             self.isRunning = False
-            exit(type(e).__name__ + ': ' + str(e))
+            exit(1)
         
         
     def print_error(self, *args):
