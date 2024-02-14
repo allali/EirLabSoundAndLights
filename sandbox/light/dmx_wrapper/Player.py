@@ -20,7 +20,7 @@ class YamlReader:
         except (yaml.YAMLError, FileNotFoundError) as e:
             raise ValueError(f"Error reading YAML file: {e}")
             
-    def play_file(self, file_name, player, offset = 0):
+    def load_file(self, file_name, player, offset = 0):
         data = self._read_yaml(file_name)
 
         if not isinstance(data, list):
@@ -148,7 +148,7 @@ class Player_Light:
         return False
 
 
-    def add(self,time:int, rgbw:List[int], tr:int, offset:int, relativeOffset:bool):
+    def add(self,time:int, rgbw:List[int], tr:int, offset:int):
         self.isRunning = True
         self.threadQueues[self.currentSetId-1].put({"time":time + offset, "red":rgbw[0], "green":rgbw[1], "blue":rgbw[2], "white":rgbw[3], "Tr":tr})
         
@@ -217,7 +217,11 @@ class Player:
         
                 
     def add(self, lightId:int, time:int, rgbw:List[int], tr:int, offset:int, relativeOffset:bool):
-        self.lights[lightId].add(time, rgbw, tr, offset, relativeOffset)
+        globalOffset = 0
+        if (relativeOffset):
+            globalOffset = self.timer.get_time()
+        
+        self.lights[lightId].add(time, rgbw, tr, offset+globalOffset)
         #self.thread_queues[lightId].put({"time":time + offset, "id": lightId, "red":rgbw[0], "green":rgbw[1], "blue":rgbw[2], "white":rgbw[3], "Tr":tr})
     
     
@@ -273,10 +277,10 @@ if __name__ == "__main__":
     interfaceName = "TkinterDisplayer" # "FT232R"
     player = Player(54, interfaceName)
     yr = YamlReader()
-    yr.play_file(r"../yamls/snake2.yml", player, 200)
-    yr.play_file(r"../yamls/snake2.yml", player, 1200)
-    yr.play_file(r"../yamls/snake2.yml", player, 3200)
-    yr.play_file(r"../yamls/snake2.yml", player, 4200)
+    yr.load_file(r"../yamls/snake2.yml", player, 200)
+    yr.load_file(r"../yamls/snake2.yml", player, 1200)
+    yr.load_file(r"../yamls/snake2.yml", player, 3200)
+    yr.load_file(r"../yamls/snake2.yml", player, 4200)
     player.start()
     while (player.is_running()):
         time.sleep(1)
