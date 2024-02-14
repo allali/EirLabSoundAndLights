@@ -20,7 +20,7 @@ class YamlReader:
         except (yaml.YAMLError, FileNotFoundError) as e:
             raise ValueError(f"Error reading YAML file: {e}")
             
-    def load_file(self, file_name, player, offset = 0):
+    def load_file(self, file_name, player, offset = 0, relativeOffset=False):
         data = self._read_yaml(file_name)
 
         if not isinstance(data, list):
@@ -28,7 +28,7 @@ class YamlReader:
         player.add_new_set()
         for item in data:
             for tram in item["times"]:
-                player.add(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], offset, False)
+                player.add(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], offset, relativeOffset)
         self.file_name = file_name
 
 #############################################################
@@ -252,7 +252,7 @@ class Player:
 
             interface.set_frame(self.universe.serialise())
             interface.send_update()
-            currentTime = self.timer.get_time() / 3
+            currentTime = self.timer.get_time()
         
         interface.close()
 
@@ -277,10 +277,11 @@ if __name__ == "__main__":
     interfaceName = "TkinterDisplayer" # "FT232R"
     player = Player(54, interfaceName)
     yr = YamlReader()
-    yr.load_file(r"../yamls/snake2.yml", player, 200)
-    yr.load_file(r"../yamls/snake2.yml", player, 1200)
-    yr.load_file(r"../yamls/snake2.yml", player, 3200)
-    yr.load_file(r"../yamls/snake2.yml", player, 4200)
+    # yr.load_file(r"../yamls/snake2.yml", player, 200)
+    # yr.load_file(r"../yamls/snake2.yml", player, 1200)
+    # yr.load_file(r"../yamls/snake2.yml", player, 3200)
+    # yr.load_file(r"../yamls/snake2.yml", player, 4200)
+    yr.load_file(r"../yamls/sound_10_tracks.yml", player, 0, False)
     player.start()
     while (player.is_running()):
         time.sleep(1)
