@@ -61,15 +61,15 @@ def stop_callback(msg=''):
     event.set()
     raise jack.CallbackExit
 
-def absolute(x):
-    if (x < 0):
-        return -x
-    return x
+#Necessaries globals in the rms_calculation 
 
-rms = {}
 rms_values = {}
-def process(frames):
+cpt = 0 
+n_port = 0
 
+def process(frames):
+    global cpt
+    global n_port
     if frames != blocksize:
         stop_callback('blocksize must not be changed, I quit!')
     try:
@@ -78,24 +78,30 @@ def process(frames):
         stop_callback('Buffer is empty: increase buffersize?')
     if data is None:
         stop_callback()  # Playback is finished
-    k = 0
+    cpt += 1024 
     for channel, port in zip(data.T, client.outports):
+        lgth_channel = len(channel)
         port.get_array()[:] = channel
         channel_value = 0
-        for i in range(len(channel)):
-            channel_value += channel[i]
-        if k not in rms.keys():
-            rms[k] = channel
-            rms_values[k] = channel_value
+        for i in range(lgth_channel):
+            channel_value += channel[i]**2
+        if n_port not in rms_values.keys():
+            rms_values[n_port] = [channel_value]
         else:
-            rms[k] = np.concatenate((rms[k],channel))
-            rms_values[k] += channel_value
-        if (len(rms[k]) >= 44100):
-            print(sqrt(rms_values[k]**2/44100))
-            for i in range(len(channel)):
-                channel_value -= rms_values[k]
-                rms[k] = np.delete(rms[k], 0)
-        k += 1
+            rms_values[n_port].append(channel_value)
+        if (len(rms_values[n_port]) * lgth_channel >= samplerate_fre):
+            rms_values[n_port].pop(0)
+        if (cpt >= samplerate_fre * 0.25):
+            sum = 0
+            for i in range(len(rms_values[n_port])):
+                sum += rms_values[n_port][i]
+            print("port n°",n_port," : ",sqrt(sum/(lgth_channel * len(rms_values[n_port]))))
+        n_port += 1
+
+    n_port = 0
+    if (cpt >= samplerate_fre * 0.25): #We want to take rms vlaue every 1/4 second, 
+        cpt = 0
+
 
 
 
@@ -113,8 +119,10 @@ try:
     client.set_shutdown_callback(shutdown)
     client.set_process_callback(process)
     def playsound():
+        global samplerate_fre
         with sf.SoundFile(args.filename) as f:
             NCHANNELS = f.channels
+            samplerate_fre = f.samplerate
             for ch in range(f.channels):
                 client.outports.register(f'out_{ch + 1}')
             block_generator = f.blocks(blocksize=blocksize, dtype='float32',
