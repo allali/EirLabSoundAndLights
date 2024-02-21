@@ -18,14 +18,14 @@ def create_yaml(name):
         sys.exit(1)
 
 
-def add_to_yaml(name, id, dt, red, green, blue, white, Tr):
+def add_to_yaml(name, id, time, red, green, blue, white, Tr):
 
     if id < 0 or id > 53:
         print(f"The id '{id}' doesn't exists.")
         sys.exit(1)
 
-    if dt < 0:
-        print(f"dt can't be negative ({dt}).")
+    if time < 0:
+        print(f"time can't be negative ({time}).")
         sys.exit(1)
 
     if not(0 <= red <= 255) or not(0 <= green <= 255) or not(0 <= blue <= 255) or not(0 <= white <= 255):
@@ -50,7 +50,7 @@ def add_to_yaml(name, id, dt, red, green, blue, white, Tr):
         data = yaml.safe_load(file)
 
     data[id]['times'].append({
-        'dt': dt,
+        'time': time,
         'red': red,
         'green': green,
         'blue': blue,
