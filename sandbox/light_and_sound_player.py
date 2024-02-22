@@ -1,28 +1,49 @@
 import time
 import sys
+import argparse
 sys.path.append("./light/dmx_wrapper")
 sys.path.append("./light")
+sys.path.append("./light/yamls")
 sys.path.append("./sound")
 
 from Player import YamlReader, Player
 from play_file_func import AudioPlayer
 
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('-s', '--soundFile', type=str, default=None, help='audio file to be played back')
+parser.add_argument('-y', '--yaml', type=str, default=None, help='Yaml file to be use for lights')
+parser.add_argument('-i', '--interface', type=str, default="TkinterDisplayer", help='Visual interface')
+parser.add_argument('--loop', action='store_true', default=False, help='Repeat')
+parser.add_argument(
+    '-b', '--buffersize', type=int, default=20,
+    help='number of blocks used for buffering (default: %(default)s)')
+parser.add_argument('-c', '--clientname', default='file player',
+                    help='JACK client name')
+parser.add_argument('-m', '--manual', action='store_true',
+                    help="don't connect to output ports automatically")
+args = parser.parse_args()
+print(args)
+    
+
 
 nbLights = 54
-interfaceName = "TkinterDisplayer" # "FT232R"
+interfaceName = args.interface # "FT232R"
+yamlFile = args.yaml # r"./light/yamls/sound_10_tracks.yml"
+audioFile = args.soundFile # r"./sound/10tracks_studio/test_10_pistes_metronome.wav"
+
 player = Player(54, interfaceName)
 yr = YamlReader()
-# yr.load_file(r"../yamls/snake2.yml", player, 200)
-# yr.load_file(r"../yamls/snake2.yml", player, 1200)
-# yr.load_file(r"../yamls/snake2.yml", player, 3200)
-# yr.load_file(r"../yamls/snake2.yml", player, 4200)
-yr.load_file(r"./light/yamls/sound_10_tracks.yml", player, 0, False)
 
-audioPlayer = AudioPlayer()
-audioPlayer.load_file(r"./sound/10tracks_studio/test_10_pistes_metronome.wav")
+if (yamlFile is not None):
+    yr.load_file(yamlFile, player, 0, False)
+audioPlayer = AudioPlayer(args.clientname, args.buffersize)
+if (audioFile is not None):
+    audioPlayer.load_file(audioFile)
 
 audioPlayer.start()
 player.start()
 while (player.is_running()):
     time.sleep(1)
+    if (args.loop):
+        pass # Do the loop if needed
 player.quit()
