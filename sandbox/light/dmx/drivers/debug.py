@@ -118,7 +118,7 @@ class Debug(DMXDriver):
     @staticmethod
     def get_driver_name() -> str:
         """Get the driver name."""
-        print("Driver name checked")
+        #print("Driver name checked")
         return "Debug"
 
 
