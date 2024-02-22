@@ -25,7 +25,7 @@ class YamlReader:
 
         if not isinstance(data, list):
             raise ValueError("Invalid YAML format. Expected a list.")
-        player.add_new_set()
+        #player.add_new_set()
         for item in data:
             for tram in item["times"]:
                 player.add(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], offset, relativeOffset)
@@ -59,12 +59,13 @@ class Player_Light:
 
     def __init__(self, lightId:int, queueMaxSize:int):
         self.isRunning:bool = False
-        self.maxQueueSize = queueMaxSize
+        self.queue = Queue(maxsize=queueMaxSize)
+        #self.maxQueueSize = queueMaxSize
         self.mixType = 1
-        self.currentSetId = 0
+        #self.currentSetId = 0
         self.id:int = lightId
-        self.threadQueues = []
-        self.lastBlocks = []
+        #self.threadQueues = []
+        self.lastBlock = [{'time': 0, 'red': 0, 'green': 0, 'blue': 0, 'white': 0, 'Tr': 0}]
         self.lastTram = np.array([0,0,0,0])
         self.light = dmx.DMXLight4Slot(address=dmx.light.light_map[lightId])
 
@@ -91,12 +92,13 @@ class Player_Light:
         
 
 
-    def get_block(self, threadQueueId):
-        thQueue = self.threadQueues[threadQueueId]
-        if (thQueue.qsize() > 0):  
-            return thQueue.queue[0]
+    def get_block(self):
+        #thQueue = self.threadQueues[threadQueueId]
+        if (self.queue.qsize() > 0):  
+            return self.queue.queue[0]
         else:
-            raise Exception("Queue shouldn't be empty")
+            return self.lastBlock[0]
+            #raise Exception("Queue shouldn't be empty")
             
         
     def get_next_block(self, threadQueueId):
@@ -106,72 +108,73 @@ class Player_Light:
         else:
             return None
         
-    def _clean_queue(self, currentTime, queueId):
-        if (self.threadQueues[queueId].qsize() == 0):
-            self.threadQueues.pop(queueId)
-            self.lastBlocks.pop(queueId)
-            self.currentSetId -= 1
-            if (self.currentSetId == 0):
-                self.isRunning = False
-            return True
+    def _clean_queue(self, currentTime:int):
+        #if (self.queue.qsize() == 0):
+            #self.threadQueues.pop(queueId)
+            #self.lastBlock.pop(0)
+            #self.currentSetId -= 1
+            # if (self.currentSetId == 0):
+            #     self.isRunning = False
+            #return True
             
-        res = self.get_block(queueId)
+        res = self.get_block()
         while(res["time"] < currentTime):
-            self.lastBlocks[queueId] = res
-            if (self.remove_block(queueId)):
+            self.lastBlock = res
+            if (self.remove_block()):
                 return True
-            res = self.get_block(queueId)
+            res = self.get_block()
         return False
     
     def clean_queues(self, currentTime):
-        add = 0
-        for queueId in range(len(self.threadQueues)):
-            if (self._clean_queue(currentTime, queueId-add)):
-                add += 1
+        # add = 0
+        # for queueId in range(len(self.threadQueues)):
+        #     if (self._clean_queue(currentTime, queueId-add)):
+        #         add += 1
+        self._clean_queue(currentTime)
         
             
         
     
-    def remove_block(self, threadQueueId):
-        self.threadQueues[threadQueueId].get()
-        if (self.threadQueues[threadQueueId].qsize() == 0):
-            self.threadQueues.pop(threadQueueId)
-            self.lastBlocks.pop(threadQueueId)
-            self.currentSetId -= 1
-            if (self.currentSetId == 0):
-                self.isRunning = False
+    def remove_block(self):
+        self.queue.get()
+        if (self.queue.qsize() == 0):
+            #self.threadQueues.pop(threadQueueId)
+            self.lastBlock.pop(0)
+            #self.currentSetId -= 1
+            # if (self.currentSetId == 0):
+            #     self.isRunning = False
             return True
-        elif (self.threadQueues[threadQueueId].qsize() == 1 and self.threadQueues[threadQueueId].queue[0]['Tr'] != -1):
-            endBlock = self.threadQueues[threadQueueId].queue[0]
-            self.threadQueues[threadQueueId].put({"time":endBlock["time"]+50, "red":endBlock["red"], "green":endBlock["green"], "blue":endBlock["blue"], "white":endBlock["white"], "Tr":-1})
+        elif (self.queue.qsize() == 1 and self.queue.queue[0]['Tr'] != -1):
+            endBlock = self.queue.queue[0]
+            self.queue.put({"time":endBlock["time"]+50, "red":endBlock["red"], "green":endBlock["green"], "blue":endBlock["blue"], "white":endBlock["white"], "Tr":-1})
         
         return False
 
 
     def add(self,time:int, rgbw:List[int], tr:int, offset:int):
         self.isRunning = True
-        self.threadQueues[self.currentSetId-1].put({"time":time + offset, "red":rgbw[0], "green":rgbw[1], "blue":rgbw[2], "white":rgbw[3], "Tr":tr})
-        
-
+        self.queue.put({"time":time + offset, "red":rgbw[0], "green":rgbw[1], "blue":rgbw[2], "white":rgbw[3], "Tr":tr})     
     
     def _get_current_block(self, currentTime):
-        currentBlocks = []
+        #currentBlocks = []
         self.clean_queues(currentTime)
-        for queueId in range(self.currentSetId):
-            currentBlocks.append(self.get_block(queueId))
+        # for queueId in range(self.currentSetId):
+        #     currentBlocks.append(self.get_block(queueId))
 
-        self.lastTram = self._mix(currentBlocks, currentTime)  
+        currentBlock = self.get_block()
+
+        #self.lastTram = self._mix(currentBlock, currentTime)  
+        self.lastTram = self._get_rgbw(currentBlock, currentTime)
         return self.lastTram
 
     
 
-    def _get_rgbw(self, blocks, threadQueueId, currentTime):
-        block = blocks[threadQueueId]
+    def _get_rgbw(self, block, currentTime):
         if (block['Tr'] == 0) or (block['Tr'] == -1):
-            lastBlock = self.lastBlocks[threadQueueId]
+            lastBlock = self.lastBlock[0]
             return np.array([lastBlock['red'],lastBlock['green'],lastBlock['blue'],lastBlock['white']])
         elif block['Tr'] == 1:
-            return np.array(self._get_transition_1_rgbw(self.lastBlocks[threadQueueId], block, currentTime))
+            return np.array(self._get_transition_1_rgbw(self.lastBlock[0], block, currentTime))
         else:
             return None, None, None, None
         
@@ -190,10 +193,10 @@ class Player_Light:
         if r is not None:
             self.light.set_colour(dmx.Color(r,g,b,w))
 
-    def add_new_set(self):
-        self.lastBlocks.append({'time': 0, 'red': 0, 'green': 0, 'blue': 0, 'white': 0, 'Tr': 0})
-        self.threadQueues.append(Queue(maxsize=self.maxQueueSize))
-        self.currentSetId += 1
+    # def add_new_set(self):
+    #     self.lastBlocks.append({'time': 0, 'red': 0, 'green': 0, 'blue': 0, 'white': 0, 'Tr': 0})
+    #     self.threadQueues.append(Queue(maxsize=self.maxQueueSize))
+    #     self.currentSetId += 1
 
     
 
@@ -222,12 +225,15 @@ class Player:
             globalOffset = self.timer.get_time()
         
         self.lights[lightId].add(time, rgbw, tr, offset+globalOffset)
+        #print("ici",time, rgbw, tr, offset+globalOffset)
+        #print(lightId,self.lights[lightId].queue.queue[0])
+
         #self.thread_queues[lightId].put({"time":time + offset, "id": lightId, "red":rgbw[0], "green":rgbw[1], "blue":rgbw[2], "white":rgbw[3], "Tr":tr})
     
     
-    def add_new_set(self):
-        for light in self.lights:
-            light.add_new_set()
+    # def add_new_set(self):
+    #     for light in self.lights:
+    #         light.add_new_set()
 
 
     def start(self):
@@ -248,6 +254,7 @@ class Player:
                 r, g, b, w = light._get_current_block(currentTime)
                 #r, g, b, w = light._get_rgbw(currentBlock, currentTime)
                 light.set_color(r,g,b,w)
+                print("light", light.id, "is doing", r, g, b, w, "at", currentTime)
 
 
             interface.set_frame(self.universe.serialise())
@@ -277,11 +284,11 @@ if __name__ == "__main__":
     interfaceName = "TkinterDisplayer" # "FT232R"
     player = Player(54, interfaceName)
     yr = YamlReader()
-    # yr.load_file(r"../yamls/snake2.yml", player, 200)
+    yr.load_file(r"../yamls/snake2.yml", player, 200)
     # yr.load_file(r"../yamls/snake2.yml", player, 1200)
     # yr.load_file(r"../yamls/snake2.yml", player, 3200)
     # yr.load_file(r"../yamls/snake2.yml", player, 4200)
-    yr.load_file(r"../yamls/sound_10_tracks.yml", player, 0, False)
+    #yr.load_file(r"../yamls/sound_10_tracks.yml", player, 0, False)
     player.start()
     while (player.is_running()):
         time.sleep(1)
