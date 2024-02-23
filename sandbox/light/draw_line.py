@@ -130,8 +130,6 @@ if __name__ == "__main__":
                 (43762, 45488)]
     
     
-    start = speakers[1]
-    stop = speakers[3]
     ym = yaml_writer("line")
     for speakerId in tqdm(range(len(speakers)-1)):
         static_glow(ym , speakers[speakerId], timeline[speakerId][0], timeline[speakerId][1] - timeline[speakerId][0])
