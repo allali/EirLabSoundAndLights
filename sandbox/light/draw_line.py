@@ -85,7 +85,7 @@ def distance_map_to_rgbw(dataSet):
     
     
 def get_color_anim(ym ,startPosition, endPosition, offset:int, duration:int, func=lambda x:(x**5)):
-    for i in tqdm(range(duration//27 - 1)):
+    for i in range(min(10, int(duration//27 - 1))):
         dataSet = get_line_step(startPosition, endPosition, i/(duration//27))
         dataSet = 1 - normalize_data_set(dataSet)
         dataSet = func(dataSet)
@@ -104,17 +104,37 @@ def add_buffer(ym):
     for lightId in range(54):
         ym.add("line", lightId, 0, 0, 0, 0, 0, 0)
 
-ym = yaml_writer("line")
-get_color_anim(ym, speakers[1], speakers[2], 50, 3000)
-ym.write()
+def static_glow(ym , position, offset:int, duration:int, func=lambda x:(x**5)):
+    dataSet = np.zeros((len(lights)), dtype=np.float64)
+    for lightId, light in enumerate(lights):
+        dataSet[lightId] = dist(position, light)
+    dataSet = np.sqrt(dataSet)
+    
+    dataSet = 1 - normalize_data_set(dataSet)
+    dataSet = func(dataSet)
+    colorMap = distance_map_to_rgbw(dataSet)
+    for lightId, color in enumerate(colorMap):
+        ym.add(lightId, offset, color[0], color[1], color[2], color[3], 0)
+        ym.add(lightId, offset+duration, color[0], color[1], color[2], color[3], 0)
 
-# mapData = get_line_step(speakers[5], speakers[3], 0.)
-# format_print(mapData)
-
-# import matplotlib.pyplot as plt
-
-# X = np.linspace(0.00001,1,1000)
-# Y = (X)**3
-# plt.plot(X,Y)
-# print(X,Y)
-# plt.show()
+if __name__ == "__main__":
+    timeline = [(0,1600),
+                (4700, 6384),
+                (9600, 11210), 
+                (14487, 16081), 
+                (19365, 21010),
+                (24287, 25896),
+                (29179, 30825),
+                (34084, 35673),
+                (38869, 40522),
+                (43762, 45488)]
+    
+    
+    start = speakers[1]
+    stop = speakers[3]
+    ym = yaml_writer("line")
+    for speakerId in tqdm(range(len(speakers)-1)):
+        static_glow(ym , speakers[speakerId], timeline[speakerId][0], timeline[speakerId][1] - timeline[speakerId][0])
+        get_color_anim(ym, speakers[speakerId], speakers[speakerId+1], timeline[speakerId][1], timeline[speakerId+1][0] - timeline[speakerId][1])
+    static_glow(ym , speakers[-1], timeline[-1][0], timeline[-1][1] - timeline[-1][0])
+    ym.write()

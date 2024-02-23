@@ -19,7 +19,6 @@ class yaml_writer:
             # self.file.close()
             self.fileOpened = False
             self.data = [{"id": i, "times": []} for i in range(54)]
-            print(self.data)
             
         else:
             print(f"The file '{name}' already exists.")
@@ -72,7 +71,7 @@ class yaml_writer:
         else:
             self.isOpened = True
             with open(self.file_path , 'w') as file:
-                print(yaml.dump(self.data, file, default_flow_style=True))
+                yaml.dump(self.data, file, default_flow_style=True)
             self.isOpened = False
         #print(self.data)
             
