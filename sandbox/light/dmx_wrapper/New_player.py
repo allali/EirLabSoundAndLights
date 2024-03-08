@@ -105,24 +105,17 @@ class SingleLightQueue:
         if self.queue.empty():
             self.isRunning = False
             return 
-    
-        # temporary code to test time of send_update
         self.next_event = self.get_next_event()
-        self.set_color(self.next_event[1])
-        self.isRunning = True
-        self.remove_event()
+        if self.next_event is not None and abs(self.next_event[0] - timeEllapsed) < FREQUENCY:
+            self.current_event = self.next_event
+            self.remove_event()
+            self.set_color(self.next_event[1])
+            self.isRunning = True
+            return 
+        while self.next_event is not None and timeEllapsed > self.next_event[0]:
+            self.next_event = self.get_next_event()
+            self.remove_event()
 
-        # code i'm trying to fix, but we'll see that later
-            # while self.next_event is not None and timeEllapsed > self.next_event[0]:
-            #     self.next_event = self.get_next_event()
-            #     self.remove_event()
-
-            # if self.next_event is not None and abs(self.next_event[0] - timeEllapsed) < FREQUENCY:
-            #     self.current_event = self.next_event
-            #     self.remove_event()
-            #     self.set_color(self.next_event[1])
-            #     self.isRunning = True
-            #     return 
             
     def remove_event(self):
         self.queue.get()
@@ -171,21 +164,14 @@ class Player:
         timeEllapsed = -1
         interface = dmx.DMXInterface(interfaceName)
         self.timer.start()
+        print("sarting")
         while (self.isRunning):
             for light in self.lights:
                 light.set_next_event(timeEllapsed)
             interface.set_frame(self.universe.serialise())
-            
-            #self.time_debug.start()
             interface.send_update()
-            #print("time debug", self.time_debug.get_time())
-            #self.time_debug.stop()
-
             self.isRunning = self.is_running()
             timeEllapsed = self.timer.get_time()
-            #print("time ellapsed", self.timer.get_time())
-
-            #timeEllapsed += FREQUENCY
 
         self.timer.stop()
         interface.close()
@@ -203,5 +189,5 @@ if __name__ == "__main__":
         print(light.queue.queue)
     player.start()
     while (player.isRunning):
-        pass
+        time.sleep(1)
     player.quit()
