@@ -4,6 +4,7 @@ import argparse
 sys.path.append("./light")
 sys.path.append("./yamls")
 sys.path.append("./sound")
+sys.path.append("./audio_files/10tracks_studio")
 
 from Player import YamlReader, Player
 from play_file_func import AudioPlayer

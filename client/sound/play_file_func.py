@@ -21,6 +21,7 @@ import jack
 import soundfile as sf
 import time
 from math import sqrt
+print(sys.path)
 #filename = fichier audio
 # bufferSize = 20
 # clientName = file player
@@ -89,7 +90,7 @@ class AudioPlayer:
         self.isRunning = True
         try:
             self.fileName = fileName
-            with sf.SoundFile(self.fileName) as f:
+            with sf.SoundFile("../sandbox/sound/10tracks_studio/" + self.fileName) as f:
                 self.get_samplerate_fe(f)
                 NCHANNELS = f.channels
                 for ch in range(f.channels):
