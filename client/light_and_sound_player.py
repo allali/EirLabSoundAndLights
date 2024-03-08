@@ -1,9 +1,8 @@
 import time
 import sys
 import argparse
-sys.path.append("./light/dmx_wrapper")
 sys.path.append("./light")
-sys.path.append("./light/yamls")
+sys.path.append("./yamls")
 sys.path.append("./sound")
 
 from Player import YamlReader, Player
