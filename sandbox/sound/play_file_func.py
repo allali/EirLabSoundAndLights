@@ -20,7 +20,7 @@ import threading
 import jack
 import soundfile as sf
 import time
-
+from math import sqrt
 #filename = fichier audio
 # bufferSize = 20
 # clientName = file player
@@ -54,6 +54,10 @@ class AudioPlayer:
         self.event = threading.Event()
         self.mainThread = None
         self.isRunning = False
+        self.rms_values = {}
+        self._samplerate = 0
+        self._port = 0
+        self._cpt = 0
 
         try:
             self.client = jack.Client(self.clientName)
@@ -76,12 +80,17 @@ class AudioPlayer:
         
     def start(self):
         self.mainThread.start()
-            
+    
+    def get_samplerate_fe(self,sf):
+        self._samplerate = sf.samplerate
+    
+
     def _play(self, fileName):
         self.isRunning = True
         try:
             self.fileName = fileName
             with sf.SoundFile(self.fileName) as f:
+                self.get_samplerate_fe(f)
                 NCHANNELS = f.channels
                 for ch in range(f.channels):
                     self.client.outports.register(f'out_{ch + 1}')
@@ -162,5 +171,25 @@ class AudioPlayer:
             self.stop_callback('Buffer is empty: increase buffersize?')
         if data is None:
             self.stop_callback()  # Playback is finished
+        self._cpt += 1024
         for channel, port in zip(data.T, self.client.outports):
+            lgth_channel = len(channel)
             port.get_array()[:] = channel
+            channel_value = 0
+            for i in range(lgth_channel):
+                channel_value += channel[i]**2
+            if self._port not in self.rms_values.keys():
+                self.rms_values[self._port] = [channel_value]
+            else:
+                self.rms_values[self._port].append(channel_value)
+            if (len(self.rms_values[self._port]) * lgth_channel >= self._samplerate):
+                self.rms_values[self._port].pop(0)
+            if (self._cpt >= self._samplerate * 0.25):
+                sum = 0
+                for i in range(len(self.rms_values[self._port])):
+                    sum += self.rms_values[self._port][i]
+                print("port n°",self._port," : ",sqrt(sum/(lgth_channel * len(self.rms_values[self._port]))))
+            self._port += 1
+        self._port = 0
+        if (self._cpt >= self._samplerate * 0.25): #We want to take rms vlaue every 1/4 second, 
+            self._cpt = 0
