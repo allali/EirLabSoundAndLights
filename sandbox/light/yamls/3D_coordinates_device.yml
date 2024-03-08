@@ -1,322 +1,329 @@
 - lights:
-    -id: 0
-    coordinates:
-      - x: 1350
-        y: 2120
-        z: 250
-    -id: 1
-    coordinates:
-      - x: 1110
-        y: 2120
-        z: 250
-    -id: 2
-    coordinates:
-      - x: 870
-        y: 2120
-        z: 250
-    -id: 3
-    coordinates:
-      - x: 570
-        y: 2120
-        z: 250
-    -id: 4
-    coordinates:
-      - x: 330
-        y: 2120
-        z: 250
-    -id: 5
-    coordinates:
-      - x: 90
-        y: 2120
-        z: 250
-    -id: 6
-    coordinates:
-      - x: 1350
-        y: 1700
-        z: 250
-    -id: 7
-    coordinates:
-      - x: 1110
-        y: 1700
-        z: 250
-    -id: 8
-    coordinates:
-      - x: 870
-        y: 1700
-        z: 250
-    -id: 9
-    coordinates:
-      - x: 570
-        y: 1700
-        z: 250
-    -id: 10
-    coordinates:
-      - x: 330
-        y: 1700
-        z: 250
-    -id: 11
-    coordinates:
-      - x: 90
-        y: 1700
-        z: 250
-    -id: 12
-    coordinates:
-      - x: 1350
-        y: 1640
-        z: 250
-    -id: 13
-    coordinates:
-      - x: 1110
-        y: 1640
-        z: 250
-    -id: 14
-    coordinates:
-      - x: 870
-        y: 1640
-        z: 250
-    -id: 15
-    coordinates:
-      - x: 570
-        y: 1640
-        z: 250
-    -id: 16
-    coordinates:
-      - x: 330
-        y: 1640
-        z: 250
-    -id: 17
-    coordinates:
-      - x: 90
-        y: 1640
-        z: 250
-    -id: 18
-    coordinates:
-      - x: 1350
-        y: 1400
-        z: 250
-    -id: 19
-    coordinates:
-      - x: 1110
-        y: 1400
-        z: 250
-    -id: 20
-    coordinates:
-      - x: 870
-        y: 1400
-        z: 250
-    -id: 21
-    coordinates:
-      - x: 570
-        y: 1400
-        z: 250
-    -id: 22
-    coordinates:
-      - x: 330
-        y: 1400
-        z: 250
-    -id: 23
-    coordinates:
-      - x: 90
-        y: 1400
-        z: 250
-    -id: 24
-    coordinates:
-      - x: 1350
-        y: 1160
-        z: 250
-    -id: 25
-    coordinates:
-      - x: 1110
-        y: 1160
-        z: 250
-    -id: 26
-    coordinates:
-      - x: 870
-        y: 1160
-        z: 250
-    -id: 27
-    coordinates:
-      - x: 570
-        y: 1160
-        z: 250
-    -id: 28
-    coordinates:
-      - x: 330
-        y: 1160
-        z: 250
-    -id: 29
-    coordinates:
-      - x: 90
-        y: 1160
-        z: 250
-    -id: 30
-    coordinates:
-      - x: 1350
-        y: 920
-        z: 250
-    -id: 31
-    coordinates:
-      - x: 1110
-        y: 920
-        z: 250
-    -id: 32
-    coordinates:
-      - x: 870
-        y: 920
-        z: 250
-    -id: 33
-    coordinates:
-      - x: 570
-        y: 920
-        z: 250
-    -id: 34
-    coordinates:
-      - x: 330
-        y: 920
-        z: 250
-    -id: 35
-    coordinates:
-      - x: 90
-        y: 920
-        z: 250
-    -id: 36
-    coordinates:
-      - x: 1350
-        y: 680
-        z: 250
-    -id: 37
-    coordinates:
-      - x: 1110
-        y: 680
-        z: 250
-    -id: 38
-    coordinates:
-      - x: 870
-        y: 680
-        z: 250
-    -id: 39
-    coordinates:
-      - x: 570
-        y: 680
-        z: 250
-    -id: 40
-    coordinates:
-      - x: 330
-        y: 680
-        z: 250
-    -id: 41
-    coordinates:
-      - x: 90
-        y: 680
-        z: 250
-    -id: 42
-    coordinates:
-      - x: 1350
-        y: 440
-        z: 250
-    -id: 43 
-    coordinates:
-      - x: 1110
-        y: 440
-        z: 250
-    -id: 44
-    coordinates:
-      - x: 870
-        y: 440
-        z: 250
-    -id: 45
-    coordinates:
-      - x: 570
-        y: 440
-        z: 250
-    -id: 46
-    coordinates:
-      - x: 330
-        y: 440
-        z: 250
-    -id: 47
-    coordinates:
-      - x: 90
-        y: 440
-        z: 250
-    -id: 48
-    coordinates:
-      - x: 1350
-        y: 260
-        z: 250
-    -id: 49
-    coordinates:
-      - x: 1110
-        y: 260
-        z: 250
-    -id: 50
-    coordinates:
-      - x: 870
-        y: 260
-        z: 250
-    -id: 51
-    coordinates:
-      - x: 570
-        y: 260
-        z: 250
-    -id: 52
-    coordinates:
-      - x: 330
-        y: 260
-        z: 250
-    -id: 53
-    coordinates:
-      - x: 90
-        y: 260
-        z: 250
+  - id : 0
+    x: 13.5
+    y: 21.2
+    z: 2.5  
+
+  - id : 1
+    x: 11.1
+    y: 21.2
+    z: 2.5
+  
+  - id : 2
+    x: 8.7
+    y: 21.2
+    z: 2.5
+  
+  - id : 3
+    x: 5.7
+    y: 21.2
+    z: 2.5
+  
+  - id : 4
+    x: 3.3
+    y: 21.2
+    z: 2.5
+  
+  - id : 5
+    x: 0.9
+    y: 21.2
+    z: 2.5
+  
+  - id : 6
+    x: 13.5
+    y: 17.0
+    z: 2.5
+  
+  - id : 7
+    x: 11.1
+    y: 17.0
+    z: 2.5
+  
+  - id : 8
+    x: 8.7
+    y: 17.0
+    z: 2.5
+  
+  - id : 9
+    x: 5.7
+    y: 17.0
+    z: 2.5
+
+  - id : 10
+    x: 3.3
+    y: 17.0
+    z: 2.5
+  
+  - id : 11
+    x: 0.9
+    y: 17.0
+    z: 2.5
+
+  - id : 12
+    x: 13.5
+    y: 16.4
+    z: 2.5
+  
+  - id : 13
+    x: 11.1
+    y: 16.4
+    z: 2.5
+  
+  - id : 14
+    x: 8.7
+    y: 16.4
+    z: 2.5
+
+  - id : 15
+    x: 5.7
+    y: 16.4
+    z: 2.5
+  
+  - id : 16
+    x: 3.3
+    y: 16.4
+    z: 2.5
+
+  - id : 17
+    x: 0.9
+    y: 16.4
+    z: 2.5
+  
+  - id : 18
+    x: 13.5
+    y: 14.0
+    z: 2.5
+  
+  - id : 19
+    x: 11.1
+    y: 14.0
+    z: 2.5
+  
+  - id : 20
+    x: 8.7
+    y: 14.0
+    z: 2.5
+
+  - id : 21
+    x: 5.7
+    y: 14.0
+    z: 2.5
+  
+  - id : 22
+    x: 3.3
+    y: 14.0
+    z: 2.5
+  
+  - id : 23
+    x: 0.9
+    y: 14.0
+    z: 2.5
+
+  - id : 24
+    x: 13.5
+    y: 11.6
+    z: 2.5
+  
+  - id : 25
+    x: 11.1
+    y: 11.6
+    z: 2.5
+  
+  - id : 26
+    x: 8.7
+    y: 11.6
+    z: 2.5
+  
+  - id : 27
+    x: 5.7
+    y: 11.6
+    z: 2.5
+  
+  - id : 28
+    x: 3.3
+    y: 11.6
+    z: 2.5
+  
+  - id : 29
+    x: 0.9
+    y: 11.6
+    z: 2.5
+  
+  - id : 30
+    x: 13.5
+    y: 9.2
+    z: 2.5
+  
+  - id : 31
+    x: 11.1
+    y: 9.2
+    z: 2.5
+  
+  - id: 32
+    x: 8.7
+    y: 9.2
+    z: 2.5
+  
+  - id: 33
+    x: 5.7
+    y: 9.2
+    z: 2.5
+  
+  - id: 34
+    x: 3.3
+    y: 9.2
+    z: 2.5
+  
+  - id: 35
+    x: 0.9
+    y: 9.2
+    z: 2.5
+  
+  - id: 36
+    x: 13.5
+    y: 6.8
+    z: 2.5
+  
+  - id: 37
+    x: 11.1
+    y: 6.8
+    z: 2.5
+  
+  - id: 38
+    x: 8.7
+    y: 6.8
+    z: 2.5
+  
+  - id: 39
+    x: 5.7
+    y: 6.8
+    z: 2.5
+  
+  - id: 40
+    x: 3.3
+    y: 6.8
+    z: 2.5
+  
+  - id: 41
+    x: 0.9
+    y: 6.8
+    z: 2.5
+  
+  - id: 42
+    x: 13.5
+    y: 4.4
+    z: 2.5
+  
+  - id: 43
+    x: 11.1
+    y: 4.4
+    z: 2.5
+  
+  - id: 44
+    x: 8.7
+    y: 4.4
+    z: 2.5
+  
+  - id: 45
+    x: 5.7
+    y: 4.4
+    z: 2.5
+  
+  - id: 46
+    x: 3.3
+    y: 4.4
+    z: 2.5
+  
+  - id: 47
+    x: 0.9
+    y: 4.4
+    z: 2.5
+  
+  - id: 48
+    x: 13.5
+    y: 2.6
+    z: 2.5
+  
+  - id: 49
+    x: 11.1
+    y: 2.6
+    z: 2.5
+  
+  - id: 50
+    x: 8.7
+    y: 2.6
+    z: 2.5
+  
+  - id: 51
+    x: 5.7
+    y: 2.6
+    z: 2.5
+  
+  - id: 52
+    x: 3.3
+    y: 2.6
+    z: 2.5
+  
+  - id: 53
+    x: 0.9
+    y: 2.6
+    z: 2.5
+
 - speakers:
-    -id: 0
-    coordinates:
-      - x: 670
-        y: 2270
-        z: 250
-    -id: 1
-    coordinates:
-      - x: 0
-        y: 1470
-        z: 250
-    -id: 2
-    coordinates:
-      - x: 0
-        y: 1100
-        z: 250
-    -id: 3
-    coordinates:
-      - x: 0
-        y: 770
-        z: 250
-    -id: 4
-    coordinates:
-      - x: 0
-        y: 420
-        z: 250
-    -id: 5
-    coordinates:
-      - x: 670
-        y: 0
-        z: 250
-    -id: 6
-    coordinates:
-      - x: 1465
-        y: 420
-        z: 250
-    -id: 7
-    coordinates:
-      - x: 1465
-        y: 770
-        z: 250
-    -id: 8
-    coordinates:
-      - x: 1465
-        y: 1100
-        z: 250
-    -id: 9
-    coordinates:
-      - x: 1465
-        y: 1470
-        z: 250
+  
+    - id: 0
+      x: 6.7
+      y: 0.
+      z: 2.5
+  
+    - id: 1
+      x: 14.65
+      y: 4.20
+      z: 2.5
+
+    - id: 2
+      x: 14.65
+      y: 7.7
+      z: 2.5
+
+    - id: 3
+      x: 14.65
+      y: 11.0
+      z: 2.5
+
+    - id: 4
+      x: 14.65
+      y: 14.7
+      z: 2.5
+
+    - id: 5
+      x: 6.7
+      y: 22.7
+      z: 2.5
+    
+    - id: 6
+      x: 0.
+      y: 14.7
+      z: 2.5
+    
+    - id: 7
+      x: 0.
+      y: 11.0
+      z: 2.5
+    
+    - id: 8
+      x: 0.
+      y: 7.7
+      z: 2.5
+    
+    - id: 9
+      x: 0.
+      y: 4.2
+      z: 2.5
+    
+
+  
+ 
+  
+  
+  

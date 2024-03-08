@@ -4,7 +4,9 @@ import yaml
 from queue import Queue
 import time
 import sys
-sys.path.append("..")
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).parent.parent))
 import dmx
 import numpy as np
 
@@ -281,7 +283,7 @@ if __name__ == "__main__":
     # yr.load_file(r"../yamls/snake2.yml", player, 1200)
     # yr.load_file(r"../yamls/snake2.yml", player, 3200)
     # yr.load_file(r"../yamls/snake2.yml", player, 4200)
-    yr.load_file(r"../yamls/sound_10_tracks.yml", player, 0, False)
+    yr.load_file(r"yamls/line.yaml", player, 0, False)
     player.start()
     while (player.is_running()):
         time.sleep(1)
