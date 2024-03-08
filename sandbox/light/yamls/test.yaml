@@ -8,8 +8,8 @@
     white: 200
 
   - Tr: 0
-    blue: 200
-    green: 200
+    blue: 0
+    green: 0
     red: 200
     time: 100000
     white: 200
@@ -29,6 +29,7 @@
     red: 200
     time: 100000
     white: 200
+  
 
 - id: 2
   times:
