@@ -1,0 +1,231 @@
+- id: 51
+  times:
+    - time: 0
+      red: 255
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+    - time: 1600
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+
+- id: 47
+  times:
+    - time: 0
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+    - time: 4700
+      red: 255
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+    - time: 6384
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+    
+
+- id: 29
+  times:
+    - time: 0
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+      
+    - time: 9600
+      red: 255
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+    - time: 11210
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+- id: 11
+  times:
+    - time: 0
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+      
+    - time: 14487
+      red: 255
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+    - time: 16081
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+  
+
+- id: 2
+  times:
+    - time: 0
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+      
+    - time: 19365
+      red: 255
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+    - time: 21010
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+
+- id: 6
+  times:
+    - time: 0
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+      
+    - time: 24287
+      red: 255
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+    - time: 25896
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+
+- id: 18
+  times:
+    - time: 0
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+      
+    - time: 29179
+      red: 255
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+    - time: 30825
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+- id: 30
+  times:
+    - time: 0
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+      
+    - time: 34084
+      red: 255
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+    - time: 35673
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+- id: 42
+  times:
+    - time: 0
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+      
+    - time: 38869
+      red: 255
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+    - time: 40522
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+- id: 49
+  times:
+    - time: 0
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+      
+    - time: 43762
+      red: 255
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+    - time: 45488
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
+
+
