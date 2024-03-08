@@ -6,7 +6,7 @@ class yaml_writer:
     def __init__(self,name):
         self.name = name
         base_path = Path(__file__).parent
-        folder_path = base_path / 'yamls'
+        folder_path = base_path
         folder_path.mkdir(parents=True, exist_ok=True)
         
         self.file_path = folder_path / f"{name}.yaml"

@@ -47,7 +47,7 @@ def load_file(file_name):
         
     
 
-lights, speakers = load_file(r"./yamls/3D_coordinates_device.yml")
+lights, speakers = load_file(r"../config/3D_coordinates_device.yml")
 
 
 
@@ -118,16 +118,16 @@ def static_glow(ym , position, offset:int, duration:int, func=lambda x:(x**5)):
         ym.add(lightId, offset+duration, color[0], color[1], color[2], color[3], 0)
 
 if __name__ == "__main__":
-    timeline = [(0,1600),
-                (4700, 6384),
-                (9600, 11210), 
-                (14487, 16081), 
-                (19365, 21010),
-                (24287, 25896),
-                (29179, 30825),
-                (34084, 35673),
-                (38869, 40522),
-                (43762, 45488)]
+    timeline = [(0,900),
+                (1250, 2250),
+                (2980, 3850), 
+                (4500, 5750), 
+                (6250, 7400),
+                (8000, 9250),
+                (9820, 11000),
+                (11890, 13140),
+                (13970, 15270),
+                (16210, 17400)]
     
     
     ym = yaml_writer("line")

@@ -39,9 +39,9 @@ if (yamlFile is not None):
 audioPlayer = AudioPlayer(args.clientname, args.buffersize)
 if (audioFile is not None):
     audioPlayer.load_file(audioFile)
-
-audioPlayer.start()
 player.start()
+audioPlayer.start()
+
 while (player.is_running()):
     time.sleep(1)
     if (args.loop):
