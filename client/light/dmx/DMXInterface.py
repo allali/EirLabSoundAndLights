@@ -49,6 +49,7 @@ class DMXInterface:
     def _set_device_driver(self, driver_name: str, *args, **kwards):
         """Set driver to specified driver."""
         drivers = get_drivers()
+        print(drivers)
         if driver_name in drivers:
             driver = drivers[driver_name]
             self._device = driver(*args, **kwards)

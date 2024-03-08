@@ -7,6 +7,8 @@ import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
+sys.path.append(str(Path(__file__).parent.parent) + "/yamls")
+yaml_folder = str(Path(__file__).parent.parent) + "/yamls/"
 import dmx
 import numpy as np
 
@@ -16,7 +18,7 @@ class YamlReader:
 
     def _read_yaml(self, file_name):
         try:
-            with open(file_name, 'r') as file:
+            with open(yaml_folder + file_name, 'r') as file:
                 data = yaml.safe_load(file)
                 return data
         except (yaml.YAMLError, FileNotFoundError) as e:

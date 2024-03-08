@@ -91,6 +91,9 @@ def get_drivers() -> Dict[str, Type[DMXDriver]]:
 
     # We go through each container, looking for drivers...
     for driver_container in driver_containers:
+        print()
+        print(driver_container)
+        print()
         # Drivers must be in their own files, so we look based on files...
         for driver_file in listdir(driver_container):
             container_name = path.basename(driver_container)
