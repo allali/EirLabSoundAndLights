@@ -165,6 +165,7 @@ class Player:
         interface = dmx.DMXInterface(interfaceName)
         self.timer.start()
         print("sarting")
+
         while (self.isRunning):
             for light in self.lights:
                 light.set_next_event(timeEllapsed)
