@@ -21,7 +21,12 @@ import jack
 import soundfile as sf
 import time
 from math import sqrt
-print(sys.path)
+import os
+filePath = os.path.dirname(__file__)
+baseDirIdx = filePath.rfind("/")
+sys.path.append("".join(filePath[:baseDirIdx]))
+from config import AUDIO_DIR, PARENT_DIR
+
 #filename = fichier audio
 # bufferSize = 20
 # clientName = file player
@@ -80,7 +85,9 @@ class AudioPlayer:
         self.mainThread = threading.Thread(target=self._play, args=[fileName])
         
     def start(self):
-        self.mainThread.start()
+        if (self.mainThread != None):
+            print("STARRT")
+            self.mainThread.start()
     
     def get_samplerate_fe(self,sf):
         self._samplerate = sf.samplerate
@@ -89,8 +96,14 @@ class AudioPlayer:
     def _play(self, fileName):
         self.isRunning = True
         try:
-            self.fileName = fileName
-            with sf.SoundFile("../sandbox/sound/10tracks_studio/" + self.fileName) as f:
+            if os.path.exists(fileName):
+                self.fileName = fileName
+            elif os.path.exists(AUDIO_DIR + fileName):
+                self.fileName = AUDIO_DIR + fileName
+            elif os.path.exists(PARENT_DIR + fileName):
+                self.fileName = PARENT_DIR + fileName
+                
+            with sf.SoundFile(self.fileName) as f:
                 self.get_samplerate_fe(f)
                 NCHANNELS = f.channels
                 for ch in range(f.channels):
@@ -194,3 +207,10 @@ class AudioPlayer:
         self._port = 0
         if (self._cpt >= self._samplerate * 0.25): #We want to take rms vlaue every 1/4 second, 
             self._cpt = 0
+
+    def is_running(self):
+        return self.isRunning
+    
+    def quit(self):
+        self.isRunnng = False
+        self.stop_callback("")

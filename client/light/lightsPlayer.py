@@ -3,12 +3,14 @@ from typing import List
 import yaml
 from queue import Queue
 import time
+import os
 import sys
-from pathlib import Path
 
-sys.path.append(str(Path(__file__).parent.parent))
-sys.path.append(str(Path(__file__).parent.parent) + "/yamls")
-yaml_folder = str(Path(__file__).parent.parent) + "/yamls/"
+filePath = os.path.dirname(__file__)
+baseDirIdx = filePath.rfind("/")
+sys.path.append("".join(filePath[:baseDirIdx]))
+from config import YAMLS_DIR
+
 import dmx
 import numpy as np
 
@@ -18,7 +20,7 @@ class YamlReader:
 
     def _read_yaml(self, file_name):
         try:
-            with open(yaml_folder + file_name, 'r') as file:
+            with open(YAMLS_DIR + file_name, 'r') as file:
                 data = yaml.safe_load(file)
                 return data
         except (yaml.YAMLError, FileNotFoundError) as e:
@@ -203,7 +205,7 @@ class Player_Light:
 
 #################################################
 
-class Player:
+class LightsPlayer:
 
     def __init__(self, nbLights:int, interfaceName:str):
         self.isRunning:bool = False
@@ -279,13 +281,13 @@ class Player:
 if __name__ == "__main__":
     nbLights = 54
     interfaceName = "TkinterDisplayer" # "FT232R"
-    player = Player(54, interfaceName)
+    player = LightsPlayer(54, interfaceName)
     yr = YamlReader()
     # yr.load_file(r"../yamls/snake2.yml", player, 200)
     # yr.load_file(r"../yamls/snake2.yml", player, 1200)
     # yr.load_file(r"../yamls/snake2.yml", player, 3200)
     # yr.load_file(r"../yamls/snake2.yml", player, 4200)
-    yr.load_file(r"yamls/line.yaml", player, 0, False)
+    yr.load_file(r"line.yaml", player, 0, False)
     player.start()
     while (player.is_running()):
         time.sleep(1)
