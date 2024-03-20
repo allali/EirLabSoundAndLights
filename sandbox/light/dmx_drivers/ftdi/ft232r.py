@@ -73,6 +73,36 @@ if system() == "Linux":
         sleeper.tv_nsec = (nanoseconds % 1000) * 1000
         _LIBC.nanosleep(byref(sleeper), byref(dummy))
 
+elif system() == "Darwin":
+    from ctypes import cdll, Structure, c_long, byref
+
+    Driver._lib_search["libftdi"] = tuple([
+        path.join(DRIVER_PATH, "libftdi.dylib")
+    ] + list(Driver._lib_search["libftdi"]))
+
+    _LIBC = cdll.LoadLibrary("/usr/lib/libc.dylib")
+
+    class timespec(Structure):
+        """A timespec."""
+
+        _fields_ = [("tv_sec", c_long), ("tv_nsec", c_long)]
+
+    def wait_ms(milliseconds):
+        """Wait for a specified number of milliseconds."""
+        dummy = timespec()
+        sleeper = timespec()
+        sleeper.tv_sec = int(milliseconds / 1000)
+        sleeper.tv_nsec = (milliseconds % 1000) * 1000000
+        _LIBC.nanosleep(byref(sleeper), byref(dummy))
+
+    def wait_us(nanoseconds):
+        """Wait for a specified number of nanoseconds."""
+        dummy = timespec()
+        sleeper = timespec()
+        sleeper.tv_sec = int(nanoseconds / 1000000)
+        sleeper.tv_nsec = (nanoseconds % 1000) * 1000
+        _LIBC.nanosleep(byref(sleeper), byref(dummy))
+
 elif system() == "Windows":
 
     from ctypes import wintypes, windll, byref
