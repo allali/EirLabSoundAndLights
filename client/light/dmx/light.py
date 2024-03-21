@@ -39,8 +39,9 @@ import sys
 import os
 
 
-parent_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + "/config"
-sys.path.append(parent_dir)
+filePath = os.path.dirname(__file__)
+baseDirIdx = filePath.rfind("/")
+sys.path.append("".join(filePath[:baseDirIdx]))
 import config
 
 
