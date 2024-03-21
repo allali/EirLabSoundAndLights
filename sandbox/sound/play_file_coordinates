@@ -84,11 +84,6 @@ def process(frames):
         stop_callback()  # Playback is finished
         
     target_volumes = [0.1, 0.7]
-    
-    '''for port, coordinate in target_points_coordinates:
-        volume = abs(args.number - coordinate) 
-        target_volumes.append(volume)
-        print(target_volumes)'''
         
     for channel, port, volume in zip(data.T, client.outports, target_volumes):
         adjusted_data = channel*volume
