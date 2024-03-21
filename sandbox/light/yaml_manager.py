@@ -9,9 +9,10 @@ class yaml_writer:
         folder_path = base_path / 'yamls'
         folder_path.mkdir(parents=True, exist_ok=True)
         
-        self.file_path = folder_path / f"{name}.yaml"
+        #self.file_path = folder_path / f"{name}.yaml"
+        self.file_path = Path(r"../../client/files/yamls/" + f"{name}.yaml")
         
-        if not self.file_path.exists():
+        if not self.file_path.exists() or True:
             self.fileOpened = True
             # self.file = open(file_path, 'w')
             # for i in range(54):

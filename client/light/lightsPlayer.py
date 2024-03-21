@@ -20,7 +20,16 @@ class YamlReader:
 
     def _read_yaml(self, file_name):
         try:
-            with open(YAMLS_DIR + file_name, 'r') as file:
+            if os.path.exists(file_name):
+                self.fileName = file_name
+            elif os.path.exists(YAMLS_DIR + file_name):
+                self.fileName = YAMLS_DIR + file_name
+            elif os.path.exists(YAMLS_DIR + file_name):
+                self.fileName = YAMLS_DIR + file_name
+            else:
+                print(f"Yaml file '{file_name}' not found. Exiting")
+                sys.exit(1)
+            with open(self.fileName, 'r') as file:
                 data = yaml.safe_load(file)
                 return data
         except (yaml.YAMLError, FileNotFoundError) as e:
@@ -35,7 +44,6 @@ class YamlReader:
         for item in data:
             for tram in item["times"]:
                 player.add(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], offset, relativeOffset)
-        self.file_name = file_name
 
 #############################################################
 
@@ -283,11 +291,22 @@ if __name__ == "__main__":
     interfaceName = "TkinterDisplayer" # "FT232R"
     player = LightsPlayer(54, interfaceName)
     yr = YamlReader()
-    # yr.load_file(r"../yamls/snake2.yml", player, 200)
-    # yr.load_file(r"../yamls/snake2.yml", player, 1200)
-    # yr.load_file(r"../yamls/snake2.yml", player, 3200)
-    # yr.load_file(r"../yamls/snake2.yml", player, 4200)
-    yr.load_file(r"line.yaml", player, 0, False)
+    #yr.load_file(r"../yamls/snake2.yml", player, 200)
+    #yr.load_file(r"../yamls/snake2.yml", player, 3200)
+    #yr.load_file(r"../yamls/snake2.yml", player, 4200)
+    #yr.load_file(r"../yamls/snake2.yml", player, 1200)
+    yr.load_file(r"test1.yaml", player, 0, False)
+    yr.load_file(r"test2.yaml", player, 0, False)
+    yr.load_file(r"test3.yaml", player, 0, False)
+    yr.load_file(r"test4.yaml", player, 0, False)
+    yr.load_file(r"rect1.yaml", player, 0, False)
+    yr.load_file(r"rect2.yaml", player, 0, False)
+    yr.load_file(r"rect3.yaml", player, 0, False)
+    yr.load_file(r"rect4.yaml", player, 0, False)
+    yr.load_file(r"ouverture.yaml", player, 0, False)
+    yr.load_file(r"saxo.yaml", player, 0, False)
+    yr.load_file(r"drums.yaml", player, 0, False)
+    yr.load_file(r"rings.yaml", player, 0, False)
     player.start()
     while (player.is_running()):
         time.sleep(1)

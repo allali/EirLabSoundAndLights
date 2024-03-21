@@ -66,7 +66,7 @@ class Player:
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('-s', '--soundFile', type=str, default=None, help='audio file to be played back')
-parser.add_argument('-y', '--yaml', type=str, default=None, help='Yaml file to be played by lights')
+parser.add_argument('-y', '--yaml', type=str, default=None, help='Yaml file to be played by lights', nargs=13)
 parser.add_argument('-i', '--interface', type=str, default="TkinterDisplayer", help='Visual interface')
 parser.add_argument('--loop', action='store_true', default=False, help='Repeat')
 parser.add_argument(
@@ -82,11 +82,11 @@ args = parser.parse_args()
 
 nbLights = 54
 player = Player()
-
-
 if (args.yaml is not None):
     player.init_light(54, args.interface) # FT232R TkinterDisplayer
-    player.load_yaml(args.yaml)
+    for yml in args.yaml:
+        player.load_yaml(yml)
+    
     
     
 if (args.soundFile is not None):

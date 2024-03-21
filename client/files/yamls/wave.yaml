@@ -1,9 +1,9 @@
 - id: 0
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -15,18 +15,25 @@
       Tr: 1
 
     - time: 2800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
     
 - id: 1
   times:
+    - time: 0
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
@@ -38,18 +45,18 @@
       Tr: 1      
 
     - time: 2800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 2
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -61,18 +68,18 @@
       Tr: 1
 
     - time: 2800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
       
 - id: 3
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -84,18 +91,18 @@
       Tr: 1
 
     - time: 2800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 4
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -107,18 +114,18 @@
       Tr: 1
 
     - time: 2800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 5
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -130,25 +137,25 @@
       Tr: 1
 
     - time: 2800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 6
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 1400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -160,25 +167,25 @@
       Tr: 1
 
     - time: 4200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 7
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 1400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -190,25 +197,25 @@
       Tr: 1
 
     - time: 4200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 8
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 1400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -220,25 +227,25 @@
       Tr: 1
 
     - time: 4200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 9
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 1400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -250,9 +257,9 @@
       Tr: 1
 
     - time: 4200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
@@ -260,16 +267,16 @@
 - id: 10
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 1400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -281,25 +288,25 @@
       Tr: 1
 
     - time: 4200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 11
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 1400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -311,25 +318,25 @@
       Tr: 1
 
     - time: 4200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 12
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 2800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -341,25 +348,25 @@
       Tr: 1
 
     - time: 5600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 13
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 2800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -371,25 +378,25 @@
       Tr: 1
 
     - time: 5600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 14
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 2800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -401,25 +408,25 @@
       Tr: 1
 
     - time: 5600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 15
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 2800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -431,25 +438,25 @@
       Tr: 1
 
     - time: 5600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 16
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 2800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -461,25 +468,25 @@
       Tr: 1
 
     - time: 5600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 17
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 2800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -491,25 +498,25 @@
       Tr: 1
 
     - time: 5600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 18
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 4200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -521,25 +528,25 @@
       Tr: 1
 
     - time: 7000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 19
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 4200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -551,25 +558,25 @@
       Tr: 1
 
     - time: 7000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 20
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 4200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -581,25 +588,25 @@
       Tr: 1
 
     - time: 7000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 21
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 4200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -611,25 +618,25 @@
       Tr: 1
 
     - time: 7000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 22
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 4200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -641,25 +648,25 @@
       Tr: 1
 
     - time: 7000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 23
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 4200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -671,25 +678,25 @@
       Tr: 1
 
     - time: 7000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 24
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 5600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -701,25 +708,25 @@
       Tr: 1
 
     - time: 8400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 25
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 5600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -731,25 +738,25 @@
       Tr: 1
 
     - time: 8400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 26
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 5600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -761,25 +768,25 @@
       Tr: 1
 
     - time: 8400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 27
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 5600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -791,25 +798,25 @@
       Tr: 1
 
     - time: 8400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 28
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 5600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -821,25 +828,25 @@
       Tr: 1
 
     - time: 8400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 29
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 5600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -851,25 +858,25 @@
       Tr: 1
 
     - time: 8400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 30
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 7000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -881,25 +888,25 @@
       Tr: 1
 
     - time: 9800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 31
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 7000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -911,25 +918,25 @@
       Tr: 1
 
     - time: 9800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 32
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 7000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -941,25 +948,25 @@
       Tr: 1
 
     - time: 9800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 33
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 7000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -971,25 +978,25 @@
       Tr: 1
 
     - time: 9800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 34
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 7000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1001,25 +1008,25 @@
       Tr: 1
 
     - time: 9800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 35
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 7000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1031,25 +1038,25 @@
       Tr: 1
 
     - time: 9800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 36
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 8400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1061,25 +1068,25 @@
       Tr: 1
 
     - time: 11200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 37
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 8400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1091,25 +1098,25 @@
       Tr: 1
 
     - time: 11200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 38
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 8400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1121,25 +1128,25 @@
       Tr: 1
 
     - time: 11200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 39
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 8400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1151,25 +1158,25 @@
       Tr: 1
 
     - time: 11200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 40
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 8400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1181,25 +1188,25 @@
       Tr: 1
 
     - time: 11200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 41
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 8400
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1211,25 +1218,25 @@
       Tr: 1
 
     - time: 11200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 42
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 9800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1241,25 +1248,25 @@
       Tr: 1
 
     - time: 12600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 43
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 9800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1271,25 +1278,25 @@
       Tr: 1
 
     - time: 12600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 44
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 9800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1301,25 +1308,25 @@
       Tr: 1
 
     - time: 12600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 45
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 9800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1331,25 +1338,25 @@
       Tr: 1
 
     - time: 12600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 46
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 9800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1361,25 +1368,25 @@
       Tr: 1
 
     - time: 12600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 47
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 9800
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1391,25 +1398,25 @@
       Tr: 1
 
     - time: 12600
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 48
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 11200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1421,25 +1428,25 @@
       Tr: 1
 
     - time: 14000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 49
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 11200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1451,25 +1458,25 @@
       Tr: 1
 
     - time: 14000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 50
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 11200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1481,25 +1488,25 @@
       Tr: 1
 
     - time: 14000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 51
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 11200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1511,25 +1518,25 @@
       Tr: 1
 
     - time: 14000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 52
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 11200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1541,25 +1548,25 @@
       Tr: 1
 
     - time: 14000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
 - id: 53
   times:
     - time: 1
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
     - time: 11200
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 0
 
@@ -1571,9 +1578,9 @@
       Tr: 1
 
     - time: 14000
-      red: 255
-      green: 255
-      blue: 255
+      red: 0
+      green: 0
+      blue: 0
       white: 0
       Tr: 1
 
