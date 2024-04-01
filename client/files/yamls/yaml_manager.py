@@ -75,9 +75,54 @@ class yaml_writer:
             self.isOpened = False
         #print(self.data)
             
+
+    #Change all the lights with given parameters
+    def full_change(self, time, red, green, blue, white, Tr):
+        for i in range(54):
+            self.add(i,time,red,green,blue,white,Tr)
+
+
+    def column(self, number, time, red, green, blue, white, Tr):
+        if number > 6 or number < 1:
+            print(f"Wrong number ({number})")
+            sys.exit(1)
+        if number == 1:
+            self.add(0,time,red,green,blue,white,Tr)
+        for i in range(number-1, 54, 6):
+            self.add(i, time, red, green, blue, white, Tr)
+
+    
+    #Wave effect following the column
+    def wave_column(self, time, duration, red_wave, green_wave, blue_wave, white_wave, red, green, blue, white):
+        pause = duration / 6
+        for i in range(1, 7):
+            if i != 1:
+                yw.column(i-1, time+(i*pause), red, green, blue, white, 1)
+            yw.column(i, time+(i*pause), red_wave, green_wave, blue_wave, white_wave, 1)
+            if i == 6:
+                yw.column(i, time+(i+1)*pause,red,green,blue,white,1)
         
+
+    def line(self, number, time, red, green, blue, white, Tr):
+        if number > 9 or number < 1:
+            print(f"Wrong number ({number})")
+            sys.exit(1)
+        for i in range((number-1)*6 ,number*6):
+            self.add(i, time, red, green, blue, white, Tr)
+    
+    #Wave effect following the line
+    #Is it better to have the duration or the start time and end time ?
+    def line_column(self, time, duration, red_wave, green_wave, blue_wave, white_wave, red, green, blue, white):
+        pause = duration / 9
+        for i in range(1,10):
+            if i != 1:
+                yw.line(i-1, time+((i+2)*pause), red, green, blue, white, 1)
+            yw.line(i, time+(i*pause), red_wave, green_wave, blue_wave, white_wave, 1)
+            if i == 9:
+                self.line(i, (time + (i+3)*pause), red, green, blue, white,1)
+
 
 if __name__ == "__main__":
     yw = yaml_writer("test")
-    yw.add(2, 100, 0, 0, 255, 200, 0)
+    yw.line_column(1000,2500,255,0,0,0,0,0,255,0)
     yw.write()
