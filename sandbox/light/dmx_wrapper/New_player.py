@@ -63,6 +63,8 @@ class SingleLightQueue:
         self.no_event = np.array([0,0,0,0])
         self.current_event = None
         self.next_event = None
+        self.transition_step_size = 0
+        self.transition_progress = 0
 
     def add_to_universe(self, dmxUniverse:dmx.DMXUniverse):
         dmxUniverse.add_light(self.light)
@@ -78,25 +80,21 @@ class SingleLightQueue:
 
     def fill_queue(self, time:int, rgbw:List[int], Tr:int):
         time = self.adjust_time(time)
-        if Tr == 0:
-            self.add(time, rgbw, Tr)
-        elif self.queue.qsize() >= 1 and Tr == 1:
-            previous_event = self.queue.queue[-1]
-            self.create_transition(previous_event, (time, rgbw, Tr))
-            self.add(time, rgbw, 0)
+        self.add(time, rgbw, Tr)
 
     def add(self, time:int, rgbw:List[int], Tr:int):
         self.queue.put((time, rgbw, Tr), block=False)
         
-    def create_transition(self, previous_event, current_event):
-        time, rgbw, Tr = current_event
-        previous_time, previous_rgbw, previous_Tr = previous_event
+    # def create_transition(self, previous_event, current_event):
+    #     time, rgbw, Tr = current_event
+    #     previous_time, previous_rgbw, previous_Tr = previous_event
 
-        number_of_steps = (time - previous_time) // FREQUENCY
-        step_size = [(current - previous) / number_of_steps for current, previous in zip(rgbw, previous_rgbw)]
-        for i in range(1, number_of_steps):  
-            transition_rgbw = [int(previous + step * i) for previous, step in zip(previous_rgbw, step_size)]
-            self.add(previous_time + i * FREQUENCY, transition_rgbw, 0)
+    #     number_of_steps = (time - previous_time) // FREQUENCY
+    #     step_size = [(current - previous) / number_of_steps for current, previous in zip(rgbw, previous_rgbw)]
+    #     print("step_size",step_size)
+    #     for i in range(1, number_of_steps):  
+    #         transition_rgbw = [int(previous + step * i) for previous, step in zip(previous_rgbw, step_size)]
+    #         self.add(previous_time + i * FREQUENCY, transition_rgbw, 0)
     
     def set_color(self, rgbw:List[int]):
         self.light.set_colour(dmx.Color(rgbw[0], rgbw[1], rgbw[2], rgbw[3]))
@@ -106,12 +104,38 @@ class SingleLightQueue:
             self.isRunning = False
             return 
         self.next_event = self.get_next_event()
-        if self.next_event is not None and abs(self.next_event[0] - timeEllapsed) < FREQUENCY:
-            self.current_event = self.next_event
-            self.remove_event()
-            self.set_color(self.next_event[1])
-            self.isRunning = True
-            return 
+
+        if self.next_event is not None:
+            event_time, event_rgbw, event_type = self.next_event
+
+            if abs(self.next_event[0] - timeEllapsed) < FREQUENCY:
+                self.current_event = self.next_event
+                self.transition_progress = 0
+                self.remove_event()
+                self.set_color(event_rgbw)
+                self.isRunning = True
+                return 
+            
+            if event_type == 0:
+                self.transition_step_size = 0
+                self.transition_progress = 0
+
+            if event_type == 1 and self.current_event:
+                if self.current_event[2] == 1:
+                    self.add(self.current_event[0], self.current_event[1], 0)
+                else:
+                    previous_time, previous_rgbw, _ = self.current_event
+                    total_steps = (event_time - previous_time) // FREQUENCY
+        
+                    if self.transition_progress >= total_steps:
+                        return
+                    self.transition_progress = abs((timeEllapsed - previous_time) / FREQUENCY)
+
+                    step_size = [(current - previous) / total_steps for current, previous in zip(event_rgbw, previous_rgbw)]
+                    transition_rgbw = [int(previous + (step * self.transition_progress)) for previous, step in zip(previous_rgbw, step_size)]
+                    self.set_color(transition_rgbw)
+
+
         while self.next_event is not None and timeEllapsed > self.next_event[0]:
             self.next_event = self.get_next_event()
             self.remove_event()
@@ -153,6 +177,7 @@ class Player:
     def quit(self):
         self.isRunning = False
         self.mainThread.join()
+        #à voir pour que ça exit direct et pas que ça attende la fin de la boucle
 
     def is_running(self):
         for light in self.lights:
@@ -165,7 +190,6 @@ class Player:
         interface = dmx.DMXInterface(interfaceName)
         self.timer.start()
         print("sarting")
-
         while (self.isRunning):
             for light in self.lights:
                 light.set_next_event(timeEllapsed)
@@ -186,6 +210,7 @@ if __name__ == "__main__":
     player = Player(54, interfaceName)
     yr = YamlReader()
     yr.load_file(r"../yamls/snake2.yml", player)
+    yr.load_file(r"../yamls/snake2.yml", player, 200)
     for light in player.lights:
         print(light.queue.queue)
     player.start()
