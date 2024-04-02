@@ -1,4 +1,4 @@
-- id: 7
+- id: 7 #
   times:
     - time: 0
       red: 0
@@ -13,29 +13,8 @@
       blue: 255
       white: 200
       Tr: 0
-
-    - time: 1500
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1600
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1700
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
     
-    - time: 1850
+    - time: 1800
       red: 0
       green: 0
       blue: 0
@@ -58,26 +37,6 @@
       white: 200
       Tr: 0
 
-    - time: 1400
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1500
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1600
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
     
     - time: 1700
       red: 0
@@ -145,27 +104,6 @@
       blue: 255
       white: 200
       Tr: 0
-
-    - time: 1200
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1300
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1400
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
     
     - time: 1500
       red: 0
@@ -174,21 +112,29 @@
       white: 0
       Tr: 0
 
-- id: 13
+- id: 13 #
   times:
     - time: 0
+      red: 0
+      green: 0
+      blue: 0
+      white: 0
+      Tr: 0
+    
+    - time: 1500
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - time: 100
+    - time: 1900
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
+    
 
 - id: 16
   times:
@@ -199,58 +145,37 @@
       white: 0
       Tr: 0
 
-    - time: 1100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1200
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1300
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1400
+    - time: 1000
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - time: 1500
+    - time: 1400
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
 
-- id: 19
+- id: 19 #
   times:
     - time: 0
       red: 0
       green: 0
-      blue: 255
-      white: 200
+      blue: 0
+      white: 0
       Tr: 0
-
-    - time: 100
+    
+    - time: 1600
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - time: 200
+    - time: 2000
       red: 0
       green: 0
       blue: 0
@@ -272,27 +197,6 @@
       blue: 255
       white: 200
       Tr: 0
-
-    - time: 1000
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1200
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
     
     - time: 1300
       red: 0
@@ -301,35 +205,29 @@
       white: 0
       Tr: 0
 
-- id: 25
+- id: 25 #
   times:
     - time: 0
       red: 0
       green: 0
-      blue: 255
-      white: 200
+      blue: 0
+      white: 0
       Tr: 0
 
-    - time: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 200
+    - time: 1700
       red: 0
       green: 0
       blue: 255
       white: 200
       Tr: 0
     
-    - time: 300
+    - time: 2100
       red: 0
       green: 0
       blue: 0
       white: 0
       Tr: 0
+
 
 - id: 28
   times:
@@ -346,27 +244,6 @@
       blue: 255
       white: 200
       Tr: 0
-
-    - time: 900
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1000
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
     
     - time: 1200
       red: 0
@@ -378,27 +255,6 @@
 - id: 31
   times:
     - time: 0
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 200
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 300
       red: 0
       green: 0
       blue: 255
@@ -427,27 +283,6 @@
       blue: 255
       white: 200
       Tr: 0
-
-    - time: 800
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 900
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 1000
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
     
     - time: 1100
       red: 0
@@ -466,27 +301,6 @@
       Tr: 0
 
     - time: 100
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 200
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 300
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 400
       red: 0
       green: 0
       blue: 255
@@ -515,27 +329,6 @@
       blue: 255
       white: 200
       Tr: 0
-
-    - time: 700
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 800
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 900
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
     
     - time: 1000
       red: 0
@@ -554,27 +347,6 @@
       Tr: 0
 
     - time: 200
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 300
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 400
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 500
       red: 0
       green: 0
       blue: 255
@@ -603,27 +375,6 @@
       blue: 255
       white: 200
       Tr: 0
-
-    - time: 400
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 500
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 600
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
     
     - time: 700
       red: 0
@@ -647,27 +398,6 @@
       blue: 255
       white: 200
       Tr: 0
-
-    - time: 500
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 600
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 700
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
     
     - time: 800
       red: 0
@@ -686,27 +416,6 @@
       Tr: 0
 
     - time: 500
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 600
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 700
-      red: 0
-      green: 0
-      blue: 255
-      white: 200
-      Tr: 0
-
-    - time: 800
       red: 0
       green: 0
       blue: 255

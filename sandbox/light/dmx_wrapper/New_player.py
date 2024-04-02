@@ -67,7 +67,7 @@ class SingleLightQueue:
     
     def get_queue(self):
         queueList = deepcopy(self.queue.queue) 
-        if len(queueList) > 0 and queueList[0][2] == 1:
+        if len(queueList) > 0:# and queueList[0][2] == 1:
             _ = [(self.lastUpdateTime, self.LastTransition_rgbw, 0)]
             _.extend(queueList)
             return _
@@ -81,7 +81,7 @@ class SingleLightQueue:
     #     previous_time, previous_rgbw, previous_Tr = previous_event
 
     #     number_of_steps = (time - previous_time) // FREQUENCY
-    #     step_size = [(current - previous) / number_of_steps for current, previous in zip(rgbw, previous_rgbw)]
+    #     step_size = self[(current - previous) / number_of_steps for current, previous in zip(rgbw, previous_rgbw)]
     #     print("step_size",step_size)
     #     for i in range(1, number_of_steps):  
     #         transition_rgbw = [int(previous + step * i) for previous, step in zip(previous_rgbw, step_size)]
@@ -103,11 +103,12 @@ class SingleLightQueue:
         if self.next_event is not None:
             event_time, event_rgbw, event_type = self.next_event
 
-            if abs(self.next_event[0] - timeEllapsed) < FREQUENCY:
+            if self.next_event[0] - timeEllapsed < FREQUENCY:
                 self.current_event = self.next_event
                 self.transition_progress = 0
                 self.remove_event()
                 self.set_color(event_rgbw)
+                self.LastTransition_rgbw = event_rgbw
                 self.isRunning = True
                 return 
             
@@ -199,7 +200,6 @@ class Player:
         timeEllapsed = -1
         interface = dmx.DMXInterface(interfaceName)
         self.timer.start()
-        print("starting")
         while (self.isRunning):
             for light in self.lights:
                 light.set_next_event(timeEllapsed)
@@ -276,7 +276,7 @@ class Frame:
         if frameEnd is None:
             raise ValueError("FrameStop should not be None")
         if frameStart is None:
-            return {"time":timeMiddlePoint, "rgbw":frameEnd["rgbw"], "Tr":0}
+            return {"time":timeMiddlePoint, "rgbw":[0,0,0,0], "Tr":0}
         
         if timeMiddlePoint > frameEnd["time"] or timeMiddlePoint < frameStart["time"]:
             raise ValueError(f"timeMiddlePoint should be between frameStart and frameEnd times. {frameStart['time']} <= {timeMiddlePoint} <= {frameEnd['time']}")
@@ -438,7 +438,6 @@ class Frame:
         
         offset = (player.get_time() if isRelativeOffset else 0) + relativeOffset
         newFrames = Frame.merge(playerFrame, frames.add_offset(offset), mergeType)
-                
         queues = [queue.Queue(maxsize=0) for i in range(nbLights)]
                 
         for lightId, frameQueue in enumerate(queues):
@@ -489,10 +488,10 @@ if __name__ == "__main__":
     yr = YamlReader()
     yamlFrame = yr.get_frame(r"../yamls/snake2.yml", 54)
     mergedFrame1 = Frame.merge(b, yamlFrame, 0)
-    Frame.player_replace_queue(player, mergedFrame1,0)
+    Frame.player_replace_queue(player, mergedFrame1,1, True, 1700)
     
     player.start()
     while (player.is_running()):
-        time.sleep(1.6)
-        Frame.player_replace_queue(player, mergedFrame1, 1, True)
+        time.sleep(1.7)
+        Frame.player_replace_queue(player, mergedFrame1, 1, True, 1700)
     player.quit()
