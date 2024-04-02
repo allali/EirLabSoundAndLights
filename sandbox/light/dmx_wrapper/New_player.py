@@ -131,6 +131,7 @@ class SingleLightQueue:
                 self.set_color(self.LastTransition_rgbw)
 
         if self.next_event is not None and timeEllapsed > self.next_event[0]:
+            self.set_color(self.next_event[1])
             self.next_event = self.get_next_event()
             self.remove_event()
 
@@ -312,12 +313,19 @@ class Frame:
             t2 = frame2[0]["time"]
             f1Idx = 1
             f2Idx = 0
-        else:
+        elif frame1[0]["time"] > frame2[0]["time"]:
             cptFrame1.append({"time":frame2[0]["time"], "rgbw":frame1[0]["rgbw"], "Tr":frame1[0]["Tr"]})
             cptFrame2.append(frame2[0])
             t1 = frame1[0]["time"]
             t2 = frame2[1]["time"] if len(frame2) > 1 else frame1[-1]["time"] +1
             f1Idx = 0
+            f2Idx = 1
+        else:
+            cptFrame1.append({"time":frame2[0]["time"], "rgbw":frame1[0]["rgbw"], "Tr":frame1[0]["Tr"]})
+            cptFrame2.append({"time":frame1[0]["time"], "rgbw":frame2[0]["rgbw"], "Tr":frame2[0]["Tr"]})
+            t1 = frame1[1]["time"] if len(frame1) > 1 else frame2[-1]["time"] +1
+            t2 = frame2[1]["time"] if len(frame2) > 1 else frame1[-1]["time"] +1
+            f1Idx = 1
             f2Idx = 1
         
         while (f1Idx < len(frame1) or f2Idx < len(frame2)):
@@ -406,7 +414,6 @@ class Frame:
                     
                     case 2:
                         resultFrames.add_frame(lightId, cptFrame1[idx]['time'], self._color_fusion(cptFrame1[idx]['rgbw'], cptFrame2[idx]['rgbw'], fusionType), 1)
-                        print("CASE 2222\t",cptFrame1[idx]['time'])
                     
         return resultFrames
     
@@ -421,19 +428,19 @@ class Frame:
                 res.add_frame(i, Frame.adjust_time(frame["time"] + offsetValue), frame["rgbw"], frame["Tr"])
         return res
     
-    def player_replace_queue(player:Player, frames, isRelativeOffset:bool = False, relativeOffset=0):
+    def player_replace_queue(player:Player, frames, mergeType, isRelativeOffset:bool = False, relativeOffset=0):
         playerFrame = Frame(player.nbLights)
         playerQueues = player.get_queue()
         currTime = player.get_time()
         for lightId in range(player.nbLights):
             for i in range(len(playerQueues[lightId])):
                 playerFrame.add_frame(lightId, playerQueues[lightId][i][0], playerQueues[lightId][i][1], playerQueues[lightId][i][2])
-                
+        
         offset = (player.get_time() if isRelativeOffset else 0) + relativeOffset
-        newFrames = Frame.merge(playerFrame, frames, 1).add_offset(offset)
+        newFrames = Frame.merge(playerFrame, frames.add_offset(offset), mergeType)
                 
         queues = [queue.Queue(maxsize=0) for i in range(nbLights)]
-        
+                
         for lightId, frameQueue in enumerate(queues):
             t=-1
             for i in range(len(newFrames.frames[lightId])):
@@ -482,13 +489,10 @@ if __name__ == "__main__":
     yr = YamlReader()
     yamlFrame = yr.get_frame(r"../yamls/snake2.yml", 54)
     mergedFrame1 = Frame.merge(b, yamlFrame, 0)
-    Frame.player_replace_queue(player, mergedFrame1)
+    Frame.player_replace_queue(player, mergedFrame1,0)
     
-    for light in player.lights:
-        print(light.queue.queue)
     player.start()
     while (player.is_running()):
-        time.sleep(3)
-        Frame.player_replace_queue(player, mergedFrame1, True)
-        print("replace")
+        time.sleep(1.6)
+        Frame.player_replace_queue(player, mergedFrame1, 1, True)
     player.quit()
