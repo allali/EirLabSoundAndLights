@@ -7,29 +7,10 @@ import sys
 sys.path.append("..")
 import dmx
 import numpy as np
+from copy import deepcopy
 FREQUENCY = 27
 
-class YamlReader:
-    def __init__(self):
-        pass
 
-    def _read_yaml(self, file_name):
-        try:
-            with open(file_name, 'r') as file:
-                data = yaml.safe_load(file)
-                return data
-        except (yaml.YAMLError, FileNotFoundError) as e:
-            raise ValueError(f"Error reading YAML file: {e}")
-    
-    def load_file(self, file_name, player, offset = 0):
-        data = self._read_yaml(file_name)
-
-        if not isinstance(data, list):
-            raise ValueError("Invalid YAML format. Expected a list.")
-        player.added_file_names.append(file_name)
-        for item in data:
-            for tram in item["times"]:
-                player.add(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], offset)
         
 #############################################################
 
@@ -50,6 +31,7 @@ class Timer:
             timeEllapsed = (time.time() - self.startTime) * 1000
             return timeEllapsed
         else:
+            return 0
             raise ValueError("Timer has not been started")
         
 #############################################################
@@ -74,16 +56,21 @@ class SingleLightQueue:
         if not self.queue.empty():
             return self.queue.queue[0]
         return None
-    
-    def adjust_time(self, time:int):
-        return time + (FREQUENCY - time % FREQUENCY) % FREQUENCY
 
     def fill_queue(self, time:int, rgbw:List[int], Tr:int):
-        time = self.adjust_time(time)
         self.add(time, rgbw, Tr)
 
     def add(self, time:int, rgbw:List[int], Tr:int):
-        self.queue.put((time, rgbw, Tr), block=False)
+        self.queue.put((time, rgbw, Tr))
+    
+    def get_queue(self):
+        return self.queue.queue
+    
+    def replace_queue(self, queue:queue.PriorityQueue, time:int):
+        while (not(queue.empty) and queue.queue[0][0] < time):
+            queue.get()
+        self.queue = queue
+            
         
     # def create_transition(self, previous_event, current_event):
     #     time, rgbw, Tr = current_event
@@ -136,13 +123,15 @@ class SingleLightQueue:
                     self.set_color(transition_rgbw)
 
 
-        while self.next_event is not None and timeEllapsed > self.next_event[0]:
+        if self.next_event is not None and timeEllapsed > self.next_event[0]:
             self.next_event = self.get_next_event()
             self.remove_event()
 
             
     def remove_event(self):
         self.queue.get()
+             
+        
 
         
 #################################################
@@ -150,13 +139,13 @@ class SingleLightQueue:
 class Player:
     def __init__(self, nbLights:int, interfaceName:str):
         self.added_file_names:List[str] = []
-        self.timer = Timer()
-        self.time_debug = Timer()
-        self.universe = dmx.DMXUniverse()
-        self.interface_name = interfaceName
+        self.timer:Timer = Timer()
+        self.time_debug:Timer = Timer()
+        self.universe:dmx.DMXUniverse = dmx.DMXUniverse()
+        self.interface_name:str = interfaceName
 
         self.nbLights:int = nbLights
-        self.lights = [SingleLightQueue(i, 0) for i in range(nbLights)]
+        self.lights:List[SingleLightQueue] = [SingleLightQueue(i, 0) for i in range(nbLights)]
         self._add_lights_to_universe()
 
         self.mainThread = threading.Thread(target=self._worker, args=[interfaceName])
@@ -165,10 +154,20 @@ class Player:
     def _add_lights_to_universe(self):
         for light in self.lights:
             light.add_to_universe(self.universe)
+            
+    def adjust_time(self, time:int):
+        return time + FREQUENCY - time % FREQUENCY
 
     def add(self, lightId:int, time:int, rgbw:List[int], Tr:int, offset:int):
-        time += offset
+        time = self.adjust_time( time + offset )
         self.lights[lightId].fill_queue(time, rgbw, Tr)
+        
+    def get_queue(self):
+        return [deepcopy(light.get_queue()) for light in self.lights]
+    
+    def replace_queue(self, queues):
+        for lightId, light in enumerate(self.lights):
+            light.replace_queue(queues[lightId], self.timer.get_time())
 
     def start(self):
         self.isRunning = True
@@ -180,16 +179,19 @@ class Player:
         #à voir pour que ça exit direct et pas que ça attende la fin de la boucle
 
     def is_running(self):
+        if not(self.isRunning):
+            return False 
         for light in self.lights:
             if light.isRunning:
                 return True
+        return False
 
     def _worker(self, interfaceName:str):
         self.isRunning = True
         timeEllapsed = -1
         interface = dmx.DMXInterface(interfaceName)
         self.timer.start()
-        print("sarting")
+        print("starting")
         while (self.isRunning):
             for light in self.lights:
                 light.set_next_event(timeEllapsed)
@@ -204,16 +206,245 @@ class Player:
 
 ##################################################
 
+
+class YamlReader:
+    def __init__(self):
+        pass
+
+    def _read_yaml(self, file_name):
+        try:
+            with open(file_name, 'r') as file:
+                data = yaml.safe_load(file)
+                return data
+        except (yaml.YAMLError, FileNotFoundError) as e:
+            raise ValueError(f"Error reading YAML file: {e}")
+    
+    def load_file(self, file_name:str, player:Player, offset:int = 0):
+        data = self._read_yaml(file_name)
+
+        if not isinstance(data, list):
+            raise ValueError("Invalid YAML format. Expected a list.")
+        player.added_file_names.append(file_name)
+        for item in data:
+            for tram in item["times"]:
+                player.add(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], offset)
+     
+##################################################
+
+                
+class Frame:
+    
+    def __init__(self, nbLights:int):
+        self.frames:List[List[dict[str,any]]] = [[] for i in range(nbLights)]
+        self.nbLights = nbLights
+        
+    def adjust_time(self, time:int):
+        if time % FREQUENCY == 0:
+            return time
+        return time + FREQUENCY - time % FREQUENCY
+        
+    def add_frame(self, lightId:int, time:int, rgbw:List[int], Tr:int):
+        if (self.frames[lightId] != [] and self.frames[lightId][-1]["time"] + FREQUENCY > self.adjust_time(time) ):
+            raise ValueError(f"Wrong frame's time given : {time} -> {self.adjust_time(time)}. Expected time >= {self.frames[lightId][-1]['time']+FREQUENCY}")
+        self.frames[lightId].append({"time": self.adjust_time(time), "rgbw":rgbw, "Tr": Tr})
+    
+    def get_middle_frame_point(self, frameStart, frameEnd, timeMiddlePoint):
+        if frameEnd is None:
+            raise ValueError("FrameStop should not be None")
+        if frameStart is None:
+            return {"time":timeMiddlePoint, "rgbw":frameEnd["rgbw"], "Tr":0}
+        
+        if timeMiddlePoint > frameEnd["time"] or timeMiddlePoint < frameStart["time"]:
+            raise ValueError(f"timeMiddlePoint should be between frameStart and frameEnd times. {frameStart['time']} <= {timeMiddlePoint} <= {frameEnd['time']}")
+        
+        if frameEnd["Tr"] == 1:
+            ratio = (timeMiddlePoint - frameStart["time"]) / (frameEnd["time"] - frameStart["time"])
+            middleRgbw = [int(frameStart["rgbw"][i] + (frameEnd["rgbw"][i] - frameStart["rgbw"][i]) *ratio) for i in range(4)]
+            return {"time": timeMiddlePoint, "rgbw":middleRgbw, "Tr": 1}
+        
+        elif frameEnd["Tr"] == 0:
+            return {"time":timeMiddlePoint, "rgbw":frameStart["rgbw"], "Tr":0}
+        
+        raise ValueError("Unknown transition type")
+        
+        
+    def create_compatible_frames(self, frame1, frame2):
+        cptFrame1 = []
+        cptFrame2 = []
+        f1Idx = 0
+        f2Idx = 0
+            
+        if len(frame1) ==0:
+            return frame2, frame2
+        if len(frame2) == 0:
+            return frame1, frame1
+        
+        if frame1[0]["time"] < frame2[0]["time"]:
+            cptFrame1.append(frame1[0])
+            cptFrame2.append({"time":frame1[0]["time"], "rgbw":frame2[0]["rgbw"], "Tr":frame2[0]["Tr"]})
+            t1 = frame1[1]["time"]
+            t2 = frame2[0]["time"]
+            f1Idx = 1
+            f2Idx = 0
+        else:
+            cptFrame1.append({"time":frame2[0]["time"], "rgbw":frame1[0]["rgbw"], "Tr":frame1[0]["Tr"]})
+            cptFrame2.append(frame2[0])
+            t1 = frame1[0]["time"]
+            t2 = frame2[1]["time"]
+            f1Idx = 0
+            f2Idx = 1
+        
+        while (f1Idx < len(frame1) or f2Idx < len(frame2)):
+            if t1 < t2:
+                cptFrame1.append({"time":t1, "rgbw":frame1[f1Idx]["rgbw"], "Tr":frame1[f1Idx]["Tr"]})
+                if f2Idx == 0:
+                    cptFrame2.append(self.get_middle_frame_point(None, frame2[f2Idx], t1))
+                elif f2Idx == len(frame2):
+                    cptFrame2.append(self.get_middle_frame_point(None, frame2[f2Idx-1], t1))
+                else: 
+                    cptFrame2.append(self.get_middle_frame_point(frame2[f2Idx-1], frame2[f2Idx], t1))
+                f1Idx += 1
+                if f1Idx < len(frame1):
+                    t1 = frame1[f1Idx]["time"]
+                else:
+                    t1 = frame2[-1]["time"] +1
+                    
+            elif t1 > t2:
+                cptFrame2.append({"time":t2, "rgbw":frame2[f2Idx]["rgbw"], "Tr":frame2[f2Idx]["Tr"]})
+                if f1Idx == 0:
+                    cptFrame1.append(self.get_middle_frame_point(None, frame1[f1Idx], t2))
+                elif f1Idx == len(frame1):
+                    cptFrame1.append(self.get_middle_frame_point(None, frame1[f1Idx-1], t2))
+                else:
+                    cptFrame1.append(self.get_middle_frame_point(frame1[f1Idx-1], frame1[f1Idx], t2))
+                f2Idx += 1
+                if f2Idx < len(frame2):
+                    t2 = frame2[f2Idx]["time"]
+                else:
+                    t2 = frame1[-1]["time"] +1
+                    
+            else:
+                cptFrame1.append({"time":t1, "rgbw":frame1[f1Idx]["rgbw"], "Tr":frame1[f1Idx]["Tr"]})
+                cptFrame2.append({"time":t2, "rgbw":frame2[f2Idx]["rgbw"], "Tr":frame2[f2Idx]["Tr"]})
+                f1Idx += 1
+                f2Idx += 1
+                if f1Idx < len(frame1):
+                    t1 = frame1[f1Idx]["time"]
+                else:
+                    t1 = frame2[-1]["time"] + 1
+                    
+                if f2Idx < len(frame2):
+                    t2 = frame2[f2Idx]["time"]
+                else:
+                    t2 = frame1[-1]["time"] + 1
+                    
+        return cptFrame1, cptFrame2
+    
+    def _color_fusion(self, rgbw1:List[int], rgbw2:List[int], fusionType:int):
+        match fusionType:
+            case 0: # Mean -> (c1 + c2)/2
+                return [int((rgbw1[i] + rgbw2[i])/2) for i in range(4)]
+            case 1: # Max(c1, c2)
+                return [int(max(rgbw1[i], rgbw2[i])) for i in range(4)]
+            case 2: # Min(c1, c2)
+                return [int(min(rgbw1[i], rgbw2[i])) for i in range(4)]
+            
+            
+    def merge(self, frames2, fusionType:int):
+        resultFrames = Frame(max(self.nbLights, frames2.nbLights))
+        maxLightId = max(self.nbLights, frames2.nbLights)
+        for lightId in range(maxLightId):
+            cptFrame1, cptFrame2 = self.create_compatible_frames(self.frames[lightId], frames2.frames[lightId])
+            if cptFrame1 == []:
+                continue
+            for idx in range(len(cptFrame1)):
+                print(cptFrame1[idx]['time'])
+                match cptFrame1[idx]['Tr'] + cptFrame2[idx]['Tr']:
+                    
+                    case 0:
+                        print("case 0")
+                        resultFrames.add_frame(lightId, cptFrame1[idx]['time'], self._color_fusion(cptFrame1[idx]['rgbw'], cptFrame2[idx]['rgbw'], fusionType), 0)
+                        
+                    case 1:
+                        print("case 1")
+                        if cptFrame1[idx]['Tr'] == 1:
+                            case1cptFrame1 = cptFrame1 # Tr == 1
+                            case1cptFrame2 = cptFrame2 # Tr == 0
+                        else:
+                            case1cptFrame1 = cptFrame2 # Tr == 1
+                            case1cptFrame2 = cptFrame1 # Tr == 0
+                    
+                        newTime = case1cptFrame1[idx]['time'] - FREQUENCY
+                        if case1cptFrame1[idx-1]['time'] < newTime and newTime >= 0: 
+                            ratio = (newTime - case1cptFrame1[idx-1]["time"]) / (case1cptFrame1[idx]["time"] - case1cptFrame1[idx-1]["time"])
+                            middleRgbw = [int(case1cptFrame1[idx-1]["rgbw"][i] + (case1cptFrame1[idx]["rgbw"][i] - case1cptFrame1[idx-1]["rgbw"][i]) *ratio) for i in range(4)]
+                            resultFrames.add_frame(lightId, newTime, self._color_fusion(middleRgbw, case1cptFrame2[idx-1]['rgbw'], fusionType), 1)
+                            print("add")
+                        print(newTime, case1cptFrame1[idx]['time'])
+                        resultFrames.add_frame(lightId, case1cptFrame1[idx]['time'], self._color_fusion(case1cptFrame1[idx]['rgbw'], case1cptFrame2[idx]['rgbw'], fusionType), 0)
+                    
+                    case 2:
+                        print("case 2")
+                        resultFrames.add_frame(lightId, cptFrame1[idx]['time'], self._color_fusion(cptFrame1[idx]['rgbw'], cptFrame2[idx]['rgbw'], fusionType), 1)
+                    
+        return resultFrames
+    
+    def player_merge(self, player:Player):
+        playerFrame = Frame(player.nbLights)
+        playerQueues = player.get_queue()
+        for lightId in range(player.nbLights):
+            for i in range(len(playerQueues[lightId])):
+                playerFrame.add_frame(lightId, playerQueues[lightId][i][0], playerQueues[lightId][i][1], playerQueues[lightId][i][2])
+        mergedFrames = self.merge(playerFrame, 0)
+        queues = [queue.PriorityQueue(maxsize=0) for i in range(self.nbLights)]
+        for lightId, frameQueue in enumerate(queues):
+            for i in range(len(mergedFrames.frames[lightId])):
+                frameQueue.put((mergedFrames.frames[lightId][i]["time"], mergedFrames.frames[lightId][i]["rgbw"], mergedFrames.frames[lightId][i]["Tr"]))
+        print("aaaaaaaa",queues[1].queue)
+        player.replace_queue(queues)
+                                
+                    
+                
+    
+    
+                
+   
+##################################################
+
+
 if __name__ == "__main__":
+    
+    f1 = Frame(54)
+    f2 = Frame(54)
+    f1.add_frame(1, 12, [1,10,100,0], 0)
+    f1.add_frame(1, 50, [2,11,101,0], 1)
+    f1.add_frame(1, 120, [3,12,102,0], 0)
+    f1.add_frame(1, 150, [4,13,103,0], 0)
+    f1.add_frame(1, 190, [5,14,104,0], 1)
+    f1.add_frame(1, 250, [6,15,105,0], 0)
+    
+    f2.add_frame(1, 30, [10,100,200,0], 0)
+    f2.add_frame(1, 101, [20,110,201,0], 1)
+    f2.add_frame(1, 220, [30,120,202,0], 0)
+    f2.add_frame(1, 290, [40,130,203,0], 0)
+    f2.add_frame(1, 350, [50,140,204,0], 1)
+    f2.add_frame(1, 4000, [60,150,205,255], 1)
+    
+
+    b= f1.merge(f2, 0)
+
+    
+
+    
     nbLights = 54
     interfaceName = "TkinterDisplayer" # "FT232R",TkinterDisplayer,Dummy
     player = Player(54, interfaceName)
     yr = YamlReader()
-    yr.load_file(r"../yamls/snake2.yml", player)
-    yr.load_file(r"../yamls/snake2.yml", player, 200)
+    yr.load_file(r"../yamls/snake2.yml", player, 100)
+    b.player_merge(player)
     for light in player.lights:
         print(light.queue.queue)
     player.start()
-    while (player.isRunning):
+    while (player.is_running()):
         time.sleep(1)
     player.quit()
