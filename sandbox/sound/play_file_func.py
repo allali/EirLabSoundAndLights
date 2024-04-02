@@ -101,20 +101,16 @@ class AudioPlayer:
         #        with client:
                 self.client.activate()
                 if True:
+                    target_ports = self.client.get_ports(
+                        is_physical=True, is_input=True, is_audio=True)
+                    NPORTS = len(target_ports)
                     if not self.manual:
-                        target_ports = self.client.get_ports(
-                            is_physical=True, is_input=True, is_audio=True)
                         print(target_ports)
-                        NPORTS=len(target_ports)
-        #                if len(client.outports) == 1 and len(target_ports) > 1:
-                            # Connect mono file to stereo output
-                            #for i in range(20):
                         for i in range(NCHANNELS):
+                            print(i%NPORTS)
                             self.client.outports[i].connect(target_ports[i%NPORTS])
-        #                    client.outports[0].connect(target_ports[1])
-        #                else:
-        #                    for source, target in zip(client.outports, target_ports):
-        #                        source.connect(target)
+                    else:
+                        self.speakers_mapping(NPORTS,NCHANNELS,target_ports)
                     timeout = self.blocksize * self.bufferSize / self.samplerate
                     print("Start Sound !")
                     for data in block_generator:
@@ -188,8 +184,21 @@ class AudioPlayer:
                 sum = 0
                 for i in range(len(self.rms_values[self._port])):
                     sum += self.rms_values[self._port][i]
-                print("port n°",self._port," : ",sqrt(sum/(lgth_channel * len(self.rms_values[self._port]))))
             self._port += 1
         self._port = 0
         if (self._cpt >= self._samplerate * 0.25): #We want to take rms vlaue every 1/4 second, 
             self._cpt = 0
+
+
+    def speakers_mapping(self, nbr_ports, nbr_channels, target_ports):
+        print("your audio has {} tracks and your audio system has {} out".format(nbr_channels,nbr_ports))
+        print("what do you want to do?")
+        for i in range(nbr_channels):
+            channel_id = input("To which output do you want the {}th channel to be linked with ?".format(i))
+            channel_id = int(channel_id)
+            if (channel_id < nbr_ports):
+                self.client.outports[i].connect(target_ports[channel_id])
+            else:
+                print("Channel_id invalid please give a number between 0 and {}".format(nbr_ports -1))
+
+

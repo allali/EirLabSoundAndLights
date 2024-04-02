@@ -12,6 +12,6 @@ clientName = "test_sound"
 audioPlayer = AudioPlayer(clientName, buffsize)
 
 audioPlayer.load_file(audioFile)
-
+#audioPlayer.manual = True
 audioPlayer.start()
 
