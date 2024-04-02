@@ -488,7 +488,8 @@ if __name__ == "__main__":
     yr = YamlReader()
     yamlFrame = yr.get_frame(r"../yamls/snake2.yml", 54)
     mergedFrame1 = Frame.merge(b, yamlFrame, 0)
-    Frame.player_replace_queue(player, mergedFrame1,1, True, 1700)
+    #Frame.player_replace_queue(player, mergedFrame1,1, True, 1700)
+    Frame.player_replace_queue(player, f2,2, True, 1700)
     
     player.start()
     while (player.is_running()):
