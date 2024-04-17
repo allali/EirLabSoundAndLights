@@ -160,7 +160,7 @@ class yaml_writer:
             pass
 
 
-    def round(self,time,duration,new_red,new_green,new_blue,new_white,red,green,blue,white):
+    def round(self,time,duration,new_red,new_green,new_blue,new_white):
         pause = duration/30
         incr = 0
         for i in range(6):
@@ -180,6 +180,49 @@ class yaml_writer:
             incr+=pause
             #self.add(i,time+incr,red,green,blue,white,0)
 
+
+    def spiral(self,time,duration,new_red,new_green,new_blue,new_white):
+        pause = duration/54
+        incr = 0
+        for i in range(6):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+            #self.add(i,time+incr,red,green,blue,white,0)
+        for i in range(5,54,6):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+            #self.add(i,time+incr,red,green,blue,white,0)
+        for i in range(53,48,-1):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+            #self.add(i,time+incr,red,green,blue,white,0)
+        for i in range(48,0,-6):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+        for i in range(7,11):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+        for i in range(10,47,6):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+        for i in range(46,43,-1):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+        for i in range(43,7,-6):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+        for i in range(14,16):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+        for i in range(15,40,6):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+        for i in range(39,38,-1):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+        for i in range(38,14,-6):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
 
 if __name__ == "__main__":
     yw = yaml_writer("test")
