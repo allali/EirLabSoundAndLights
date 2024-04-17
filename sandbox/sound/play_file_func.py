@@ -54,10 +54,12 @@ class AudioPlayer:
         self.event = threading.Event()
         self.mainThread = None
         self.isRunning = False
-        self.rms_values = {}
+        self._rmsValues = {}
         self._samplerate = 0
         self._port = 0
         self._cpt = 0
+        self._preRmsSum = {}
+        self._maxRmsValue = 0
 
         try:
             self.client = jack.Client(self.clientName)
@@ -79,6 +81,7 @@ class AudioPlayer:
         self.mainThread = threading.Thread(target=self._play, args=[fileName])
         
     def start(self):
+        self.isRunning = True
         self.mainThread.start()
     
     def get_samplerate_fe(self,sf):
@@ -86,7 +89,7 @@ class AudioPlayer:
     
 
     def _play(self, fileName):
-        self.isRunning = True
+
         try:
             self.fileName = fileName
             with sf.SoundFile(self.fileName) as f:
@@ -104,8 +107,7 @@ class AudioPlayer:
                     if not self.manual:
                         target_ports = self.client.get_ports(
                             is_physical=True, is_input=True, is_audio=True)
-                        print(target_ports)
-                        NPORTS=len(target_ports)
+                        NPORTS = len(target_ports)
         #                if len(client.outports) == 1 and len(target_ports) > 1:
                             # Connect mono file to stereo output
                             #for i in range(20):
@@ -178,18 +180,35 @@ class AudioPlayer:
             channel_value = 0
             for i in range(lgth_channel):
                 channel_value += channel[i]**2
-            if self._port not in self.rms_values.keys():
-                self.rms_values[self._port] = [channel_value]
+            if self._port not in self._preRmsSum.keys():
+                self._preRmsSum[self._port] = [channel_value]
             else:
-                self.rms_values[self._port].append(channel_value)
-            if (len(self.rms_values[self._port]) * lgth_channel >= self._samplerate):
-                self.rms_values[self._port].pop(0)
+                self._preRmsSum[self._port].append(channel_value)
+            if (len(self._preRmsSum[self._port]) * lgth_channel >= self._samplerate):
+                self._preRmsSum[self._port].pop(0)
             if (self._cpt >= self._samplerate * 0.25):
                 sum = 0
-                for i in range(len(self.rms_values[self._port])):
-                    sum += self.rms_values[self._port][i]
-                print("port n°",self._port," : ",sqrt(sum/(lgth_channel * len(self.rms_values[self._port]))))
+                for i in range(len(self._preRmsSum[self._port])):
+                    sum += self._preRmsSum[self._port][i]
+                self.set_Rms_Values(self._port, lgth_channel, sum)
+                self.set_Max_Rms_Values(self._port)
+                #print("1 port n°",self._port," : ",self.get_Rms_Values(self._port))
             self._port += 1
         self._port = 0
         if (self._cpt >= self._samplerate * 0.25): #We want to take rms vlaue every 1/4 second, 
             self._cpt = 0
+
+    def set_Rms_Values(self, port, lgth, sum):
+        self._rmsValues[port] = sqrt(sum/(lgth * len(self._preRmsSum[port])))
+
+    def get_Rms_Values(self, port):
+        return self._rmsValues.get(port)
+
+    def set_Max_Rms_Values(self,port):
+        self._maxRmsValue = self._rmsValues.get(port) if self._rmsValues.get(port)>= self._maxRmsValue else self._maxRmsValue
+    
+    def get_Max_Rms_Values(self):
+        return self._maxRmsValue 
+
+    def normalize_Rms_Value(self, value):
+        return value/self._maxRmsValue

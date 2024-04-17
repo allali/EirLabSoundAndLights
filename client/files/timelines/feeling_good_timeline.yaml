@@ -1,0 +1,57 @@
+- meta:
+  - title: Feeling Good
+  - artist: Nina Simone
+  - bpm: 79
+  - duration: 174 #seconds
+
+- parts:
+  - intro:
+    time: 0 #seconds
+    type: intro
+    tag : [vocal]
+  
+  -chorus1:
+    time: 19
+    type: chorus
+    tag : [vocal]
+
+  - verse1:
+    time : 47
+    type : verse
+    tag : [vocal, instrumental]
+
+  - chorus2:
+    time : 64
+    type : chorus
+    tag : [vocal, instrumental]
+
+  - verse2:
+    time : 80
+    type : verse
+    tag : [vocal, instrumental]
+
+  - verse3:
+    time : 114
+    type : verse
+    tag : [vocal, instrumental]
+
+  - chorus3:
+    time : 131
+    type : chorus
+    tag : [vocal, instrumental]
+
+  - outro:
+    time : 139
+    type : outro
+    tag : [vocal, instrumental]
+
+- events:
+  - transition1:
+    time: 39.5
+    tag : [instrumental]
+
+  - transition2:
+    time : 106
+    tag : [instrumental]
+  
+  
