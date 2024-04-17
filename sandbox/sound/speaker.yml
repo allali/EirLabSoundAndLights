@@ -1,0 +1,51 @@
+- speakers:
+    - id: 0
+      coordinates:
+        - x: 6.70
+          y: 22.70
+          z: 2.50
+    - id: 1
+      coordinates:
+        - x: 0.00
+          y: 14.70
+          z: 2.50
+    - id: 2
+      coordinates:
+        - x: 0.00
+          y: 11.00
+          z: 2.50
+    - id: 3
+      coordinates:
+        - x: 0.00
+          y: 7.70
+          z: 2.50
+    - id: 4
+      coordinates:
+        - x: 0.00
+          y: 4.20
+          z: 2.50
+    - id: 5
+      coordinates:
+        - x: 6.70
+          y: 0.00
+          z: 2.50
+    - id: 6
+      coordinates:
+        - x: 14.65
+          y: 4.20
+          z: 2.50
+    - id: 7
+      coordinates:
+        - x: 14.65
+          y: 7.70
+          z: 2.50
+    - id: 8
+      coordinates:
+        - x: 14.65
+          y: 11.00
+          z: 2.50
+    - id: 9
+      coordinates:
+        - x: 14.65
+          y: 14.70
+          z: 2.50
