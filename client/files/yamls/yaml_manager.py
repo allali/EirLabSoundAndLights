@@ -1,5 +1,6 @@
 import sys
 import yaml
+import random
 from pathlib import Path
 
 class yaml_writer:
@@ -116,13 +117,73 @@ class yaml_writer:
         pause = duration / 9
         for i in range(1,10):
             if i != 1:
-                yw.line(i-1, time+((i+2)*pause), red, green, blue, white, 1)
-            yw.line(i, time+(i*pause), red_wave, green_wave, blue_wave, white_wave, 1)
+                self.line(i-1, time+((i+2)*pause), red, green, blue, white, 1)
+            self.line(i, time+(i*pause), red_wave, green_wave, blue_wave, white_wave, 1)
             if i == 9:
                 self.line(i, (time + (i+3)*pause), red, green, blue, white,1)
+
+    #Cross (weird because its an odd by even grid)
+    def cross(self, time, red, green, blue, white, Tr):
+        for i in range(24,30):
+            self.add(i,time,red,green,blue,white,Tr)
+        for i in range(2,51,6):
+            self.add(i,time,red,green,blue,white,Tr)
+            self.add(i+1,time,red,green,blue,white,Tr)
+
+    #Basically a small wave on a single line
+    def passing_line(self, number, time, duration, red_wave, green_wave, blue_wave, white_wave, red, green, blue, white):
+        pause = duration / 6
+        for i in range((number-1)*6,number*6):
+            if i != (number-1)*6:
+                self.add(i-1, time+((i%6)+2)*pause,red,green,blue,white,1)
+            self.add(i, time+(i%6)*pause,red_wave,green_wave,blue_wave,white_wave,1)
+            if i == number*6-1:
+                self.add(i, time+((i%6)+3)*pause, red, green, blue, white, 1)
+
+    #Same but for column
+    def passing_column(self, number, time, duration, red_wave, green_wave, blue_wave, white_wave, red, green, blue, white):
+        pause = duration / 9
+        if number == 1:
+            self.add(0,time,red_wave,green_wave,blue_wave,white_wave,1)
+            self.add(0,time+(12*pause),red, green, blue, white, 1)
+        for i in range(number-1, 54, 6):
+            if i != number-1:
+                self.add(i-6, time+(i%9)*pause,red,green,blue,white,1)
+            self.add(i, time)
+
+
+    def full_random(self,time, Tr):
+        for i in range(54):
+            self.add(i,time,random.randrange(256), random.randrange(256), random.randrange(256), random.randrange(256), Tr)
+        
+    def expanding_point(self, number, time, duration, red, green, blue, white, Tr):
+            pass
+
+
+    def round(self,time,duration,new_red,new_green,new_blue,new_white,red,green,blue,white):
+        pause = duration/30
+        incr = 0
+        for i in range(6):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+            #self.add(i,time+incr,red,green,blue,white,0)
+        for i in range(5,54,6):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+            #self.add(i,time+incr,red,green,blue,white,0)
+        for i in range(53,48,-1):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+            #self.add(i,time+incr,red,green,blue,white,0)
+        for i in range(48,0,-6):
+            self.add(i,time+incr,new_red,new_green,new_blue,new_white,0)
+            incr+=pause
+            #self.add(i,time+incr,red,green,blue,white,0)
 
 
 if __name__ == "__main__":
     yw = yaml_writer("test")
-    yw.line_column(1000,2500,255,0,0,0,0,0,255,0)
+    #yw.cross(250,255,0,0,0,1)
+    yw.full_change(1,255,0,0,100,1)
+    yw.round(500,3000,0,0,255,100,0,255,0,100)
     yw.write()
