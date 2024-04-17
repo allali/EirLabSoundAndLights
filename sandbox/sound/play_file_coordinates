@@ -23,6 +23,7 @@ installed for this to work.
 
 """
 import argparse
+import yaml 
 try:
     import queue  # Python 3.x
 except ImportError:
@@ -32,7 +33,8 @@ import threading
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('filename', help='audio file to be played back')
-parser.add_argument('number', type=float, help='number to be used as coordinates')
+parser.add_argument('number_x', type=float, help='x coordinates')
+parser.add_argument('number_y', type=float, help='y coordinates')
 parser.add_argument(
     '-b', '--buffersize', type=int, default=20,
     help='number of blocks used for buffering (default: %(default)s)')
@@ -72,6 +74,21 @@ def stop_callback(msg=''):
     raise jack.CallbackExit
 
 
+def speaker():
+    with open('speaker.yml', 'r') as stream:
+        try:
+            d = yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+        
+    speakers = []
+    speakers_data = d[0]["speakers"]
+    for speakerId, speaker in enumerate(speakers_data):
+        if speakerId != speaker["id"]:
+            ValueError(f"Exepected id {speakerId}, got { speaker['id'] }")
+        speakers.append([speaker["coordinates"][0]["x"], speaker["coordinates"][0]["y"], speaker["coordinates"][0]["z"]])
+    return speakers
+
 # look for the specification of the process function into jack API (jack.Client.set_process_callback)
 def process(frames):
     if frames != blocksize:
@@ -82,18 +99,22 @@ def process(frames):
         stop_callback('Buffer is empty: increase buffersize?')
     if data is None:
         stop_callback()  # Playback is finished
-        
-    target_volumes = [0.1, 0.7]
-        
-    for channel, port, volume in zip(data.T, client.outports, target_volumes):
-        adjusted_data = channel*volume
-        port.get_array()[:] = adjusted_data
     
-        
-    # for port in client.outports:  # put same data to every ports of our clients
-    #     port.get_array()[:] = data
+    target_volumes = []
+    
+    for coordinates in speaker():
+        x = abs(args.number_x - coordinates[0])
+        y = abs(args.number_y - coordinates[1])
+        t = (x**2 + y**2)**0.5
+        if (t > 9):
+            target_volumes.append(0.0)
+        else:
+            target_volumes.append(1.0 - t/9)
+    for i in range(10):
+        client.outports[i].get_array()[:] = data.T[0] * target_volumes[i]
 
 try:
+    
     import jack
     import soundfile as sf
     import time
@@ -104,14 +125,16 @@ try:
     client.set_xrun_callback(xrun)
     client.set_shutdown_callback(shutdown)
     client.set_process_callback(process)
-#    client.activate()
+#s    client.activate()
 
     
 
     with sf.SoundFile(args.filename) as f:
         NCHANNELS = f.channels
         print(NCHANNELS)
-        for ch in range(f.channels): # create ouput port in jack for our client
+        #for ch in range(f.channels): # create ouput port in jack for our client
+        #    client.outports.register(f'out_{ch + 1}')
+        for ch in range(10): # create ouput port in jack for our client
             client.outports.register(f'out_{ch + 1}')
 
         # Read bloack of  audio data from file (argument of the script) 
@@ -134,23 +157,12 @@ try:
                 NPORTS=len(target_ports)
 #                if len(client.outports) == 1 and len(target_ports) > 1:
                     # Connect mono file to stereo output
-                    #for i in range(20):
-                target=[]
-                target_points_coordinates = [[target_ports[0], 0], [target_ports[1],2.0]]
-               
-
-                for port, coordinate in target_points_coordinates:
-                    if (abs(args.number-coordinate)<=2):
-                        target.append(port)
                 
-                for port in client.outports: # connection between OUR ports to speakers
+                for port in range(10): # connection between OUR ports to speakers
                         #client.outports[i].connect(target_ports[i%NPORTS])
                         #client.outports[i].connect(target_ports[i%2]) # example of adjustment for an stero speakers setup
-                    for t in target:    
-                        port.connect(t)
-#                else:
-#                    for source, target in zip(client.outports, target_ports):
-#                        source.connect(target)
+                    client.outports[port].connect(target_ports[port])
+                 
             timeout = blocksize * args.buffersize / samplerate
             # put remaining input audio blocks into q
             for data in block_generator:
