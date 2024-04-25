@@ -48,7 +48,7 @@ class AudioPlayer:
     def __init__(self, clientName = "file player", bufferSize=20):
         self.clientName = clientName
         self.bufferSize = bufferSize
-        self.manual = False
+        self.manual = None
         self.fileName = None
         self.q = queue.Queue(maxsize=self.bufferSize)
         self.event = threading.Event()
@@ -101,20 +101,15 @@ class AudioPlayer:
         #        with client:
                 self.client.activate()
                 if True:
-                    if not self.manual:
+                    if self.manual == None:
                         target_ports = self.client.get_ports(
                             is_physical=True, is_input=True, is_audio=True)
                         print(target_ports)
                         NPORTS=len(target_ports)
-        #                if len(client.outports) == 1 and len(target_ports) > 1:
-                            # Connect mono file to stereo output
-                            #for i in range(20):
                         for i in range(NCHANNELS):
                             self.client.outports[i].connect(target_ports[i%NPORTS])
-        #                    client.outports[0].connect(target_ports[1])
-        #                else:
-        #                    for source, target in zip(client.outports, target_ports):
-        #                        source.connect(target)
+                    else:
+                        self._mapping = self.parse(self.manual)
                     timeout = self.blocksize * self.bufferSize / self.samplerate
                     print("Start Sound !")
                     for data in block_generator:
@@ -171,6 +166,7 @@ class AudioPlayer:
             self.stop_callback('Buffer is empty: increase buffersize?')
         if data is None:
             self.stop_callback()  # Playback is finished
+            
         self._cpt += 1024
         for channel, port in zip(data.T, self.client.outports):
             lgth_channel = len(channel)
@@ -178,12 +174,15 @@ class AudioPlayer:
             channel_value = 0
             for i in range(lgth_channel):
                 channel_value += channel[i]**2
+
             if self._port not in self.rms_values.keys():
                 self.rms_values[self._port] = [channel_value]
             else:
                 self.rms_values[self._port].append(channel_value)
+
             if (len(self.rms_values[self._port]) * lgth_channel >= self._samplerate):
                 self.rms_values[self._port].pop(0)
+
             if (self._cpt >= self._samplerate * 0.25):
                 sum = 0
                 for i in range(len(self.rms_values[self._port])):
@@ -193,3 +192,22 @@ class AudioPlayer:
         self._port = 0
         if (self._cpt >= self._samplerate * 0.25): #We want to take rms vlaue every 1/4 second, 
             self._cpt = 0
+
+
+    def parse(str): #str should be like : id_speaker:id_track,id_track.id_speaker:id...$
+        lib = {}
+        isSpeaker = True
+        currentSpeaker = None
+        for char in str:
+            if (char == ":" or char == ","):
+                isSpeaker = False
+            elif(char == "."):
+                isSpeaker = True
+            else:
+                if (isSpeaker):
+                    currentSpeaker = char
+                    lib[char] = []
+                else:
+                    lib[currentSpeaker].append(char)
+        return lib
+
