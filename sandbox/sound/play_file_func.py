@@ -55,9 +55,11 @@ class AudioPlayer:
         self.mainThread = None
         self.isRunning = False
         self.rms_values = {}
+        self.nb_speaker = None
         self._samplerate = 0
         self._port = 0
         self._cpt = 0
+        self._mapping = None
 
         try:
             self.client = jack.Client(self.clientName)
@@ -84,6 +86,8 @@ class AudioPlayer:
     def get_samplerate_fe(self,sf):
         self._samplerate = sf.samplerate
     
+    def set_nbr_channels(self,nbr):
+        self.nb_speaker = nbr
 
     def _play(self, fileName):
         self.isRunning = True
@@ -92,24 +96,29 @@ class AudioPlayer:
             with sf.SoundFile(self.fileName) as f:
                 self.get_samplerate_fe(f)
                 NCHANNELS = f.channels
-                for ch in range(f.channels):
+                self.set_nbr_channels(NCHANNELS)
+
+                target_ports = self.client.get_ports(is_physical=True, is_input=True, is_audio=True)
+                NPORTS=len(target_ports)
+
+                for ch in range(NPORTS):
                     self.client.outports.register(f'out_{ch + 1}')
-                block_generator = f.blocks(blocksize=self.blocksize, dtype='float32',
-                                        always_2d=True, fill_value=0)
+
+                block_generator = f.blocks(blocksize=self.blocksize, dtype='float32',always_2d=True, fill_value=0)
+
                 for _, data in zip(range(self.bufferSize), block_generator):
                     self.q.put_nowait(data)  # Pre-fill queue
-        #        with client:
+
                 self.client.activate()
                 if True:
                     if self.manual == None:
-                        target_ports = self.client.get_ports(
-                            is_physical=True, is_input=True, is_audio=True)
-                        print(target_ports)
-                        NPORTS=len(target_ports)
-                        for i in range(NCHANNELS):
-                            self.client.outports[i].connect(target_ports[i%NPORTS])
+                        self._mapping = self.default_mapping(NPORTS)
                     else:
                         self._mapping = self.parse(self.manual)
+
+                    for i in range(NPORTS):
+                        self.client.outports[i].connect(target_ports[i%NPORTS])
+                    
                     timeout = self.blocksize * self.bufferSize / self.samplerate
                     print("Start Sound !")
                     for data in block_generator:
@@ -158,6 +167,12 @@ class AudioPlayer:
 
 
     def process(self, frames):
+        def add_arrays(a1,a2):
+            a3 = [0]*len(a1)
+            for i in range(len(a1)):
+                a3[i] = a1[i] + a2[i]
+            return a3
+        
         if frames != self.blocksize:
             self.stop_callback('blocksize must not be changed, I quit!')
         try:
@@ -167,10 +182,52 @@ class AudioPlayer:
         if data is None:
             self.stop_callback()  # Playback is finished
             
+        new_data = data.T
+        self.calc_rms(data)
+        for speaker in self._mapping.keys():
+            list_channel = self._mapping[speaker]
+            print("speaker:", speaker, "list_channel:", list_channel)
+            values = [0]*1024
+            for i in list_channel:
+                values = add_arrays(values,new_data[int(i)])
+                print(len(values))
+            self.client.outports[int(speaker)].get_array()[:] = values
+
+            
+
+    def parse(self,str): #str should be like : id_speaker:id_track,id_track.id_speaker:id...$
+        lib = {}
+        isSpeaker = True
+        currentSpeaker = None
+        for char in str:
+            if (char == ":" or char == ","):
+                isSpeaker = False
+            elif(char == "."):
+                isSpeaker = True
+            else:
+                if (isSpeaker):
+                    currentSpeaker = char
+                    lib[char] = []
+                else:
+                    lib[currentSpeaker].append(char)
+        return lib
+
+    def default_mapping(self,NPORTS):
+        lib= {}
+
+        for i in range(NPORTS):
+            lib[str(i)] = []
+
+        for i in range(self.nb_speaker):
+            speaker = i%NPORTS
+            lib[str(speaker)].append(str(i))
+
+        return lib
+    
+    def calc_rms(self,data):
         self._cpt += 1024
-        for channel, port in zip(data.T, self.client.outports):
+        for channel in data.T:
             lgth_channel = len(channel)
-            port.get_array()[:] = channel
             channel_value = 0
             for i in range(lgth_channel):
                 channel_value += channel[i]**2
@@ -192,22 +249,3 @@ class AudioPlayer:
         self._port = 0
         if (self._cpt >= self._samplerate * 0.25): #We want to take rms vlaue every 1/4 second, 
             self._cpt = 0
-
-
-    def parse(str): #str should be like : id_speaker:id_track,id_track.id_speaker:id...$
-        lib = {}
-        isSpeaker = True
-        currentSpeaker = None
-        for char in str:
-            if (char == ":" or char == ","):
-                isSpeaker = False
-            elif(char == "."):
-                isSpeaker = True
-            else:
-                if (isSpeaker):
-                    currentSpeaker = char
-                    lib[char] = []
-                else:
-                    lib[currentSpeaker].append(char)
-        return lib
-
