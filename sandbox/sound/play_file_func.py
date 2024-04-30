@@ -95,11 +95,10 @@ class AudioPlayer:
             self.fileName = fileName
             with sf.SoundFile(self.fileName) as f:
                 self.get_samplerate_fe(f)
-                NCHANNELS = f.channels
-                self.set_nbr_channels(NCHANNELS)
+                self.set_nbr_channels(f.channels)
 
                 target_ports = self.client.get_ports(is_physical=True, is_input=True, is_audio=True)
-                NPORTS=len(target_ports)
+                NPORTS = len(target_ports)
 
                 for ch in range(NPORTS):
                     self.client.outports.register(f'out_{ch + 1}')
@@ -117,7 +116,7 @@ class AudioPlayer:
                         self._mapping = self.parse(self.manual)
 
                     for i in range(NPORTS):
-                        self.client.outports[i].connect(target_ports[i%NPORTS])
+                        self.client.outports[i].connect(target_ports[i])
                     
                     timeout = self.blocksize * self.bufferSize / self.samplerate
                     print("Start Sound !")
@@ -126,6 +125,7 @@ class AudioPlayer:
                     self.q.put(None, timeout=timeout)  # Signal end of file
                     self.event.wait()  # Wait until playback is finished
             print("Sound finished !")
+            
             self.isRunning = False
         except KeyboardInterrupt:
             self.isRunning = False
@@ -183,14 +183,14 @@ class AudioPlayer:
             self.stop_callback()  # Playback is finished
             
         new_data = data.T
-        self.calc_rms(data)
+        #self.calc_rms(new_data)
         for speaker in self._mapping.keys():
             list_channel = self._mapping[speaker]
-            print("speaker:", speaker, "list_channel:", list_channel)
+            #print("speaker:", speaker, "list_channel:", list_channel)
             values = [0]*1024
             for i in list_channel:
                 values = add_arrays(values,new_data[int(i)])
-                print(len(values))
+                #print(len(values))
             self.client.outports[int(speaker)].get_array()[:] = values
 
             
@@ -226,7 +226,7 @@ class AudioPlayer:
     
     def calc_rms(self,data):
         self._cpt += 1024
-        for channel in data.T:
+        for channel in data:
             lgth_channel = len(channel)
             channel_value = 0
             for i in range(lgth_channel):
