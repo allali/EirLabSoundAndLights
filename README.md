@@ -1,5 +1,11 @@
 # EirLabSoundAndLights
 
+## Light and sound configuration :
+
+- Install **qjackctl** with the command `sudo apt-get install qjackctl`
+- Install **Tkinter** with the command `apt install python3-tk`
+- Install all the **dependencies** with the command `pip install -r <requirements.txt>`
+
 ## Configuration you need to do in order to launch the lights without sudo (a must if you want sound + lights) :
 
 **Needs:** to not be connected to the lights while doing this
