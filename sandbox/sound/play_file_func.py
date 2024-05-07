@@ -222,6 +222,7 @@ class AudioPlayer:
                     lib[currentSpeaker].append(char)
         return lib
 
+#A revoir lorsque le nombre de channel est inférieur au nombre d'enceintes
     def default_mapping(self,NPORTS):
         lib= {}
 
