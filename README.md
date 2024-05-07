@@ -3,12 +3,26 @@
 ## Project architecture
 
 ├── config
+
+
 ├── files
+
+
 │   ├── wav
+
+
 │   └── yaml
+
+
 ├── light
+
+
 ├── sound
+
+
 ├── jack_launcher.sh
+
+
 └──Player.py
 
 ## Configuration you need to do in order to launch the lights without sudo (a must if you want sound + lights) :
