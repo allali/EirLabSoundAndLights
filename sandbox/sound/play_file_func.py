@@ -60,6 +60,7 @@ class AudioPlayer:
         self._port = 0
         self._cpt = 0
         self._mapping = None
+        self.loop = False
 
         try:
             self.client = jack.Client(self.clientName)
@@ -110,7 +111,7 @@ class AudioPlayer:
 
                 self.client.activate()
                 if True:
-                    if self.manual == None:
+                    if self.manual == None: #case -m option was used 
                         self._mapping = self.default_mapping(NPORTS)
                     else:
                         self._mapping = self.parse(self.manual)
@@ -119,6 +120,14 @@ class AudioPlayer:
                         self.client.outports[i].connect(target_ports[i])
                     
                     timeout = self.blocksize * self.bufferSize / self.samplerate
+
+                    while (self.loop): #case -l option was used 
+                        f = sf.SoundFile(self.fileName)
+                        block_generator = f.blocks(blocksize=self.blocksize, dtype='float32',always_2d=True, fill_value=0)
+
+                        for data in block_generator:
+                            self.q.put(data, timeout=timeout)
+
                     print("Start Sound !")
                     for data in block_generator:
                         self.q.put(data, timeout=timeout)
@@ -186,11 +195,12 @@ class AudioPlayer:
         #self.calc_rms(new_data)
         for speaker in self._mapping.keys():
             list_channel = self._mapping[speaker]
-            #print("speaker:", speaker, "list_channel:", list_channel)
+            print("speaker:", speaker, "list_channel:", list_channel)
+
             values = [0]*1024
             for i in list_channel:
                 values = add_arrays(values,new_data[int(i)])
-                #print(len(values))
+
             self.client.outports[int(speaker)].get_array()[:] = values
 
             
