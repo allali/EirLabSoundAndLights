@@ -1,0 +1,4 @@
+numpy==1.26.3
+argparse==1.1
+soundfile==0.12.1
+jack-client==0.5.4
