@@ -101,15 +101,15 @@ def process(frames):
         stop_callback()  # Playback is finished
     
     target_volumes = []
-    
-    for coordinates in speaker():
-        x = abs(args.number_x - coordinates[0])
+    # getting volume for each speaker
+    for coordinates in speaker(): 
+        x = abs(args.number_x - coordinates[0]) 
         y = abs(args.number_y - coordinates[1])
-        t = (x**2 + y**2)**0.5
-        if (t > 9):
+        distance = (x**2 + y**2)**0.5 # distance between the speaker and the sound source
+        if (distance > 9):             # radius is set to 9
             target_volumes.append(0.0)
         else:
-            target_volumes.append(1.0 - t/9)
+            target_volumes.append(1.0 - distance/9)
     for i in range(10):
         client.outports[i].get_array()[:] = data.T[0] * target_volumes[i]
 
@@ -125,16 +125,14 @@ try:
     client.set_xrun_callback(xrun)
     client.set_shutdown_callback(shutdown)
     client.set_process_callback(process)
-#s    client.activate()
+#    client.activate()
 
     
 
     with sf.SoundFile(args.filename) as f:
         NCHANNELS = f.channels
         print(NCHANNELS)
-        #for ch in range(f.channels): # create ouput port in jack for our client
-        #    client.outports.register(f'out_{ch + 1}')
-        for ch in range(10): # create ouput port in jack for our client
+        for ch in range(10): # create output port in jack for our client
             client.outports.register(f'out_{ch + 1}')
 
         # Read bloack of  audio data from file (argument of the script) 
@@ -155,12 +153,8 @@ try:
                 print(target_ports)
                 
                 NPORTS=len(target_ports)
-#                if len(client.outports) == 1 and len(target_ports) > 1:
-                    # Connect mono file to stereo output
-                
+
                 for port in range(10): # connection between OUR ports to speakers
-                        #client.outports[i].connect(target_ports[i%NPORTS])
-                        #client.outports[i].connect(target_ports[i%2]) # example of adjustment for an stero speakers setup
                     client.outports[port].connect(target_ports[port])
                  
             timeout = blocksize * args.buffersize / samplerate
