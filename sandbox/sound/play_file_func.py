@@ -60,6 +60,7 @@ class AudioPlayer:
         self._cpt = 0
         self._mapping = None
         self.loop = False
+        self.NCHANNELS = None
 
         try:
             self.client = jack.Client(self.clientName)
@@ -93,7 +94,7 @@ class AudioPlayer:
             self.fileName = fileName
             with sf.SoundFile(self.fileName) as f:
                 self.get_samplerate_fe(f)
-                NCHANNELS = f.channels
+                self.NCHANNELS = f.channels
 
                 target_ports = self.client.get_ports(is_physical=True, is_input=True, is_audio=True)
                 NPORTS = len(target_ports)
@@ -109,7 +110,7 @@ class AudioPlayer:
                 self.client.activate()
                 if True:
                     if self.manual == None: #case -m option was used 
-                        self._mapping = self.default_mapping(NPORTS,NCHANNELS)
+                        self._mapping = self.default_mapping(NPORTS)
                     else:
                         self._mapping = self.parse(self.manual)
 
@@ -173,12 +174,6 @@ class AudioPlayer:
 
 
     def process(self, frames):
-        def add_arrays(a1,a2):
-            a3 = [0]*len(a1)
-            for i in range(len(a1)):
-                a3[i] = a1[i] + a2[i]
-            return a3
-        
         if frames != self.blocksize:
             self.stop_callback('blocksize must not be changed, I quit!')
         try:
@@ -192,11 +187,14 @@ class AudioPlayer:
         #self.calc_rms(new_data)
         for speaker in self._mapping.keys():
             list_channel = self._mapping[speaker]
-            print("speaker:", speaker, "list_channel:", list_channel)
+            #print("speaker:", speaker, "list_channel:", list_channel)
 
-            values = [0]*1024
-            for i in list_channel:
-                values = add_arrays(values,new_data[int(i)])
+            weigth = 1 / len(list_channel)
+
+            values = new_data[int(list_channel[0])] * weigth
+            for idx in range(1,len(list_channel)):
+                values = values + new_data[int(list_channel[idx])] * weigth
+                #print(values / new_data[int(list_channel[idx])] * weigth)
 
             self.client.outports[int(speaker)].get_array()[:] = values
 
@@ -220,23 +218,24 @@ class AudioPlayer:
         return lib
 
 #A revoir lorsque le nombre de channel est inférieur au nombre d'enceintes
-    def default_mapping(self,NPORTS,NCHANNELS):
+    def default_mapping(self,NPORTS):
         lib= {}
 
         for i in range(NPORTS):
             lib[str(i)] = []
 
-        if (NPORTS > NCHANNELS):
+        if (NPORTS > self.NCHANNELS):
             spk = []
-            for i in range(NCHANNELS):
+            for i in range(self.NCHANNELS):
                 spk.append(str(i))
 
             for j in range(NPORTS):
                 lib[str(j)] = spk
         else:
-            for i in range(NCHANNELS):
+            for i in range(self.NCHANNELS):
                 speaker = i%NPORTS
                 lib[str(speaker)].append(str(i))
+        print(lib)
         return lib
     
     def calc_rms(self,data):
