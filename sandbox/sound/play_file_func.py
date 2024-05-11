@@ -55,7 +55,6 @@ class AudioPlayer:
         self.mainThread = None
         self.isRunning = False
         self.rms_values = {}
-        self.nb_speaker = None
         self._samplerate = 0
         self._port = 0
         self._cpt = 0
@@ -87,8 +86,6 @@ class AudioPlayer:
     def get_samplerate_fe(self,sf):
         self._samplerate = sf.samplerate
     
-    def set_nbr_channels(self,nbr):
-        self.nb_speaker = nbr
 
     def _play(self, fileName):
         self.isRunning = True
@@ -96,7 +93,7 @@ class AudioPlayer:
             self.fileName = fileName
             with sf.SoundFile(self.fileName) as f:
                 self.get_samplerate_fe(f)
-                self.set_nbr_channels(f.channels)
+                NCHANNELS = f.channels
 
                 target_ports = self.client.get_ports(is_physical=True, is_input=True, is_audio=True)
                 NPORTS = len(target_ports)
@@ -112,7 +109,7 @@ class AudioPlayer:
                 self.client.activate()
                 if True:
                     if self.manual == None: #case -m option was used 
-                        self._mapping = self.default_mapping(NPORTS)
+                        self._mapping = self.default_mapping(NPORTS,NCHANNELS)
                     else:
                         self._mapping = self.parse(self.manual)
 
@@ -223,16 +220,23 @@ class AudioPlayer:
         return lib
 
 #A revoir lorsque le nombre de channel est inférieur au nombre d'enceintes
-    def default_mapping(self,NPORTS):
+    def default_mapping(self,NPORTS,NCHANNELS):
         lib= {}
 
         for i in range(NPORTS):
             lib[str(i)] = []
 
-        for i in range(self.nb_speaker):
-            speaker = i%NPORTS
-            lib[str(speaker)].append(str(i))
+        if (NPORTS > NCHANNELS):
+            spk = []
+            for i in range(NCHANNELS):
+                spk.append(str(i))
 
+            for j in range(NPORTS):
+                lib[str(j)] = spk
+        else:
+            for i in range(NCHANNELS):
+                speaker = i%NPORTS
+                lib[str(speaker)].append(str(i))
         return lib
     
     def calc_rms(self,data):
