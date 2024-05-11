@@ -1,0 +1,38 @@
+- meta:
+  - title: Highway To Hell
+  - artist: ACDC
+  - bpm: 116
+  - duration: 207 #seconds
+
+- parts:
+  - intro:
+    time: 0
+    type: intro
+    tag: [guitar]
+
+  - intro:
+    time: 8.59
+    type: intro
+    tag : [guitar]
+  
+  - intro:
+    time: 9.435
+    type: intro
+    tag : [drums]
+
+  - verse 1:
+    time: 18.1
+    type: verse
+    tag: [guitar, drums, vocal]
+  
+  - build 1:
+    time: 49
+    type: build
+    tag: [guitar, drums]
+  
+  - chorus 1:
+    time: 52.1
+    type: chorus
+    tag: [guitar, drums, vocal]
+
+
