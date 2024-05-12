@@ -11,9 +11,14 @@
     tag: [guitar]
 
   - intro:
-    time: 9.43
+    time: 8.59
     type: intro
-    tag : [guitar, drums]
+    tag : [guitar]
+  
+  - intro:
+    time: 9.435
+    type: intro
+    tag : [drums]
 
   - verse 1:
     time: 18.1
