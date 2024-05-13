@@ -22,7 +22,7 @@ yr = YamlReader()
 yr.load_file(r"../light/yamls/test.yaml", player)
 #yr.load_file(r"./light/yamls/test.yaml", player, 1000)
 player.start()
-time.sleep(3)
+time.sleep(2)
 
 grille = Grille()
 pieces = []
@@ -86,10 +86,11 @@ while True:
         init_pieces()
         current_piece = pieces[0]
 
+    update_grille(grille)
+
     if not grille.piece_down(current_piece):
         grille.stuck_piece(current_piece)
         current_piece = pieces[i%12]
         i += 1
         grille.complete_row()
-    update_grille(grille)
     time.sleep(0.5)

@@ -1,0 +1,7 @@
+pondéré pour le mapping, tous les facteurs == 1
+
+Pq 20 canaux sur jack ? A voir peut être sur alsa 
+
+pour le rms peut être voir de le faire en amont de la fonction process lorsque l'on met des blocs dans la pile 
+
+pq pas mettre dans la timeline le calcul + valeur de rms pour l'utiliser lors des add, ça serait une espèce de couche intermédiaire avant un truc dynamique 
