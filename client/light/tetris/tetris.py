@@ -76,6 +76,7 @@ def random_move(grille, piece):
 
 init_pieces()
 current_piece = pieces[0]
+grille.add_piece(current_piece)
 
 while True:
     if (i == 13):
@@ -84,6 +85,7 @@ while True:
         i = 1
         init_pieces()
         current_piece = pieces[0]
+        grille.add_piece(current_piece)
 
     update_grille(grille)
 
@@ -92,4 +94,5 @@ while True:
         current_piece = pieces[i%12]
         i += 1
         grille.complete_row()
+        grille.add_piece(current_piece)
     time.sleep(0.5)
