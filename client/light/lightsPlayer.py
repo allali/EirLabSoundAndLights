@@ -14,31 +14,6 @@ from config import YAMLS_DIR
 import dmx
 import numpy as np
 
-class YamlReader:
-    def __init__(self):
-        pass
-
-    def _read_yaml(self, file_name):
-        try:
-            with open(YAMLS_DIR + file_name, 'r') as file:
-                data = yaml.safe_load(file)
-                return data
-        except (yaml.YAMLError, FileNotFoundError) as e:
-            raise ValueError(f"Error reading YAML file: {e}")
-            
-    def load_file(self, file_name, player, offset = 0, relativeOffset=False):
-        data = self._read_yaml(file_name)
-
-        if not isinstance(data, list):
-            raise ValueError("Invalid YAML format. Expected a list.")
-        player.add_new_set()
-        for item in data:
-            for tram in item["times"]:
-                player.add(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], offset, relativeOffset)
-        self.file_name = file_name
-
-#############################################################
-
 class Timer:
     def __init__(self):
         self.startTime = None
@@ -194,7 +169,7 @@ class Player_Light:
     
     def set_color(self, r, g, b, w):
         if r is not None:
-            self.light.set_colour(dmx.Color(r,g,b,w))
+            self.light.set_color(dmx.Color(r,g,b,w))
 
     def add_new_set(self):
         self.lastBlocks.append({'time': 0, 'red': 0, 'green': 0, 'blue': 0, 'white': 0, 'Tr': 0})
