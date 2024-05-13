@@ -76,6 +76,7 @@ class SingleLightQueue:
             self.queue.append((time, rgbw, Tr))
             return True
         self.mutex.release()
+        print("Add faileds", time, self.queue[-1][0])
         return False
       
         
@@ -162,6 +163,7 @@ class StaticLightsPlayer:
         
     def start(self) -> None:
         self.isRunning = True
+
         self.mainThread.start()
     
     def quit(self) -> None:
@@ -187,9 +189,9 @@ class StaticLightsPlayer:
                 light.set_next_event(timeEllapsed)
             interface.set_frame(self.universe.serialise())
             interface.send_update()
-            self.isRunning = self.is_running()
             timeEllapsed = self.timer.get_time()
         self.timer.stop()
+        raise ValueError("Tanguy")
         interface.close()
     
     def get_time(self) -> float:
