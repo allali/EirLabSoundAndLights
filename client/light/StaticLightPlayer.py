@@ -44,9 +44,7 @@ class Timer:
 ############         SINGLE LIGHT PLAYER         #############
 ##############################################################
         
-class Transition(Enum):
-    INSTANTANEOUS = 0
-    LINEAR = 1
+
         
 class SingleLightQueue:
     def __init__(self, lightId:int, queueMaxSize:int | None):
@@ -71,12 +69,13 @@ class SingleLightQueue:
             return self.queue[0]
         return None
 
-    def add(self, time:int, rgbw:List[int], Tr:Transition) -> bool:
+    def add(self, time:int, rgbw:List[int], Tr:int) -> bool:
         self.mutex.acquire() # To safely get elmt at index -1 without out of range error
         if (len(self.queue) == 0 or time > self.queue[-1][0]): 
             self.mutex.release()
             self.queue.append((time, rgbw, Tr))
             return True
+        self.mutex.release()
         return False
       
         
@@ -140,7 +139,7 @@ class SingleLightQueue:
 ###############         LIGHT PLAYER         #################
 ##############################################################
 
-class Player:
+class StaticLightsPlayer:
     def __init__(self, nbLights:int, interfaceName:str):
         self.timer:Timer = Timer()
         self.time_debug:Timer = Timer()
@@ -158,7 +157,7 @@ class Player:
         for light in self.lights:
             light.add_to_universe(self.universe)
             
-    def add(self, lightId:int, time:int, rgbw:List[int], Tr:Transition, offset:int) -> None:
+    def add(self, lightId:int, time:int, rgbw:List[int], Tr:int, offset:int) -> None:
         self.lights[lightId].add(time+offset, rgbw, Tr)
         
     def start(self) -> None:
@@ -190,7 +189,6 @@ class Player:
             interface.send_update()
             self.isRunning = self.is_running()
             timeEllapsed = self.timer.get_time()
-
         self.timer.stop()
         interface.close()
     

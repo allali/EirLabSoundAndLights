@@ -1,7 +1,10 @@
 import yaml
+import os
 import sys
+import config
 from pathlib import Path
-from frame import Frame
+from frame import Frame, FREQUENCY, MergeType
+from typing import List
 
 ##############################################################
 ################         YAML READER         #################
@@ -28,8 +31,18 @@ class YamlReader:
             raise ValueError("Invalid YAML format. Expected a list.")
         for item in data:
             for tram in item["times"]:
-                frame.add_frame(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"])
+                frame.append(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"])
         return frame
+    
+    @staticmethod
+    def load_file(file_name:str, player, offset:int = 0):
+        data = YamlReader._read_yaml(file_name)
+
+        if not isinstance(data, list):
+            raise ValueError("Invalid YAML format. Expected a list.")
+        for item in data:
+            for tram in item["times"]:
+                player.add(item["id"], tram["time"], [tram['red'], tram['green'], tram['blue'], tram['white']], tram["Tr"], offset)
     
     
     
@@ -48,12 +61,33 @@ class YamlWritter:
             for sample in frame.frames[lightId]:
                 yamlWritter.add(lightId, sample['time'], sample["rgbw"][0], sample["rgbw"][1], sample["rgbw"][2], sample["rgbw"][3], sample["Tr"])
         yamlWritter.write() 
+        
+    @staticmethod
+    def merge_yamls(fileNames:List[str], outputFileName:str, nbLights:int, mergeType:MergeType) -> int:
+        if (len(fileNames) == 0):
+            return 0
+        finalFrame = YamlReader.file_to_frame(fileNames[0], nbLights)
+        for i in range(1, len(fileNames)):
+            finalFrame = Frame.merge(finalFrame, YamlReader.file_to_frame(fileNames[i], nbLights), mergeType)
+        YamlWritter.frame_to_file(outputFileName, finalFrame)
+        
+        return len(fileNames)   
+    
+    @staticmethod
+    def merge_yamls_in_directory(directoryName:str, outputFileName:str, nbLights:int, mergeType:MergeType) -> int:
+        filePaths = []
+        for fileName in os.listdir(directoryName):
+            if fileName.endswith(".yaml"):
+                filePaths.append(os.path.join(directoryName, fileName))
+                print("Merge directory : found file\t", filePaths[-1])
+        
+        return YamlWritter.merge_yamls(filePaths, outputFileName, nbLights, mergeType)
+    
     
     def __init__(self,fileName:str):
         self.name = fileName
         base_path = Path(__file__).parent.parent
         folder_path = base_path 
-        folder_path.mkdir(parents=True, exist_ok=True)
         
         self.file_path = folder_path / f"{fileName}"
         
@@ -84,11 +118,6 @@ class YamlWritter:
             print(f"Wrong Tr ({Tr}).")
             sys.exit(1)
 
-        base_path = Path(__file__).parent
-        folder_path = base_path / 'yamls'
-        folder_path.mkdir(parents=True, exist_ok=True)
-        
-        file_path = folder_path / f"{self.name}.yaml"
              
 
         self.data[id]['times'].append({

@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import List, Tuple
-from StaticLightPlayer import FREQUENCY, Player
+from StaticLightPlayer import FREQUENCY, StaticLightsPlayer
 
 ##############################################################
 ###############         FRAME MANAGER         ################
@@ -15,6 +15,8 @@ class OffsetType(Enum):
     RELATIVE=1
     ABSOLUTE=2
       
+      
+
 class Frame:
         
     def __init__(self, nbLights:int):
@@ -27,7 +29,7 @@ class Frame:
             return time
         return int(time + FREQUENCY - time % FREQUENCY)
         
-    def add_frame(self, lightId:int, time:int, rgbw:List[int], Tr:int) -> None:
+    def append(self, lightId:int, time:int, rgbw:List[int], Tr:int) -> None:
         if (self.frames[lightId] != [] and self.frames[lightId][-1]["time"] + FREQUENCY > Frame.adjust_time(time) ):
             raise ValueError(f"Wrong frame's time given : {time} -> {Frame.adjust_time(time)}. Expected time >= {self.frames[lightId][-1]['time']+FREQUENCY} for light {lightId}")
         self.frames[lightId].append({"time": Frame.adjust_time(time), "rgbw":rgbw, "Tr": Tr})
@@ -50,7 +52,7 @@ class Frame:
         elif frameEnd["Tr"] == 0:
             return {"time":timeMiddlePoint, "rgbw":frameStart["rgbw"], "Tr":0}
         
-        raise ValueError("Unknown transition type")
+        raise ValueError("Unknown transition type", frameEnd['Tr'], frameEnd["Tr"] == 0, 0)
         
     @staticmethod
     def _create_compatible_frames(frame1:'Frame', frame2:'Frame') -> Tuple[List[dict[str, any]],List[dict[str, any]]]:
@@ -138,12 +140,12 @@ class Frame:
     
     @staticmethod
     def _color_fusion(rgbw1:List[int], rgbw2:List[int], fusionType:MergeType):
-        match fusionType:
-            case MergeType.MEAN: # Mean -> (c1 + c2)/2
+        match fusionType.value:
+            case MergeType.MEAN.value: # Mean -> (c1 + c2)/2
                 return [int((rgbw1[i] + rgbw2[i])/2) for i in range(4)]
-            case MergeType.MAX: # Max(c1, c2)
+            case MergeType.MAX.value: # Max(c1, c2)
                 return [int(max(rgbw1[i], rgbw2[i])) for i in range(4)]
-            case MergeType.MIN: # Min(c1, c2)
+            case MergeType.MIN.value: # Min(c1, c2)
                 return [int(min(rgbw1[i], rgbw2[i])) for i in range(4)]
         raise ValueError()
             
@@ -157,28 +159,27 @@ class Frame:
             if cptFrame1 == []:
                 continue
             for idx in range(len(cptFrame1)):
-                match cptFrame1[idx]['Tr'] + cptFrame2[idx]['Tr']:
                     
-                    case 0:
-                        resultFrames.add_frame(lightId, cptFrame1[idx]['time'], Frame._color_fusion(cptFrame1[idx]['rgbw'], cptFrame2[idx]['rgbw'], fusionType), 0)
+                if (cptFrame1[idx]['Tr'] == 0 and cptFrame2[idx]['Tr'] == 0):
+                    resultFrames.append(lightId, cptFrame1[idx]['time'], Frame._color_fusion(cptFrame1[idx]['rgbw'], cptFrame2[idx]['rgbw'], fusionType), 0)
                         
-                    case 1:
-                        if cptFrame1[idx]['Tr'] == 1:
-                            case1cptFrame1 = cptFrame1 # Tr == 1
-                            case1cptFrame2 = cptFrame2 # Tr == 0
-                        else:
-                            case1cptFrame1 = cptFrame2 # Tr == 1
-                            case1cptFrame2 = cptFrame1 # Tr == 0
-                    
-                        newTime = case1cptFrame1[idx]['time'] - FREQUENCY
-                        if case1cptFrame1[idx-1]['time'] < newTime and newTime >= 0: 
-                            ratio = (newTime - case1cptFrame1[idx-1]["time"]) / (case1cptFrame1[idx]["time"] - case1cptFrame1[idx-1]["time"])
-                            middleRgbw = [int(case1cptFrame1[idx-1]["rgbw"][i] + (case1cptFrame1[idx]["rgbw"][i] - case1cptFrame1[idx-1]["rgbw"][i]) *ratio) for i in range(4)]
-                            resultFrames.add_frame(lightId, newTime, Frame._color_fusion(middleRgbw, case1cptFrame2[idx-1]['rgbw'], fusionType), 1)
-                        resultFrames.add_frame(lightId, case1cptFrame1[idx]['time'], Frame._color_fusion(case1cptFrame1[idx]['rgbw'], case1cptFrame2[idx]['rgbw'], fusionType), 0)
-                    
-                    case 2:
-                        resultFrames.add_frame(lightId, cptFrame1[idx]['time'], Frame._color_fusion(cptFrame1[idx]['rgbw'], cptFrame2[idx]['rgbw'], fusionType), 1)
+                elif (cptFrame1[idx]['Tr'] == 1 and cptFrame2[idx]['Tr'] == 1):
+                    resultFrames.append(lightId, cptFrame1[idx]['time'], Frame._color_fusion(cptFrame1[idx]['rgbw'], cptFrame2[idx]['rgbw'], fusionType), 1)
+                
+                else:
+                    if cptFrame1[idx]['Tr'] == 1:
+                        case1cptFrame1 = cptFrame1 # Tr == 1
+                        case1cptFrame2 = cptFrame2 # Tr == 0
+                    else:
+                        case1cptFrame1 = cptFrame2 # Tr == 1
+                        case1cptFrame2 = cptFrame1 # Tr == 0
+                
+                    newTime = case1cptFrame1[idx]['time'] - FREQUENCY
+                    if case1cptFrame1[idx-1]['time'] < newTime and newTime >= 0: 
+                        ratio = (newTime - case1cptFrame1[idx-1]["time"]) / (case1cptFrame1[idx]["time"] - case1cptFrame1[idx-1]["time"])
+                        middleRgbw = [int(case1cptFrame1[idx-1]["rgbw"][i] + (case1cptFrame1[idx]["rgbw"][i] - case1cptFrame1[idx-1]["rgbw"][i]) *ratio) for i in range(4)]
+                        resultFrames.append(lightId, newTime, Frame._color_fusion(middleRgbw, case1cptFrame2[idx-1]['rgbw'], fusionType), 1)
+                    resultFrames.append(lightId, case1cptFrame1[idx]['time'], Frame._color_fusion(case1cptFrame1[idx]['rgbw'], case1cptFrame2[idx]['rgbw'], fusionType), 0)                       
                     
         return resultFrames
     
@@ -186,17 +187,17 @@ class Frame:
     def merge(frame1:'Frame', frame2:'Frame', fusionType:MergeType) -> 'Frame':
         return Frame._merge(frame1, frame2, fusionType)
     
-    
-    def add_offset(self, offsetValue:int) -> 'Frame':
-        res = Frame(self.nbLights)
+    @staticmethod
+    def add_offset(inputFrame:'Frame', offsetValue:int) -> 'Frame':
+        res = Frame(inputFrame.nbLights)
         
-        for i in range(self.nbLights):
-            for frame in self.frames[i]:
+        for i in range(inputFrame.nbLights):
+            for frame in inputFrame.frames[i]:
                 res.add_frame(i, Frame.adjust_time(frame["time"] + offsetValue), frame["rgbw"], frame["Tr"])
         return res
                                    
     
-    def push(self, player:Player, mergeType:MergeType, offsetType:OffsetType, offsetValue:int) -> None:
+    def push(self, player:StaticLightsPlayer, mergeType:MergeType, offsetType:OffsetType, offsetValue:int) -> None:
         relativeOffset:int = offsetValue if offsetType == OffsetType.ABSOLUTE else ( int(player.get_time()) + offsetValue + 1 )
         maxSampleLen = max([len(frames) for frames in self.frames])
         
