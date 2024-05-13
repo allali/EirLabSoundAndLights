@@ -3,7 +3,6 @@ import tty
 import time
 import random
 import termios
-import keyboard
 import tkinter as tk
 sys.path.append("./light/dmx_wrapper")
 sys.path.append("./light")
