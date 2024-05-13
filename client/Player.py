@@ -66,7 +66,7 @@ class Player:
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('-s', '--soundFile', type=str, default=None, help='audio file to be played back')
-parser.add_argument('-y', '--yaml', type=str, default=None, help='Yaml file to be played by lights')
+parser.add_argument('-y', '--yaml', type=str, default=None, help='Yaml file to be played by lights', nargs="+")
 parser.add_argument('-i', '--interface', type=str, default="TkinterDisplayer", help='Visual interface')
 parser.add_argument('--loop', action='store_true', default=False, help='Repeat')
 parser.add_argument(

@@ -13,8 +13,9 @@ except:
 
 import tkinter as tk
 
-
 bgColor = "#555555"
+
+
 
 class TkinterDisplayer:
 

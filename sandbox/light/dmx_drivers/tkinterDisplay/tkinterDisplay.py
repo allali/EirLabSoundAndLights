@@ -37,11 +37,40 @@ from typing import List
 from pylibftdi import Device
 
 from dmx.drivers import DMXDriver
+from os import path
+from platform import system
+from pylibftdi import Device, Driver, LibraryMissingError
+
 currentDir = path.dirname(path.abspath(__file__))
 sys.path.append(currentDir)
 import tkinter_utils as tkutils
 
 DRIVER_PATH = path.abspath(path.dirname(__file__))
+
+if system() == "Linux":
+
+    from ctypes import cdll, c_long, byref, Structure
+
+    Driver._lib_search["libftdi"] = tuple([
+        path.join(DRIVER_PATH, "libftdi.so"),
+        path.join(DRIVER_PATH, "libftdi.so.1"),
+        path.join(DRIVER_PATH, "libftdi1.so")
+    ] + list(Driver._lib_search["libftdi"]))
+
+    _LIBC = cdll.LoadLibrary("libc.so.6")
+
+    class timespec(Structure):
+        """A timespec."""
+
+        _fields_ = [("tv_sec", c_long), ("tv_nsec", c_long)]
+
+    def wait_ms(milliseconds):
+        """Wait for a specified number of milliseconds."""
+        dummy = timespec()
+        sleeper = timespec()
+        sleeper.tv_sec = int(milliseconds / 1000)
+        sleeper.tv_nsec = (milliseconds % 1000) * 1000000
+        _LIBC.nanosleep(byref(sleeper), byref(dummy))
 
 class TkinterDisplayer(Device, DMXDriver):
     """A DMX driver design for the University of York Serial-to-DMX usb adapter based on the FT232R."""
@@ -56,6 +85,7 @@ class TkinterDisplayer(Device, DMXDriver):
         """Write 512 bytes or less of DMX data."""
         self.tkDisplayer.set_light_colors(data)
         self.tkDisplayer.update()
+        wait_ms(20)
         if (self.tkDisplayer.exitProgram):
             exit(130)
 

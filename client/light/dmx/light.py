@@ -149,7 +149,7 @@ class DMXLight4Slot(DMXLight):
         """Gets the number of slots used by this light."""
         return 4
 
-    def set_colour(self, color: Color):
+    def set_color(self, color: Color):
         """Sets the color for the light."""
         self._colour = color
 
