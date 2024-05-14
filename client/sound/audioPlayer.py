@@ -51,7 +51,7 @@ from config import AUDIO_DIR, PARENT_DIR
 
 
 class AudioPlayer:
-    def __init__(self, clientName = "file player", bufferSize=20):
+    def __init__(self, clientName = "file player", bufferSize=20,loop=False):
         self.clientName = clientName
         self.bufferSize = bufferSize
         self.manual = False
@@ -64,6 +64,7 @@ class AudioPlayer:
         self._samplerate = 0
         self._port = 0
         self._cpt = 0
+        self.loop = loop
 
         try:
             self.client = jack.Client(self.clientName)
@@ -125,6 +126,12 @@ class AudioPlayer:
                             #for i in range(20):
                         for i in range(NCHANNELS):
                             self.client.outports[i].connect(target_ports[i%NPORTS])
+                        while (self.loop): #case -l option was used 
+                            f = sf.SoundFile(self.fileName)
+                            block_generator = f.blocks(blocksize=self.blocksize, dtype='float32',always_2d=True, fill_value=0)
+
+                            for data in block_generator:
+                                self.q.put(data, timeout=timeout)
         #                    client.outports[0].connect(target_ports[1])
         #                else:
         #                    for source, target in zip(client.outports, target_ports):
