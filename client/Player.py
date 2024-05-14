@@ -22,12 +22,12 @@ class Player:
         self.audioClientName = None
         self.audioBufferSize = None
         
-    def init_audio(self, clientName:str, bufferSize:int):
+    def init_audio(self, clientName:str, bufferSize:int, loop:bool):
         if (self.audioPlayer is not None):
             raise ValueError("Audio player has already been initialized")
         self.audioClientName = clientName
         self.audioBufferSize = bufferSize
-        self.audioPlayer = AudioPlayer(self.audioClientName, self.audioBufferSize)
+        self.audioPlayer = AudioPlayer(self.audioClientName, self.audioBufferSize,loop)
         
     def init_light(self, nbLights:int, interfaceName:str, isPlayerDynamic:bool, isLoopActive:bool):
         if (self.lightPlayer is not None):
@@ -111,7 +111,7 @@ if (args.yaml is not None):
     
     
 if (args.soundFile is not None):
-    player.init_audio(args.clientname, args.buffersize)
+    player.init_audio(args.clientname, args.buffersize,args.loop)
     player.load_audio_file(args.soundFile)
 
 player.start()
