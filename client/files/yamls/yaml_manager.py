@@ -98,10 +98,10 @@ class yaml_writer:
         pause = duration / 6
         for i in range(1, 7):
             if i != 1:
-                yw.column(i-1, time+(i*pause), red, green, blue, white, 1)
-            yw.column(i, time+(i*pause), red_wave, green_wave, blue_wave, white_wave, 1)
+                self.column(i-1, time+(i*pause), red, green, blue, white, 1)
+            self.column(i, time+(i*pause), red_wave, green_wave, blue_wave, white_wave, 1)
             if i == 6:
-                yw.column(i, time+(i+1)*pause,red,green,blue,white,1)
+                self.column(i, time+(i+1)*pause,red,green,blue,white,1)
         
 
     def line(self, number, time, red, green, blue, white, Tr):

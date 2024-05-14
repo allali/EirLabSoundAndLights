@@ -1,8 +1,9 @@
 from yaml_manager import *
 import os
 
+
 if __name__ == "__main__":
-    os.remove("chop_suey.yaml")
+    #os.remove("chop_suey.yaml")
     yw = yaml_writer("chop_suey")
     yw.full_change(500, 255, 255, 255, 255, 1)
     yw.column(1,1500,255, 0, 0, 100, 0)
@@ -20,17 +21,6 @@ if __name__ == "__main__":
     yw.full_change(24000,0,204,0,100,1)
     yw.full_change(30000,0,76,153,100,1)
     yw.spiral(30100,10000,255,0,0,100)
-    yw.full_change(41000,255,128,0,100,0)
-    yw.full_change(42000,255,0,0,100,0)
-    yw.full_change(43000,255,128,0,100,0)
-    yw.full_change(44000,255,255,0,100,0)
-    yw.full_change(45000,102,0,102,100,0)
-    yw.full_change(45900,0,0,0,0,1)
-    yw.full_change(46000,0,0,153,0,0)
-    yw.full_change(47000,153,0,153,0,1)
-    yw.full_change(47800,0,0,0,0,1)
-    yw.full_change(47900,255,128,0,128,0)
-    yw.full_change(48400,0,0,255,128,0)
-    yw.full_change(49100,255,128,0,128,0)
-    yw.full_change(49800,0,0,0,0,1)
+
     yw.write()
+
