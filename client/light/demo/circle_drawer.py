@@ -47,7 +47,7 @@ def load_file(file_name):
         
     
 
-lights, _ = load_file(r"/home/nuggets/Documents/enseirb/pfa/EirLabSoundAndLights/client/config/3D_coordinates_device.yml")
+lights, _ = load_file(r"config/3D_coordinates_device.yml")
 
 
 def dist(P1, P2):
@@ -72,7 +72,7 @@ def ring_appear(center, finalRadius:int, t0:int, t1:int, rgbw:List[int], ym:Yaml
     timeInterval = 45
     times = np.arange(t0, t1, timeInterval)
     totalIterations = len(times) 
-    for i, ti in enumerate(times):
+    for i, ti in enumerate(times[:-1]):
         for lightId in range(54):
             light_yaml_from_ring(center, finalRadius * i / totalIterations, ti, rgbw.astype(np.uint8), lightId, ym)
     for lightId in range(54):
@@ -128,10 +128,10 @@ if __name__ == "__main__":
     vert = np.array([25,200,0,20], dtype=np.uint8)
     rouge2 = np.array([240, 20, 60, 40], dtype=np.uint8)
     rouge3 = np.array([255, 30, 70, 120], dtype=np.uint8)
-    yw1 = YamlWritter("test1")
-    yw2 = YamlWritter("test2")
-    yw3 = YamlWritter("test3")
-    yw4 = YamlWritter("test4")
+    yw1 = YamlWritter("opening1.yaml")
+    yw2 = YamlWritter("opening2.yaml")
+    yw3 = YamlWritter("opening3.yaml")
+    yw4 = YamlWritter("opening4.yaml")
     set_color(yw1, [0,0,0,0], 0)
     set_color(yw2, [0,0,0,0], 0)
     set_color(yw3, [0,0,0,0], 0)
@@ -159,7 +159,7 @@ if __name__ == "__main__":
     ######### phase 2 ##############
 
 
-    yw5 = YamlWritter("ouverture")
+    yw5 = YamlWritter("ouverture.yaml")
     set_color(yw5, [0,0,0,0], 0)
     set_color(yw5, [0,0,0,0], 37370-45)
     circle_appear((lights[27]+lights[26])/2, 40, 37370, 37800, rouge2, yw5)
@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
     ########### Ring animation #############
 
-    yw6 = YamlWritter("rings")
+    yw6 = YamlWritter("rings.yaml")
 
     set_color(yw6, [0,0,0,0], 0)
 
@@ -178,11 +178,11 @@ if __name__ == "__main__":
     ring_appear(lights[12], 20, 39320, 39560, rouge3, yw6)
     set_color(yw6, [0,0,0,0], 39790, 1)
 
-    set_color(yw6, [0,0,0,0], 40410-10)
+    set_color(yw6, [0,0,0,0], 40410-27)
     ring_appear(lights[46], 20, 40410, 40710, rouge3, yw6)
     set_color(yw6, [0,0,0,0], 41010, 1)
 
-    set_color(yw6, [0,0,0,0], 42650-10)
+    set_color(yw6, [0,0,0,0], 42650-27)
     ring_appear(lights[10], 20, 42650, 42950, rouge3, yw6)
     set_color(yw6, [0,0,0,0], 43350, 1)
 
@@ -197,7 +197,7 @@ if __name__ == "__main__":
     set_color(yw6, [0,0,0,0], 47900, 1)
 
     ring_appear(lights[8], 20, 48200, 48750, rouge3, yw6)
-    set_color(yw6, [0,0,0,0], 49000, 1)
+    set_color(yw6, [0,0,0,0], 48800, 1)
 
     ring_appear(lights[8], 20, 48830, 49200, rouge3, yw6)
     set_color(yw6, [0,0,0,0], 49600, 1)

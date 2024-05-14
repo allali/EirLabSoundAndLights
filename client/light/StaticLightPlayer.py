@@ -191,7 +191,6 @@ class StaticLightsPlayer:
             interface.send_update()
             timeEllapsed = self.timer.get_time()
         self.timer.stop()
-        raise ValueError("Tanguy")
         interface.close()
     
     def get_time(self) -> float:

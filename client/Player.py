@@ -1,4 +1,5 @@
 import time
+import os
 import argparse
 from typing import List
 
@@ -48,9 +49,10 @@ class Player:
             for yamlFile in yamlFiles:
                 YamlReader.load_file(yamlFile, self.lightPlayer, 0, False)
         else:
-            YamlWritter.merge_yamls(yamlFiles, "tmpYaml.yaml", self.nbLights, mergeType)
-            frame = YamlReader.file_to_frame("tmpYaml.yaml", 54)
+            YamlWritter.merge_yamls(yamlFiles, "__tmpYaml__.yaml", self.nbLights, mergeType)
+            frame = YamlReader.file_to_frame("__tmpYaml__.yaml", 54)
             frame.push(self.lightPlayer, mergeType, OffsetType.ABSOLUTE, 0)
+            os.remove("__tmpYaml__.yaml")
     
     def start(self):
         if (self.audioPlayer is not None):
