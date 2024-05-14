@@ -29,13 +29,13 @@ class Player:
         self.audioBufferSize = bufferSize
         self.audioPlayer = AudioPlayer(self.audioClientName, self.audioBufferSize)
         
-    def init_light(self, nbLights:int, interfaceName:str, isPlayerDynamic:bool):
+    def init_light(self, nbLights:int, interfaceName:str, isPlayerDynamic:bool, isLoopActive:bool):
         if (self.lightPlayer is not None):
             raise ValueError("Light player has already been initialized")
         self.nbLights = nbLights
         self.lightInterface = interfaceName
         self.isPlayerDynamic = isPlayerDynamic
-        self.lightPlayer = LightsPlayer(self.nbLights, self.lightInterface) if isPlayerDynamic else StaticLightsPlayer(self.nbLights, self.lightInterface)
+        self.lightPlayer = LightsPlayer(self.nbLights, self.lightInterface) if isPlayerDynamic else StaticLightsPlayer(self.nbLights, self.lightInterface, isLoopActive)
         
     def load_audio_file(self, audioFile:str):
         if (self.audioPlayer is None):
@@ -106,7 +106,7 @@ player = Player()
 
 
 if (args.yaml is not None):
-    player.init_light(54, args.interface, args.dynamic) # FT232R TkinterDisplayer
+    player.init_light(54, args.interface, args.dynamic, args.loop) # FT232R TkinterDisplayer
     player.load_yaml(args.yaml, mergeType)
     
     

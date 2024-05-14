@@ -50,6 +50,7 @@ class SingleLightQueue:
     def __init__(self, lightId:int, queueMaxSize:int | None):
         self.lightId:int = lightId
         self.queue = deque([], queueMaxSize)
+        self.history = deque([], None)
         self.light = dmx.DMXLight4Slot(address=dmx.light.light_map[lightId])
         self.isRunning:bool = True
         self.current_event = None
@@ -59,10 +60,15 @@ class SingleLightQueue:
         self.lastUpdateTime = 0
         self.LastTransition_rgbw = [0,0,0,0]
         self.mutex = threading.Lock()
+        
 
     def add_to_universe(self, dmxUniverse:dmx.DMXUniverse) -> None:
         dmxUniverse.add_light(self.light)
 
+    def loop_refill(self):
+        self.queue.extend(self.history)
+        self.history.clear()
+            
     
     def get_next_event(self) -> List[int] | None:
         if len(self.queue) != 0:
@@ -76,7 +82,7 @@ class SingleLightQueue:
             self.queue.append((time, rgbw, Tr))
             return True
         self.mutex.release()
-        print("Add faileds", time, self.queue[-1][0])
+        print("Add failed", time, self.queue[-1][0])
         return False
       
         
@@ -88,7 +94,7 @@ class SingleLightQueue:
         self.lastUpdateTime = timeEllapsed
         if len(self.queue) == 0:
             self.isRunning = False
-            return 
+            return False
         else:
             self.isRunning = True
         self.next_event = self.get_next_event()
@@ -103,7 +109,7 @@ class SingleLightQueue:
                 self.set_color(event_rgbw)
                 self.LastTransition_rgbw = event_rgbw
                 self.isRunning = True
-                return 
+                return True
             
             if event_type == 0:
                 self.transition_step_size = 0
@@ -115,7 +121,7 @@ class SingleLightQueue:
                 total_steps = (event_time - previous_time) // FREQUENCY
     
                 if self.transition_progress >= total_steps:
-                    return
+                    return True
                 self.transition_progress = abs((timeEllapsed - previous_time) / FREQUENCY)
 
                 step_size = [(current - previous) / total_steps for current, previous in zip(event_rgbw, previous_rgbw)]
@@ -126,12 +132,14 @@ class SingleLightQueue:
             self.set_color(self.next_event[1])
             self.next_event = self.get_next_event()
             self.remove_event()
+        return True
 
             
     def remove_event(self) -> None:
         self.mutex.acquire()
-        self.queue.popleft()
+        elmt = self.queue.popleft()
         self.mutex.release()
+        self.history.append(elmt)
              
         
 
@@ -141,11 +149,12 @@ class SingleLightQueue:
 ##############################################################
 
 class StaticLightsPlayer:
-    def __init__(self, nbLights:int, interfaceName:str):
+    def __init__(self, nbLights:int, interfaceName:str, isLoopActive:bool=False):
         self.timer:Timer = Timer()
         self.time_debug:Timer = Timer()
         self.universe:dmx.DMXUniverse = dmx.DMXUniverse()
         self.interface_name:str = interfaceName
+        self._isRunning = False
 
         self.nbLights:int = nbLights
         self.lights:List[SingleLightQueue] = [SingleLightQueue(i, None) for i in range(nbLights)]
@@ -153,13 +162,17 @@ class StaticLightsPlayer:
 
         self.mainThread = threading.Thread(target=self._worker, args=[interfaceName])
         self.isRunning:bool = False
+        self.isLoopActive = isLoopActive
+        self.refillMutex = threading.Lock()
 
     def _add_lights_to_universe(self) -> None:
         for light in self.lights:
             light.add_to_universe(self.universe)
             
     def add(self, lightId:int, time:int, rgbw:List[int], Tr:int, offset:int) -> None:
+        self.refillMutex.acquire()
         self.lights[lightId].add(time+offset, rgbw, Tr)
+        self.refillMutex.release()
         
     def start(self) -> None:
         self.isRunning = True
@@ -172,24 +185,42 @@ class StaticLightsPlayer:
         #à voir pour que ça exit direct et pas que ça attende la fin de la boucle
 
     def is_running(self) -> bool:
-        if not(self.isRunning):
-            return False 
-        for light in self.lights:
-            if light.isRunning:
-                return True
-        return False
+        if (self.isLoopActive):
+            return True
+        return self._isRunning
 
-    def _worker(self, interfaceName:str) -> None:
-        self.isRunning = True
+    def update_worker(self, interface):
         timeEllapsed = -1
-        interface = dmx.DMXInterface(interfaceName)
-        self.timer.start()
-        while (self.isRunning):
+        while (self._isRunning):
+            self._isRunning = False
             for light in self.lights:
-                light.set_next_event(timeEllapsed)
+                self._isRunning = light.set_next_event(timeEllapsed) or self._isRunning
             interface.set_frame(self.universe.serialise())
             interface.send_update()
             timeEllapsed = self.timer.get_time()
+            
+        if self.isLoopActive:
+            self.refillMutex.acquire()
+            self.timer.stop()
+            self.timer = Timer()
+            for light in self.lights:
+                light.loop_refill()            
+            self.refillMutex.release()
+            timeEllapsed = -1
+            self.timer.start()
+            self.isRunning = True
+            self._isRunning = True
+
+    def _worker(self, interfaceName:str) -> None:
+        self.isRunning = True
+        self._isRunning = True
+        interface = dmx.DMXInterface(interfaceName)
+        self.timer.start()
+        self.update_worker(interface)
+        while (self.isLoopActive):
+            self.update_worker(interface)
+                
+        self.isRunning = False
         self.timer.stop()
         interface.close()
     
