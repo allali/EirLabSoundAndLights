@@ -51,6 +51,8 @@ for (timing,type,list) in tags:
                 newYml.random_period(timing*1000,250,3)
             if instrument == "guitar2":
                 newYml.full_change(timing*1000)
+            if instrument == "void":
+                newYml.ymlFile.full_change(timing,100,100,100,100,0)
 
 newYml.write()
 

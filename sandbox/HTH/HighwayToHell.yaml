@@ -39,10 +39,14 @@
   - chorus 1:
     time: 52.6
     type: chorus
-    tag: []
+    tag: [void]
   - chorus 1:
     time: 53.10
     type: chorus
-    tag: [drums2,guitar2]
+    tag: [drums2]
+  - chorus 1:
+    time: 56.10
+    type: chorus
+    tag: [guitar2]
 
 

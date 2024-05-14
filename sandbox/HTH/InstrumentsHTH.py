@@ -47,12 +47,13 @@ class Instruments():
 
     def random_period(self,timing,period,number):
         for k in range(number):
-            self.ymlFile.full_random(timing + period * number,0)
-            self.ymlFile.full_random(timing + period * number + 250,0)
+            self.ymlFile.full_random(timing + period * k,0)
+            self.ymlFile.full_random(timing + period * k + 250,0)
+            
 
     def full_change(self,timing):
         self.ymlFile.full_change(timing,100,100,100,100,0)
-        self.ymlFile.full_change(timing,0,0,0,255,0)
+        self.ymlFile.full_change(timing,100,100,100,255,0)
         self.ymlFile.full_change(timing+250,100,100,100,100,0)
-        self.ymlFile.full_change(timing+250,0,0,0,255,0)
+        self.ymlFile.full_change(timing+250,100,100,100,255,0)
 
