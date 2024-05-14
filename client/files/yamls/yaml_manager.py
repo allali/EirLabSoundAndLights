@@ -180,6 +180,21 @@ class yaml_writer:
             incr+=pause
             #self.add(i,time+incr,red,green,blue,white,0)
 
+    def round_cst_1_row(self,time,n_red,n_green,n_blue,n_white):
+        for k in range(9):
+            self.add(6* k,time,n_red,n_green,n_blue,n_white,0)
+            self.add(6*k + 5,time,n_red,n_green,n_blue,n_white,0)
+        for k in range(6):
+            self.add(k,time,n_red,n_green,n_blue,n_white,0)
+            self.add(k+48,time,n_red,n_green,n_blue,n_white,0)
+
+    def round_cst_2_row(self,time,n_red,n_green,n_blue,n_white):
+        for k in range(1,8):
+            self.add(6* k + 1,time,n_red,n_green,n_blue,n_white,0)
+            self.add(6*k + 4,time,n_red,n_green,n_blue,n_white,0)
+        for k in range(1,5):
+            self.add(k + 6,time,n_red,n_green,n_blue,n_white,0)
+            self.add(k + 43,time,n_red,n_green,n_blue,n_white,0)
 
     def spiral(self,time,duration,new_red,new_green,new_blue,new_white):
         pause = duration/54
