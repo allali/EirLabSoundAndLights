@@ -2,7 +2,7 @@ import threading
 from typing import List
 from queue import Queue
 import time
-from light.yamlManager import YamlReader
+from light import YamlReader
 
 import dmx
 import numpy as np

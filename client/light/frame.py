@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import List, Tuple
-from light.StaticLightPlayer import FREQUENCY, StaticLightsPlayer
+from light.StaticLightPlayer import FREQUENCY, StaticLightsPlayer, OffsetType
 
 ##############################################################
 ###############         FRAME MANAGER         ################
@@ -9,12 +9,7 @@ from light.StaticLightPlayer import FREQUENCY, StaticLightsPlayer
 class MergeType(Enum):
     MEAN=0
     MAX=1
-    MIN=2
-
-class OffsetType(Enum):
-    RELATIVE=1
-    ABSOLUTE=2
-      
+    MIN=2      
       
 
 class Frame:
@@ -198,15 +193,15 @@ class Frame:
                                    
     
     def push(self, player:StaticLightsPlayer, mergeType:MergeType, offsetType:OffsetType, offsetValue:int) -> None:
-        relativeOffset:int = offsetValue if offsetType == OffsetType.ABSOLUTE else ( int(player.get_time()) + offsetValue + 1 )
+        # relativeOffset:int = offsetValue if offsetType == OffsetType.ABSOLUTE else ( int(player.get_time()) + offsetValue + 1 )
         maxSampleLen = max([len(frames) for frames in self.frames])
         
         for sampleId in range(maxSampleLen): # Adding in this order to add efficiently in the queues
             for lightId in range(self.nbLights):
                 if (sampleId < len(self.frames[lightId])):
                     sample = self.frames[lightId][sampleId]
-                    offsetTime:int = Frame.adjust_time(sample['time'] + relativeOffset)
-                    player.add(lightId, offsetTime, sample['rgbw'], sample['Tr'], 0)
+                    offsetTime:int = Frame.adjust_time(sample['time'] + offsetValue)
+                    player.add(lightId, offsetTime, sample['rgbw'], sample['Tr'], offsetType)
                     
                 
     

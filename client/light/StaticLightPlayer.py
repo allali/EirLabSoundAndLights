@@ -1,11 +1,17 @@
-import threading
 from typing import List
-from collections import deque
 from enum import Enum
+
+import threading
+from collections import deque
 import time
+
 from light import dmx, lightConfig
 FREQUENCY:int = 27
 
+
+class OffsetType(Enum):
+    RELATIVE=1
+    ABSOLUTE=2
 
         
 ##############################################################
@@ -44,7 +50,7 @@ class Timer:
 
 # Light player for one light
 class SingleLightQueue:
-    def __init__(self, lightId:int, queueMaxSize:int | None):
+    def __init__(self, lightId:int, queueMaxSize:int | None, isLoopActive : bool):
         self.lightId:int = lightId
         self.queue = deque([], queueMaxSize)
         self.history = deque([], None)
@@ -57,6 +63,7 @@ class SingleLightQueue:
         self.lastUpdateTime = 0
         self.LastTransition_rgbw = [0,0,0,0]
         self.mutex = threading.Lock()
+        self.isLoopActive = isLoopActive
         
 
     def add_to_universe(self, dmxUniverse:dmx.DMXUniverse) -> None:
@@ -79,7 +86,7 @@ class SingleLightQueue:
             self.queue.append((time, rgbw, Tr))
             return True
         self.mutex.release()
-        print("Add failed", time, self.queue[-1][0])
+        print(f"Add failed for light n°{self.lightId}. Expected timestamp higher than {self.queue[-1][0]} (last timestamp in queue), but got {time}")
         return False
       
         
@@ -136,7 +143,8 @@ class SingleLightQueue:
         self.mutex.acquire()
         elmt = self.queue.popleft()
         self.mutex.release()
-        self.history.append(elmt)
+        if self.isLoopActive:
+            self.history.append(elmt)
     
     def is_running(self) -> bool:
         return len(self.queue) != 0
@@ -169,9 +177,10 @@ class StaticLightsPlayer:
         self.timer:Timer = Timer()
         self.universe:dmx.DMXUniverse = dmx.DMXUniverse()
         self.interface_name:str = interfaceName
+        self.timeEllapsed = 0
 
         self.nbLights:int = nbLights
-        self.lights:List[SingleLightQueue] = [SingleLightQueue(i, None) for i in range(nbLights)]
+        self.lights:List[SingleLightQueue] = [SingleLightQueue(i, None, isLoopActive) for i in range(nbLights)]
         self._add_lights_to_universe()
 
         self.mainThread:threading.Thread = threading.Thread(target=self._worker, args=[interfaceName])
@@ -184,7 +193,7 @@ class StaticLightsPlayer:
             light.add_to_universe(self.universe)
        
     
-    def add(self, lightId:int, time:int, rgbw:List[int], Tr:int, offset:int) -> None:
+    def add(self, lightId:int, time:int, rgbw:List[int], Tr:int, offsetType: OffsetType) -> None:
         """Adds an order to the queue of a light.
 
         Parameters
@@ -196,22 +205,26 @@ class StaticLightsPlayer:
         rgbw : List[int]
             The rgbw values of your order.
         Tr : int
-            The type of transition to use
+            The type of transition to use.
+        offsetType : OffsetType
+            If set to RELATIVE, adds player's current time to the time given.
         offset : int
-            An offset to add to the time
+            An offset to add to the time.
 
         The call to this function will be ignored if the given timestamp is smaller than the current time.
 
         """
-        self.refillMutex.acquire()
-        self.lights[lightId].add(time+offset, rgbw, Tr)
+        # Using timeEllapsed and not self.get_time() to avoid to many calls to time.time()
+        # Adding also FREQUENCY to avoid any time conflicts
+        newTime = (time + self.timeEllapsed + FREQUENCY) if offsetType == OffsetType.RELATIVE else time  
+        self.refillMutex.acquire()      # This mutex is used to avoid any conflicts between 'add' and the 'loop' option
+        self.lights[lightId].add(newTime, rgbw, Tr)
         self.refillMutex.release()
         
     def start(self) -> None:
         """Start the Light Player."""
         
         self.isRunning = True
-
         self.mainThread.start()
     
     def quit(self) -> None:
@@ -233,15 +246,15 @@ class StaticLightsPlayer:
         return False
 
     def _update_worker(self, interface:dmx.DMXInterface):
-        timeEllapsed = -1
         _isRunning = True
+        self.timeEllapsed = 0
         while (_isRunning and self.isRunning):
             _isRunning = False
             for light in self.lights:
-                _isRunning = light.set_next_event(timeEllapsed) or _isRunning
+                _isRunning = light.set_next_event(self.timeEllapsed) or _isRunning
             interface.set_frame(self.universe.serialise())
             interface.send_update()
-            timeEllapsed = self.timer.get_time()
+            self.timeEllapsed = self.timer.get_time()
             
         if self.isLoopActive:
             self.refillMutex.acquire()
@@ -250,15 +263,17 @@ class StaticLightsPlayer:
             for light in self.lights:
                 light.loop_refill()            
             self.refillMutex.release()
-            timeEllapsed = -1
+            self.timeEllapsed = 0
             self.timer.start()
             self.isRunning = True
 
     def _worker(self, interfaceName:str) -> None:
+        # The interface must be declared in this thread as Tkinter does not allow multi-thread access to its windows
+        # We can't also declared 'interface' as an instance variable as tkinter consider it like allowing its access to other threads
         interface = dmx.DMXInterface(interfaceName)
         self.timer.start()
         self._update_worker(interface)
-        while (self.isLoopActive):
+        while (self.isLoopActive):  # for the 'loop' option
             self._update_worker(interface)
                 
         self.isRunning = False

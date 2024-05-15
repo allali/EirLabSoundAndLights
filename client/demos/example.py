@@ -25,7 +25,7 @@ if __name__ == "__main__":
     f2.append(48, 220, [30,120,202,0], 0)
     f2.append(48, 290, [40,130,203,0], 0)
     f2.append(48, 350, [50,140,204,0], 1)
-    f2.append(48, 4000, [60,150,205,255], 1)
+    f2.append(48, 4000, [255,50,60,30], 1)
     
 
     # On merge la frame 1 et 2 en une seule et même frame. Vous pouvez préciser le type de fusion
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     # Instanciation du nouveau player statique
     interfaceName = "TkinterDisplayer" # "FT232R", "TkinterDisplayer", "Dummy"
-    player = light.StaticLightsPlayer(nbLights, interfaceName) 
+    player = light.StaticLightsPlayer(nbLights, interfaceName, False) 
     
     # On charge un yaml sous forme de frame
     yamlFrame = light.YamlReader.file_to_frame(r"files/yamls/snake.yaml", nbLights)
@@ -58,18 +58,20 @@ if __name__ == "__main__":
     # On merge la frame obtenue du yaml avec la frame f3. 
     f4 = light.Frame.merge(f3, yamlFrame, light.MergeType.MEAN)
     
-    # On donne la frame 4 à jouer au player statique.
-    f4.push(player, light.MergeType.MAX, light.OffsetType.RELATIVE, 10)
+    # On donne la frame 4 à jouer au player statique. Avec un offset de 1800ms
+    f4.push(player, light.MergeType.MAX, light.OffsetType.ABSOLUTE, 1800)
     
     # Lancement du player
     player.start()
     while (player.is_running()):
-        time.sleep(1.5) # Toujours laisser un sleep d'au moins 1s
-        # Toutes les 3 secondes, on remplie à nouveau le player avec la même frame.
-        # OffsetType.RELATIVE et le '10' signifie qu'on charge la frame 10ms dans le futur
+        time.sleep(2) # Toujours laisser un sleep d'au moins 1s (ordonancement)
+        
+        # Toutes les 2 secondes, on remplie à nouveau le player avec la même frame.
+        # OffsetType.RELATIVE et le '2000' signifie qu'on charge la frame 2000ms dans le futur
         # On peut également choisir OffsetType.ABSOLUTE qui aurait eu pour effet de charger la frame à partir
-        # de 10 millisecondes après le lancement du player (donc il ne serait rien passé car ce moment est déjà passé (trop tard))
-        yamlFrame.push(player, light.MergeType.MAX, light.OffsetType.RELATIVE, 10)
+        # de 2000 millisecondes après le lancement du player (donc il ne serait rien passé car ce moment est déjà passé (trop tard))
+        yamlFrame.push(player, light.MergeType.MAX, light.OffsetType.RELATIVE, 2000)
+        # On précise que c'est une mauvaise manière faire une loop. Il faut privilégier l'option loop à l'instanciation du player
         
     # On quitte le player
     player.quit()
