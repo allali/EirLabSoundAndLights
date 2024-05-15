@@ -2,6 +2,7 @@ import threading
 from typing import List
 from queue import Queue
 import time
+from light.yamlManager import YamlReader
 
 import dmx
 import numpy as np
@@ -172,7 +173,7 @@ class Player_Light:
 
 #################################################
 
-class LightsPlayer:
+class DynamicLightsPlayer:
 
     def __init__(self, nbLights:int, interfaceName:str):
         self.isRunning:bool = False
@@ -248,7 +249,7 @@ class LightsPlayer:
 if __name__ == "__main__":
     nbLights = 54
     interfaceName = "TkinterDisplayer" # "FT232R"
-    player = LightsPlayer(54, interfaceName)
+    player = DynamicLightsPlayer(54, interfaceName)
     yr = YamlReader()
     # yr.load_file(r"../yamls/snake2.yml", player, 200)
     # yr.load_file(r"../yamls/snake2.yml", player, 1200)

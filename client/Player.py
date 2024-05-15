@@ -4,7 +4,7 @@ import argparse
 from typing import List
 
 from light.yamlManager import YamlReader, YamlWritter
-from light.lightsPlayer import LightsPlayer
+from light.DynamicLightsPlayer import DynamicLightsPlayer
 from light.StaticLightPlayer import StaticLightsPlayer
 from sound.audioPlayer import AudioPlayer
 from light.frame import MergeType, OffsetType
@@ -35,7 +35,7 @@ class Player:
         self.nbLights = nbLights
         self.lightInterface = interfaceName
         self.isPlayerDynamic = isPlayerDynamic
-        self.lightPlayer = LightsPlayer(self.nbLights, self.lightInterface) if isPlayerDynamic else StaticLightsPlayer(self.nbLights, self.lightInterface, isLoopActive)
+        self.lightPlayer = DynamicLightsPlayer(self.nbLights, self.lightInterface) if isPlayerDynamic else StaticLightsPlayer(self.nbLights, self.lightInterface, isLoopActive)
         
     def load_audio_file(self, audioFile:str):
         if (self.audioPlayer is None):
