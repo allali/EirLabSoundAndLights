@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import List, Tuple
-from StaticLightPlayer import FREQUENCY, StaticLightsPlayer
+from light.StaticLightPlayer import FREQUENCY, StaticLightsPlayer
 
 ##############################################################
 ###############         FRAME MANAGER         ################

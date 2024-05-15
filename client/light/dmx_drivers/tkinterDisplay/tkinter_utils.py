@@ -6,7 +6,7 @@ try:
     currentDir = os.path.dirname(os.path.abspath(__file__))
     repertoire_source = os.path.join(currentDir, r"../../")
     sys.path.append(repertoire_source)
-    import config as cf
+    import light_configuration as cf
 except:
     raise Exception("Path to config.py not found")
 

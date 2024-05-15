@@ -1,9 +1,8 @@
-import os
 import sys
-filePath = os.path.dirname(os.path.dirname(__file__))
-baseDirIdx = filePath.rfind("/")
-sys.path.append("".join(filePath[:baseDirIdx]))
-import config
+from os import path
+MAIN_FOLDER = path.abspath(path.dirname(path.dirname(path.dirname(__file__))))
+sys.path.append(MAIN_FOLDER)
+import light
 import tty
 import time
 import random
@@ -13,18 +12,15 @@ import threading
 import tkinter as tk
 
 
-from StaticLightPlayer import StaticLightsPlayer
-from yaml_manager import YamlReader
-from frame import Frame, MergeType, OffsetType
 from Piece import *
 from Grille import *
 
 nbLights = 54
-interfaceName = "FT232R" # "FT232R" "TkinterDisplayer"
-player = StaticLightsPlayer(54, interfaceName)
-frame = YamlReader.file_to_frame(config.YAMLS_DIR + "reset.yaml", nbLights)
+interfaceName = "TkinterDisplayer" # "FT232R" "TkinterDisplayer"
+player = light.StaticLightsPlayer(54, interfaceName)
+frame = light.YamlReader.file_to_frame(MAIN_FOLDER + "/files/yamls/reset.yaml", nbLights)
 #yr.load_file(r"./light/yamls/test.yaml", player, 1000)
-frame.push(player, MergeType.MAX, OffsetType.ABSOLUTE, 0)
+frame.push(player, light.MergeType.MAX, light.OffsetType.ABSOLUTE, 0)
 player.start()
 time.sleep(2)
 

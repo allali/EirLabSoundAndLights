@@ -1,12 +1,9 @@
-import os
+from os import path
 import sys
-filePath = os.path.dirname(os.path.dirname(__file__))
-baseDirIdx = filePath.rfind("/")
-sys.path.append("".join(filePath[:baseDirIdx]))
-print(sys.path)
-import config
+MAIN_FOLDER = path.abspath(path.dirname(path.dirname(path.dirname(__file__))))
+sys.path.append(MAIN_FOLDER)
+from light import lightConfig, YamlWritter
 import yaml
-import yaml_manager 
 import numpy as np
 from typing import List
 
@@ -19,28 +16,6 @@ def read_yaml(file_name):
     except (yaml.YAMLError, FileNotFoundError) as e:
         raise ValueError(f"Error reading YAML file: {e}")
     
-def load_config_lights(file_name):
-    data = read_yaml(file_name)
-
-    if not isinstance(data, list):
-        raise ValueError("Invalid YAML format. Expected a list.")
-    
-    lights = []
-    speakers = []
-    lights_data = data[0]["lights"]
-    speakers_data = data[1]["speakers"]
-    
-    for lightId, light in enumerate(lights_data):
-        if lightId != light["id"]:
-            ValueError(f"Exepected id {lightId}, got { light['id'] }")
-        lights.append([light["x"], light["y"], light["z"]])
-        
-    for speakerId, speaker in enumerate(speakers_data):
-        if speakerId != speaker["id"]:
-            ValueError(f"Exepected id {speakerId}, got { speaker['id'] }")
-        speakers.append([speaker["x"], speaker["y"], speaker["z"]])
-    
-    return (np.array(lights), np.array(speakers))
         
 def load_timeline(file_name):
     data = read_yaml(file_name)
@@ -82,16 +57,15 @@ def load_timeline(file_name):
 
 
 ######### BEGINNING MAIN ##################
-lights, _ = load_config_lights("config/3D_coordinates_device.yml")
 
 import random
 # generate random list of id of lights  with no duplicates
-random_lights_id = random.sample(range(0, len(lights)), len(lights))
+random_lights_id = random.sample(range(0, len(lightConfig.LIGHTS_COORDINATES)), len(lightConfig.LIGHTS_COORDINATES))
 print(random_lights_id)
 
 #add to yaml
 
-ym = yaml_manager.YamlWritter('files/yamls/feeling_good/feeling_good.yaml')
+ym = YamlWritter('files/yamls/feeling_good/feeling_good.yaml')
 
 # add on bpm 79
 bpm = 79
@@ -179,8 +153,8 @@ instrument9 = 48621
 instrument10 = 48905
 instrument11 = 49128
 instrument12 = 49380
-import circle_drawer
-center = (lights[26]+lights[27])/2
+
+center = (lightConfig.LIGHTS_COORDINATES[26]+lightConfig.LIGHTS_COORDINATES[27])/2
 print(center)
 circle_drawer.ring_appear(center, 30, instrument-200, instrument+800, np.array([255, 255, 255, 0]), ym)
 # circle_drawer.ring_appear(center, 30, instrument2, instrument2+500, np.array([255, 255, 255, 0]), ym)

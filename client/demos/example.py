@@ -1,15 +1,17 @@
-from frame import Frame, MergeType, OffsetType
-from StaticLightPlayer import StaticLightsPlayer
-from yaml_manager import YamlReader, YamlWritter
+import sys
+from os import path
+sys.path.append(path.abspath(path.dirname(path.dirname(__file__))))
+import light
 import time
 
 if __name__ == "__main__":
+    nbLights = 54
     
-    f1 = Frame(54) # On instancie une frame vide
-    f2 = Frame(54) # On instancie une seconde frame vide
+    f1 = light.Frame(nbLights) # On instancie une frame vide
+    f2 = light.Frame(nbLights) # On instancie une seconde frame vide
     
     # On remplie la frame 1. Important : on la remplie par timeStamp croissant pour chaque light. 
-    # Pour une même light, ne surtout pas faire 2 appends avec un t0 > t1.
+    # Pour une même light, ne surtout pas faire 2 appends avec un t0 > t1. L'assertion exacte est "t0+frame.FREQUENCY <= t1"
     f1.append(48, 12, [1,10,100,0], 0)
     f1.append(48, 50, [2,11,101,0], 1)
     f1.append(48, 120, [3,12,102,0], 0)
@@ -29,7 +31,7 @@ if __name__ == "__main__":
     # On merge la frame 1 et 2 en une seule et même frame. Vous pouvez préciser le type de fusion
     # Ici, on fait la moyenne des couleurs de f1 et f2. On obtient une nouvelle frame f3. f1 et f2
     # restent inchangées
-    f3= Frame.merge(f1, f2, MergeType.MEAN)
+    f3= light.Frame.merge(f1, f2, light.MergeType.MEAN)
 
 
 ##################################################
@@ -47,18 +49,17 @@ if __name__ == "__main__":
     
 
     # Instanciation du nouveau player statique
-    nbLights = 54
-    interfaceName = "TkinterDisplayer" # "FT232R",TkinterDisplayer,Dummy
-    player = StaticLightsPlayer(54, interfaceName) 
+    interfaceName = "TkinterDisplayer" # "FT232R", "TkinterDisplayer", "Dummy"
+    player = light.StaticLightsPlayer(nbLights, interfaceName) 
     
     # On charge un yaml sous forme de frame
-    yamlFrame = YamlReader.file_to_frame(r"files/yamls/snake.yaml", 54)
+    yamlFrame = light.YamlReader.file_to_frame(r"files/yamls/snake.yaml", nbLights)
     
     # On merge la frame obtenue du yaml avec la frame f3. 
-    f4 = Frame.merge(f3, yamlFrame, MergeType.MEAN)
+    f4 = light.Frame.merge(f3, yamlFrame, light.MergeType.MEAN)
     
     # On donne la frame 4 à jouer au player statique.
-    f4.push(player, MergeType.MAX, OffsetType.RELATIVE, 10)
+    f4.push(player, light.MergeType.MAX, light.OffsetType.RELATIVE, 10)
     
     # Lancement du player
     player.start()
@@ -68,7 +69,7 @@ if __name__ == "__main__":
         # OffsetType.RELATIVE et le '10' signifie qu'on charge la frame 10ms dans le futur
         # On peut également choisir OffsetType.ABSOLUTE qui aurait eu pour effet de charger la frame à partir
         # de 10 millisecondes après le lancement du player (donc il ne serait rien passé car ce moment est déjà passé (trop tard))
-        yamlFrame.push(player, MergeType.MAX, OffsetType.RELATIVE, 10)
+        yamlFrame.push(player, light.MergeType.MAX, light.OffsetType.RELATIVE, 10)
         
     # On quitte le player
     player.quit()

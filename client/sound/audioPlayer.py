@@ -22,10 +22,6 @@ import soundfile as sf
 import time
 from math import sqrt
 import os
-filePath = os.path.dirname(__file__)
-baseDirIdx = filePath.rfind("/")
-sys.path.append("".join(filePath[:baseDirIdx]))
-from config import AUDIO_DIR, PARENT_DIR
 
 #filename = fichier audio
 # bufferSize = 20
@@ -99,10 +95,6 @@ class AudioPlayer:
         try:
             if os.path.exists(fileName):
                 self.fileName = fileName
-            elif os.path.exists(AUDIO_DIR + fileName):
-                self.fileName = AUDIO_DIR + fileName
-            elif os.path.exists(PARENT_DIR + fileName):
-                self.fileName = PARENT_DIR + fileName
                 
             with sf.SoundFile(self.fileName) as f:
                 self.get_samplerate_fe(f)

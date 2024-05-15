@@ -3,13 +3,7 @@ from typing import List
 from collections import deque
 from enum import Enum
 import time
-import sys
-import os
-filePath = os.path.dirname(__file__)
-baseDirIdx = filePath.rfind("/")
-sys.path.append("".join(filePath[:baseDirIdx]))
-from config import AUDIO_DIR, PARENT_DIR
-import dmx
+from light import dmx, lightConfig
 FREQUENCY:int = 27
 
 
@@ -23,14 +17,17 @@ class Timer:
         self.startTime = None
 
     def start(self) -> None:
+        """Starts the timer at t=0"""
         self.startTime = time.time()
 
     def stop(self) -> float:
+        """Stops the timer"""
         timeEllapsed = self.get_time()
         self.startTime = None
         return timeEllapsed
         
     def get_time(self) -> float:
+        """Returns the time ellapsed from start in milliseconds"""
         if self.startTime is not None:
             timeEllapsed = (time.time() - self.startTime) * 1000
             return timeEllapsed
@@ -45,13 +42,13 @@ class Timer:
 ##############################################################
         
 
-        
+# Light player for one light
 class SingleLightQueue:
     def __init__(self, lightId:int, queueMaxSize:int | None):
         self.lightId:int = lightId
         self.queue = deque([], queueMaxSize)
         self.history = deque([], None)
-        self.light = dmx.DMXLight4Slot(address=dmx.light.light_map[lightId])
+        self.light = dmx.DMXLight4Slot(address=lightConfig.light_map[lightId])
         self.isRunning:bool = True
         self.current_event = None
         self.next_event = None
@@ -140,6 +137,9 @@ class SingleLightQueue:
         elmt = self.queue.popleft()
         self.mutex.release()
         self.history.append(elmt)
+    
+    def is_running(self) -> bool:
+        return len(self.queue) != 0
              
         
 
@@ -148,53 +148,97 @@ class SingleLightQueue:
 ###############         LIGHT PLAYER         #################
 ##############################################################
 
+
+# Static light player manager all your lights
 class StaticLightsPlayer:
+    """A Light Player for rgbw lights to control with DMX.
+    """
+    
     def __init__(self, nbLights:int, interfaceName:str, isLoopActive:bool=False):
+        """Creates a Static Light Player.
+
+        Parameters
+        ----------
+        nbLights : int
+            The number of lights to control.
+        interfaceName : int
+            The name of the interface to use (either "TkinterDisplayer", "FT232R" or "Dummy").
+        isLoopActive : bool
+            If set to True, the queue will resume from the start when there will be no more orders to read in the queues
+        """
         self.timer:Timer = Timer()
-        self.time_debug:Timer = Timer()
         self.universe:dmx.DMXUniverse = dmx.DMXUniverse()
         self.interface_name:str = interfaceName
-        self._isRunning = False
 
         self.nbLights:int = nbLights
         self.lights:List[SingleLightQueue] = [SingleLightQueue(i, None) for i in range(nbLights)]
         self._add_lights_to_universe()
 
-        self.mainThread = threading.Thread(target=self._worker, args=[interfaceName])
-        self.isRunning:bool = False
-        self.isLoopActive = isLoopActive
-        self.refillMutex = threading.Lock()
+        self.mainThread:threading.Thread = threading.Thread(target=self._worker, args=[interfaceName])
+        self.isRunning:bool = False     # Used by the user to close the player
+        self.isLoopActive:bool = isLoopActive    # When no more orders to read in the queue, resume from start
+        self.refillMutex:threading.Lock = threading.Lock()
 
     def _add_lights_to_universe(self) -> None:
         for light in self.lights:
             light.add_to_universe(self.universe)
-            
+       
+    
     def add(self, lightId:int, time:int, rgbw:List[int], Tr:int, offset:int) -> None:
+        """Adds an order to the queue of a light.
+
+        Parameters
+        ----------
+        lightId : int
+            The id of the light to which the order is related.
+        time : int
+            The timestamp at which the order is to be execute.
+        rgbw : List[int]
+            The rgbw values of your order.
+        Tr : int
+            The type of transition to use
+        offset : int
+            An offset to add to the time
+
+        The call to this function will be ignored if the given timestamp is smaller than the current time.
+
+        """
         self.refillMutex.acquire()
         self.lights[lightId].add(time+offset, rgbw, Tr)
         self.refillMutex.release()
         
     def start(self) -> None:
+        """Start the Light Player."""
+        
         self.isRunning = True
 
         self.mainThread.start()
     
     def quit(self) -> None:
+        """Closes the Player."""
+        
         self.isRunning = False
         self.mainThread.join()
-        #à voir pour que ça exit direct et pas que ça attende la fin de la boucle
+
 
     def is_running(self) -> bool:
+        """Returns True if the player has still orders to read.
+        Always returns True is the looper is active.
+        """
         if (self.isLoopActive):
             return True
-        return self._isRunning
+        for light in self.lights:
+            if light.is_running():
+                return True
+        return False
 
-    def update_worker(self, interface):
+    def _update_worker(self, interface:dmx.DMXInterface):
         timeEllapsed = -1
-        while (self._isRunning):
-            self._isRunning = False
+        _isRunning = True
+        while (_isRunning and self.isRunning):
+            _isRunning = False
             for light in self.lights:
-                self._isRunning = light.set_next_event(timeEllapsed) or self._isRunning
+                _isRunning = light.set_next_event(timeEllapsed) or _isRunning
             interface.set_frame(self.universe.serialise())
             interface.send_update()
             timeEllapsed = self.timer.get_time()
@@ -209,20 +253,18 @@ class StaticLightsPlayer:
             timeEllapsed = -1
             self.timer.start()
             self.isRunning = True
-            self._isRunning = True
 
     def _worker(self, interfaceName:str) -> None:
-        self.isRunning = True
-        self._isRunning = True
         interface = dmx.DMXInterface(interfaceName)
         self.timer.start()
-        self.update_worker(interface)
+        self._update_worker(interface)
         while (self.isLoopActive):
-            self.update_worker(interface)
+            self._update_worker(interface)
                 
         self.isRunning = False
         self.timer.stop()
         interface.close()
     
     def get_time(self) -> float:
+        """Returns the current relative time of the Player in milliseconds."""
         return self.timer.get_time()

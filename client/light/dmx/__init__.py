@@ -39,5 +39,5 @@ from dmx.DMXUniverse import DMXUniverse
 #from dmx.LightEffects import LightEffects
 
 __all__ = [
-    "Color", "DMXDriver", "get_drivers", "DMXInterface", "DMXLight", "DMXUniverse", "DMXLight4Slot", "LightInterface"
+    "Color", "DMXDriver", "get_drivers", "DMXInterface", "DMXLight", "DMXUniverse", "DMXLight4Slot", "LightInterface",
 ]

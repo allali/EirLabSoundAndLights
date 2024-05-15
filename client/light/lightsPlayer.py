@@ -1,15 +1,7 @@
 import threading
 from typing import List
-import yaml
 from queue import Queue
 import time
-import os
-import sys
-
-filePath = os.path.dirname(__file__)
-baseDirIdx = filePath.rfind("/")
-sys.path.append("".join(filePath[:baseDirIdx]))
-from config import YAMLS_DIR
 
 import dmx
 import numpy as np

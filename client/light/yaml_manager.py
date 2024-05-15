@@ -1,9 +1,8 @@
 import yaml
 import os
 import sys
-import config
 from pathlib import Path
-from frame import Frame, FREQUENCY, MergeType
+from light import Frame, MergeType
 from typing import List
 
 ##############################################################

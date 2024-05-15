@@ -1,0 +1,58 @@
+- meta:
+  - title: Don't Leave Me Now
+  - artist: Pink Floyd
+  - bpm: 123
+  - duration: 383 #seconds
+
+- parts:
+  - intro:
+    time: 0 #seconds
+    type: intro
+    tag : [instrumental]
+  
+  - verse1:
+    time: 37552
+    type: chorus
+    tag : [vocal, instrumental]
+  
+  - verse2:
+    time: 88750
+    type: chorus
+    tag : [vocal, instrumental]
+
+  - verse3:
+    time: 106890
+    type: chorus
+    tag : [vocal, instrumental]
+
+  - verse4:
+    time: 123024
+    type: chorus
+    tag : [vocal, instrumental]
+  
+  - verse5:
+    time: 174139
+    type: chorus
+    tag : [vocal, instrumental]
+  
+  - verse6:
+    time: 191202
+    type: chorus
+    tag : [vocal, instrumental]
+
+  - outro:
+    time : 209107
+    type : outro
+    tag : [instrumental]
+
+
+- events:
+  - transition1:
+    time: 39.5
+    tag : [instrumental]
+
+  - transition2:
+    time : 106
+    tag : [instrumental]
+  
+  

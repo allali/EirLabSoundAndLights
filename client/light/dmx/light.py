@@ -42,13 +42,13 @@ import os
 filePath = os.path.dirname(__file__)
 baseDirIdx = filePath.rfind("/")
 sys.path.append("".join(filePath[:baseDirIdx]))
-import config
+import light_configuration
 
 
 DMX_MAX_ADDRESS = 512
 DMX_MIN_ADDRESS = 1
 
-light_map = config.light_map
+light_map = light_configuration.light_map
 
 def light_id(adress):
     """ Get the light id from the config file.
@@ -71,7 +71,7 @@ def light_coord_to_id(x, y):
     Returns:
         int: id of the light in the config file
     """
-    return light_map[y + x * config.number_of_columns]
+    return light_map[y + x * light_configuration.number_of_columns]
 
 def light_id_to_coord(id):
     """ Convert a light id to a coordinate, where (0, 0) is the top left corner.
@@ -82,7 +82,7 @@ def light_id_to_coord(id):
     Returns:
         tuple: x, y coordinate of the light
     """
-    return light_map.index(id) % config.number_of_columns, light_map.index(id) // config.number_of_columns
+    return light_map.index(id) % light_configuration.number_of_columns, light_map.index(id) // light_configuration.number_of_columns
 
 def distance_between_lights(id1, id2):
     """ Calculate the distance between two lights.
