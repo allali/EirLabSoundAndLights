@@ -73,3 +73,29 @@ if __name__ == "__main__":
         
     # On quitte le player
     player.quit()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+###############################################
+#########      GENERER DU YAML      ###########
+###############################################
+
+# Pour générer du yaml, on utilise le YamlWritter de light (light.YamlWritter), ainsi que la classe statique
+# light.YamlEffectWritter qui contient quelques méthodes pour générer des effets sympathiques assez facilement.
+#  
+# Le YamlEffectWritter a encore de grosses possibilités d'amélioration !
+# 
+# Pour générer des yamls avec le YamlEffectWritter, vous devrez utiliser des positions en mètres selon les 3 coordonées x,y,z.
+# Le système de coordonnées peut être retrouvé dans light/light_configuration/3D_coordinates_device.yml
+# Vous pouvez également accéder aux positions des lights et speakers via light.lightConfig.LIGHTS_COORDINATES et lightConfig.SPEAKERS_COORDINATES
+# 
+# Les quelques démos disponibles dans ce dossiers peuvent vous donner une idée de comment utiliser ces fonctions

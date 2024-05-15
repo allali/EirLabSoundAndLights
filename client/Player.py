@@ -3,7 +3,7 @@ import os
 import argparse
 from typing import List
 
-from light.yaml_manager import YamlReader, YamlWritter
+from light.yamlManager import YamlReader, YamlWritter
 from light.lightsPlayer import LightsPlayer
 from light.StaticLightPlayer import StaticLightsPlayer
 from sound.audioPlayer import AudioPlayer

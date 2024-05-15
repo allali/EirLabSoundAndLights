@@ -1,4 +1,4 @@
-from light.yaml_manager import YamlWritter
+from light.yamlManager import YamlWritter
 from light_configuration import LIGHTS_COORDINATES
 import numpy as np
 from typing import List

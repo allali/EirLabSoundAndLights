@@ -9,7 +9,7 @@ from light import dmx
 
 from light.frame import Frame, MergeType, OffsetType
 from light.StaticLightPlayer import StaticLightsPlayer, FREQUENCY
-from light.yaml_manager import YamlReader, YamlWritter
+from light.yamlManager import YamlReader, YamlWritter
 from light.yamlEffects import YamlEffectWritter
 
 
