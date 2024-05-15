@@ -55,7 +55,7 @@ def light_yaml_from_rectangle(center:np.ndarray, dimensions:List[int], t0:int, r
 class YamlEffectWritter:
         
     @staticmethod
-    def rectangle_appear(start:np.ndarray, stop:np.ndarray, dimensions:int, t0:int, t1:int, rgbw:List[int], ym:YamlWritter, precision=200):
+    def draw_rectangle(start:np.ndarray, stop:np.ndarray, dimensions:int, t0:int, t1:int, rgbw:List[int], ym:YamlWritter, precision=200):
         timeInterval = precision
         times = np.arange(t0, t1, timeInterval)
         totalIterations = len(times) 
@@ -67,7 +67,7 @@ class YamlEffectWritter:
 
         
     @staticmethod
-    def ring_appear(center:np.ndarray, finalRadius:int, t0:int, t1:int, rgbw:List[int], ym:YamlWritter):
+    def draw_ring(center:np.ndarray, finalRadius:int, t0:int, t1:int, rgbw:List[int], ym:YamlWritter):
         timeInterval = 45
         times = np.arange(t0, t1, timeInterval)
         totalIterations = len(times) 
@@ -78,7 +78,7 @@ class YamlEffectWritter:
             light_yaml_from_ring(center, finalRadius, t1, rgbw, lightId, ym)
             
     @staticmethod
-    def circle_appear(center:np.ndarray, finalRadius:int, t0:int, t1:int, rgbw:List[int], ym:YamlWritter):
+    def draw_circle(center:np.ndarray, finalRadius:int, t0:int, t1:int, rgbw:List[int], ym:YamlWritter):
         timeInterval = 150
         times = np.arange(t0, t1, timeInterval)
         totalIterations = len(times) 

@@ -2,7 +2,7 @@ from os import path
 import sys
 MAIN_FOLDER = path.abspath(path.dirname(path.dirname(path.dirname(__file__))))
 sys.path.append(MAIN_FOLDER)
-from light import lightConfig, YamlWritter
+from light import lightConfig, YamlWritter, YamlEffectWritter
 import yaml
 import numpy as np
 from typing import List
@@ -156,39 +156,39 @@ instrument12 = 49380
 
 center = (lightConfig.LIGHTS_COORDINATES[26]+lightConfig.LIGHTS_COORDINATES[27])/2
 print(center)
-circle_drawer.ring_appear(center, 30, instrument-200, instrument+800, np.array([255, 255, 255, 0]), ym)
-# circle_drawer.ring_appear(center, 30, instrument2, instrument2+500, np.array([255, 255, 255, 0]), ym)
+YamlEffectWritter.draw_ring(center, 30, instrument-200, instrument+800, np.array([255, 255, 255, 0]), ym)
+# circle_drawer.draw_ring(center, 30, instrument2, instrument2+500, np.array([255, 255, 255, 0]), ym)
 for i in range(54):
     ym.add(i, instrument2-20, 216, 192, 245, 0, 0)
     ym.add(i, instrument2+50, 0, 0, 0, 0, 0)
 
-circle_drawer.ring_appear(center, 30, instrument3-200, instrument3+600, np.array([216, 192, 245, 0]), ym)
-# circle_drawer.ring_appear(center, 30, instrument4, instrument4+500, np.array([255, 255, 255, 0]), ym)
+YamlEffectWritter.draw_ring(center, 30, instrument3-200, instrument3+600, np.array([216, 192, 245, 0]), ym)
+# circle_drawer.draw_ring(center, 30, instrument4, instrument4+500, np.array([255, 255, 255, 0]), ym)
 for i in range(54):
     ym.add(i, instrument4-20, 203, 234, 216, 0, 0)
     ym.add(i, instrument4+50, 0, 0, 0, 0, 0)
-circle_drawer.ring_appear(center, 30, instrument5-200, instrument5+600, np.array([203, 234, 216, 0]), ym)
-# circle_drawer.ring_appear(center, 30, instrument6, instrument6+500, np.array([255, 255, 255, 0]), ym)
+YamlEffectWritter.draw_ring(center, 30, instrument5-200, instrument5+600, np.array([203, 234, 216, 0]), ym)
+# circle_drawer.draw_ring(center, 30, instrument6, instrument6+500, np.array([255, 255, 255, 0]), ym)
 for i in range(54):
     ym.add(i, instrument6-20, 185, 225, 252, 0, 0)
     ym.add(i, instrument6+50, 0, 0, 0, 0, 0)
-circle_drawer.ring_appear(center, 30, instrument7-200, instrument7+300, np.array([185, 225, 252, 0]), ym)
-# circle_drawer.ring_appear(center, 30, instrument8, instrument8+400, np.array([255, 255, 255, 0]), ym)
+YamlEffectWritter.draw_ring(center, 30, instrument7-200, instrument7+300, np.array([185, 225, 252, 0]), ym)
+# circle_drawer.draw_ring(center, 30, instrument8, instrument8+400, np.array([255, 255, 255, 0]), ym)
 for i in range(54):
     ym.add(i, instrument8-20, 255, 182, 193, 0, 0)
     ym.add(i, instrument8+50, 0, 0, 0, 0, 0)
-# circle_drawer.ring_appear(center, 30, instrument9, instrument9+400, np.array([255, 255, 255, 0]), ym)
+# circle_drawer.draw_ring(center, 30, instrument9, instrument9+400, np.array([255, 255, 255, 0]), ym)
 for i in range(54):
     ym.add(i, instrument9-20, 255, 182, 193, 0, 0)
     ym.add(i, instrument9+50, 0, 0, 0, 0, 0)
-# circle_drawer.ring_appear(center, 30, instrument10, instrument10+400, np.array([255, 255, 255, 0]), ym)
+# circle_drawer.draw_ring(center, 30, instrument10, instrument10+400, np.array([255, 255, 255, 0]), ym)
 for i in range(54):
     ym.add(i, instrument10-20, 255, 182, 193, 0, 0)
     ym.add(i, instrument10+50, 0, 0, 0, 0, 0)
-# circle_drawer.ring_appear(center, 30, instrument11, instrument11+400, np.array([255, 255, 255, 0]), ym)
+# circle_drawer.draw_ring(center, 30, instrument11, instrument11+400, np.array([255, 255, 255, 0]), ym)
 for i in range(54):
     ym.add(i, instrument11-20, 255, 182, 193, 0, 0)
     ym.add(i, instrument11+50, 0, 0, 0, 0, 0)
 
-circle_drawer.ring_appear(center, 30, instrument12-200, instrument12+850, np.array([255, 182, 193, 0]), ym)
+YamlEffectWritter.draw_ring(center, 30, instrument12-200, instrument12+850, np.array([255, 182, 193, 0]), ym)
 ym.write()

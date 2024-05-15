@@ -3,7 +3,7 @@ import sys
 filePath = os.path.dirname(os.path.dirname(__file__))
 baseDirIdx = filePath.rfind("/")
 sys.path.append("".join(filePath[:baseDirIdx]))
-import config
+import light_configuration
 import yaml
 from yaml_manager import YamlWritter
 import numpy as np
@@ -108,101 +108,5 @@ def set_color(ym:YamlWritter, rgbw:List[int], t0:int, Tr:int=0):
         ym.add(lightId, t0, rgbw[0], rgbw[1], rgbw[2], rgbw[3], Tr)
             
     
-if __name__ == "__main__":
 
-    hg = np.array([-1,1.8, 2.5])
-    hd = np.array([-1,20, 2.5])
-    bg = np.array([15,1.8, 2.5])
-    bd = np.array([15,20, 2.5])
-    #center = np.array(lights[27])
-    radius = 15
-    t0= 0
-    t1 = 4870
-    t2 = 9440
-    t3 = 13922
-    tstop = 34000
-    bleu_clair = np.array([30, 100, 200, 12], dtype=np.uint8)
-    rouge = np.array([150, 20, 60, 40], dtype=np.uint8)
-    bleu = np.array([70, 160, 0, 12], dtype=np.uint8)
-    violet = np.array([100, 20, 150, 12], dtype=np.uint8)
-    vert = np.array([25,200,0,20], dtype=np.uint8)
-    rouge2 = np.array([240, 20, 60, 40], dtype=np.uint8)
-    rouge3 = np.array([255, 30, 70, 120], dtype=np.uint8)
-    yw1 = YamlWritter("opening1.yaml")
-    yw2 = YamlWritter("opening2.yaml")
-    yw3 = YamlWritter("opening3.yaml")
-    yw4 = YamlWritter("opening4.yaml")
-    set_color(yw1, [0,0,0,0], 0)
-    set_color(yw2, [0,0,0,0], 0)
-    set_color(yw3, [0,0,0,0], 0)
-    set_color(yw4, [0,0,0,0], 0)
-    circle_appear(hg, radius, t0, t0+1300, bleu_clair, yw1)
-    circle_appear(hd, radius, t1, t1+1300, rouge, yw2)
-    circle_appear(bg, radius, t2, t2+1300, bleu, yw3)
-    circle_appear(bd, radius, t3, t3+1300, violet, yw4)
-    set_color(yw1, [0,0,0,0], tstop-1000, 1)
-    set_color(yw2, [0,0,0,0], tstop-1000, 1)
-    set_color(yw3, [0,0,0,0], tstop-1000, 1)
-    set_color(yw4, [0,0,0,0], tstop-1000, 1)
-    set_color(yw1, [0,0,0,0], tstop, 1)
-    set_color(yw2, [0,0,0,0], tstop, 1)
-    set_color(yw3, [0,0,0,0], tstop, 1)
-    set_color(yw4, [0,0,0,0], tstop, 1)
-    yw1.write()
-    yw2.write()
-    yw3.write()
-    yw4.write()
-    del yw1, yw2, yw3, yw4
-
-
-
-    ######### phase 2 ##############
-
-
-    yw5 = YamlWritter("ouverture.yaml")
-    set_color(yw5, [0,0,0,0], 0)
-    set_color(yw5, [0,0,0,0], 37370-45)
-    circle_appear((lights[27]+lights[26])/2, 40, 37370, 37800, rouge2, yw5)
-    set_color(yw5, [0,0,0,0], 56000)
-    yw5.write()
-    del yw5
-
-
-    ########### Ring animation #############
-
-    yw6 = YamlWritter("rings.yaml")
-
-    set_color(yw6, [0,0,0,0], 0)
-
-    set_color(yw6, [0,0,0,0], 39320-50)
-    ring_appear(lights[12], 20, 39320, 39560, rouge3, yw6)
-    set_color(yw6, [0,0,0,0], 39790, 1)
-
-    set_color(yw6, [0,0,0,0], 40410-27)
-    ring_appear(lights[46], 20, 40410, 40710, rouge3, yw6)
-    set_color(yw6, [0,0,0,0], 41010, 1)
-
-    set_color(yw6, [0,0,0,0], 42650-27)
-    ring_appear(lights[10], 20, 42650, 42950, rouge3, yw6)
-    set_color(yw6, [0,0,0,0], 43350, 1)
-
-    ring_appear(lights[48], 20, 44400, 44900, rouge3, yw6)
-    set_color(yw6, [0,0,0,0], 45800, 1)
-
-    ring_appear(lights[27], 20, 46630, 47000, rouge3, yw6)
-    set_color(yw6, [0,0,0,0], 47400, 1)
-
-    set_color(yw6, [0,0,0,0], 47440, 1)
-    ring_appear(lights[27], 20, 47480, 47780, rouge3, yw6)
-    set_color(yw6, [0,0,0,0], 47900, 1)
-
-    ring_appear(lights[8], 20, 48200, 48750, rouge3, yw6)
-    set_color(yw6, [0,0,0,0], 48800, 1)
-
-    ring_appear(lights[8], 20, 48830, 49200, rouge3, yw6)
-    set_color(yw6, [0,0,0,0], 49600, 1)
-
-    yw6.write()
-    del yw6
-
-
+    
